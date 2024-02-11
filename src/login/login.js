@@ -1,11 +1,11 @@
 
 import React, {useRef } from 'react';
 import { root } from '../index.js'
-import gameTable from '../gameTable/gameTable';
+import GameTable from '../gameTable/gameTable.js';
 
 function Login() {
     const ClickRegister = () => {
-        root.render(<gameTable />);
+        root.render(<GameTable />);
       }; 
     return(
         <>
