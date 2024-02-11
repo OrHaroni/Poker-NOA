@@ -92,7 +92,7 @@ body {
   overflow: hidden; /* Ensure the image does not exceed the container */
 }
 
-.dealer-image {
+.logo-image {
   width: 100%; /* Make the image fill the entire container */
   height: 100%;
   object-fit: cover; /* Preserve the aspect ratio and cover the container */

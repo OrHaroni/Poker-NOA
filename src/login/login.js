@@ -3,7 +3,7 @@ import React from 'react';
 import { root } from '../index.js';
 import GameTable from '../gameTable/gameTable';
 import '../App.css';
-import dealerImage from '../assets/logo.png'; // Import the image
+import logo from '../assets/logo.png'; 
 
 function Login() {
   const ClickRegister = () => {
@@ -58,7 +58,7 @@ function Login() {
           </button>
         </div>
         <div className="image-container">
-          <img src={dealerImage} alt="Dealer" className="dealer-image" />
+          <img src={logo} alt="Dealer" className="logo-image" />
         </div>
       </div>
     </>
