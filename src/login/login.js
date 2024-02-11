@@ -6,7 +6,7 @@ import gameTable from '../gameTable/gameTable';
 function Login() {
     const ClickRegister = () => {
         root.render(<gameTable />);
-      };
+      }; 
     return(
         <>
         <div className="upper-bg">
