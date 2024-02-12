@@ -1,17 +1,12 @@
-// src/LoginPage.js
+// src/Register.js
 import React from 'react';
+import logo from '../assets/logo.png';
 import { root } from '../index.js';
-import GameTable from '../gameTable/gameTable';
-import '../App.css';
-import logo from '../assets/logo.png'; 
-import Register from '../register/Register';
+import Login from '../login/login.js';
 
-function Login() {
+function Register() {
   const ClickLogin = () => {
-    root.render(<GameTable />);
-  };
-  const ClickRegister = () => {
-    root.render(<Register />);
+    root.render(<Login />);
   };
 
   return (
@@ -19,9 +14,7 @@ function Login() {
       <div className="upper-bg"></div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container p-4 rounded in-Login">
-          <header className="reg-head text-center mb-4">
-            Welcome Back!
-          </header>
+          <header className="reg-head text-center mb-4">Register</header>
           <div className="mb-3">
             <label htmlFor="username" className="form-label">
               Username
@@ -44,6 +37,17 @@ function Login() {
               id="password"
             />
           </div>
+          <div className="mb-3 confirm-password-container"> {/* Add this container */}
+            <label htmlFor="confirm-password" className="form-label t">
+            Confirm Password
+            </label>
+            <input
+              onKeyDown={ClickLogin}
+              type="password"
+              className="form-control confirm-password"
+              id="confirm-password"
+            />
+          </div>
           <button
             onClick={ClickLogin}
             id="buttonLogin"
@@ -53,7 +57,7 @@ function Login() {
             Login
           </button>
           <button
-            onClick={ClickRegister}
+            onClick={ClickLogin}
             id="not-reg"
             type="submit"
             className="btn btn-link btn-block text-secondary"
@@ -69,4 +73,4 @@ function Login() {
   );
 }
 
-export default Login;
+export default Register;

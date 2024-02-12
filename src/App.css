@@ -53,6 +53,27 @@ body {
   border: 1px solid #63b8a7; /* Dark green border color */
   border-radius: 4px;
 }
+.confirm-password-container {
+  position: relative;
+  width: 28%; /* Adjusted width for confirm password container */
+  margin-bottom: 1rem;
+  left: -1.5%;
+}
+.t{
+  position: relative;
+  left: 7%;
+}
+
+.confirm-password {
+  width: 80%; /* Adjusted width for confirm password */
+  padding: 8px;
+  margin-bottom: 1rem;
+  border: 1px solid #63b8a7; /* Dark green border color */
+  border-radius: 4px;
+  display: block; /* Ensure it takes up the full width of its container */
+  margin-left: auto; /* Align it to the right within its container */
+  margin-right: auto; /* Align it to the left within its container */
+}
 
 .our-btn {
   background-color: #a81a18; /* Dark green button color */
