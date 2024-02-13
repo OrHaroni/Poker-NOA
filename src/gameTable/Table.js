@@ -4,11 +4,11 @@ import Player from './Player';
 import './table.css'; // Import the table CSS file
 import tableImg from '../assets/emptyTable.png'; // Import the image
 import { root } from '../index.js';
-import Login from '../login/login.js';
+import Lobby from '../lobby/lobby.js';
 
 function Table(props) {
     const ClickBack = () => {
-        root.render(<Login />);
+        root.render(<Lobby />);
       };
     // Array to hold the Player components
     const players = [];

@@ -1,14 +1,14 @@
 // src/LoginPage.js
 import React from 'react';
 import { root } from '../index.js';
-import GameTable from '../gameTable/gameTable';
 import '../App.css';
 import logo from '../assets/logo.png'; 
 import Register from '../register/Register';
+import Lobby from '../lobby/lobby.js';
 
 function Login() {
   const ClickLogin = () => {
-    root.render(<GameTable />);
+    root.render(<Lobby />);
   };
   const ClickRegister = () => {
     root.render(<Register />);
