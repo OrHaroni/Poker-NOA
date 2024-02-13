@@ -36,7 +36,9 @@ body {
 }
 
 .reg-head {
-  font-size: 24px;
+  font-size: 44px;
+  position: relative;
+  top: -5%;
   color: #000; /* Black text color */
 }
 
@@ -59,21 +61,7 @@ body {
   margin-bottom: 1rem;
   left: -1.5%;
 }
-.t{
-  position: relative;
-  left: 7%;
-}
 
-.confirm-password {
-  width: 80%; /* Adjusted width for confirm password */
-  padding: 8px;
-  margin-bottom: 1rem;
-  border: 1px solid #63b8a7; /* Dark green border color */
-  border-radius: 4px;
-  display: block; /* Ensure it takes up the full width of its container */
-  margin-left: auto; /* Align it to the right within its container */
-  margin-right: auto; /* Align it to the left within its container */
-}
 
 .our-btn {
   background-color: #a81a18; /* Dark green button color */
@@ -116,8 +104,13 @@ body {
 .logo-image {
   width: 100%; /* Make the image fill the entire container */
   height: 100%;
+  position: relative;
+  top: 25%;
   object-fit: cover; /* Preserve the aspect ratio and cover the container */
   border-radius: 0 8px 8px 0; /* Optional: Add rounded corners to the right side */
 }
 
+.mp-4{
+  margin-top: 3%;
+}
 

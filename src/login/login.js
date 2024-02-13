@@ -20,7 +20,7 @@ function Login() {
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container p-4 rounded in-Login">
           <header className="reg-head text-center mb-4">
-            Welcome Back!
+            Login
           </header>
           <div className="mb-3">
             <label htmlFor="username" className="form-label">
