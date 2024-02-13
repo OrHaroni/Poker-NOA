@@ -5,7 +5,8 @@ import Player from './Player';
 import './table.css'; // Import the table CSS file
 import tableImg from './tableGame.png'; // Import the image
 function Table() {
-    return (
+    return (<>
+    <button className='exit-button'>Back</button>
         <div className="table">
             <div>
                 {/* Background image */}
@@ -18,6 +19,7 @@ function Table() {
                 </div>
             </div>
         </div>
+        </>
     );
 }
 

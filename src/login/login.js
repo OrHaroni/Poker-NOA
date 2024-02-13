@@ -16,7 +16,9 @@ function Login() {
 
   return (
     <>
-      <div className="upper-bg"></div>
+      <div className="upper-bg">
+      <button className='exit-button'>Back</button>
+      </div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container p-4 rounded in-Login">
           <header className="reg-head text-center mb-4">
