@@ -3,13 +3,15 @@
 import React from 'react';
 import Card from './Card';
 import RandomCard from './RandomCard';
+import './table.css';
+import cards from '../assets/cards.png';
 
 const Player = ({ name}) => {
     return (
         <div className="player">
             <span className="player-name">{name}</span>
             <div className="player-cards">
-                {/* Render one random Card component */}
+                <img src={cards} />
                 <RandomCard />
                 <RandomCard />
             </div>
