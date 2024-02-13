@@ -22,10 +22,19 @@ function Register() {
                 Username
               </label>
               <input
-                onKeyDown={ClickLogin}
                 type="text"
                 className="form-control"
                 id="username"
+              />
+            </div>
+            <div className="mb-3">
+              <label htmlFor="username" className="form-label">
+                Email address
+              </label>
+              <input
+                type="text"
+                className="form-control"
+                id="email"
               />
             </div>
             <div className="mb-3">
@@ -33,18 +42,16 @@ function Register() {
                 Password
               </label>
               <input
-                onKeyDown={ClickLogin}
                 type="password"
                 className="form-control"
                 id="password"
               />
             </div>
-            <div className="mb-3"> {/* Add this container */}
+            <div className="mb-3"> 
               <label htmlFor="confirm-password" className="form-label t">
               Confirm Password
               </label>
               <input
-                onKeyDown={ClickLogin}
                 type="password"
                 className="form-control confirm-password"
                 id="confirm-password"

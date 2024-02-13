@@ -27,7 +27,6 @@ function Login() {
               Username
             </label>
             <input
-              onKeyDown={ClickLogin}
               type="text"
               className="form-control"
               id="username"
@@ -38,7 +37,6 @@ function Login() {
               Password
             </label>
             <input
-              onKeyDown={ClickLogin}
               type="password"
               className="form-control"
               id="password"
