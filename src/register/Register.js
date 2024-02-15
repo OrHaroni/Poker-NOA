@@ -6,13 +6,18 @@ import Login from '../login/login.js';
 
 function Register() {
   const ClickLogin = () => {
+    //Make some things to add the new user to the database and than only
+    //if you added him, go to login again.
+    root.render(<Login />);
+  };
+  const ClickBack = () => {
     root.render(<Login />);
   };
 
   return (
     <>
       <div className="upper-bg">
-      <button className='exit-button'>Back</button>
+      <button className='exit-button' onClick={ClickBack}>Back</button>
       </div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container p-4 rounded in-Login">

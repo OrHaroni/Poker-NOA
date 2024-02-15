@@ -13,11 +13,14 @@ function Login() {
   const ClickRegister = () => {
     root.render(<Register />);
   };
+  const ClickExit = () => {
+    //Exit the window
+  };
 
   return (
     <>
       <div className="upper-bg">
-      <button className='exit-button'>Back</button>
+      <button className='exit-button' onClick={ClickExit}>Back</button>
       </div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container p-4 rounded in-Login">
