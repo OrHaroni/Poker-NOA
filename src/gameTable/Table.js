@@ -9,7 +9,7 @@ function Table(props) {
     const players = [];
 
     // Use a for loop to generate Player components
-    for (let i = 0; i < props.player_num; i++) {
+    for (let i = 0; i < props.players_num; i++) {
         players.push(
             <Player key={i} name={`Player ${i + 1}`} className={`player player${i + 1}`} />
         );

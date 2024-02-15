@@ -79,7 +79,7 @@
 
 
 /* Set a fixed size for the cards */
-.Card {
+.card {
     width: 100px; /* Adjust the card width as needed */
     height: 150px; /* Adjust the card height as needed */
 }
