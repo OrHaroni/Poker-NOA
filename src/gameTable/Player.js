@@ -1,18 +1,28 @@
-// Player.js
-
-import React from 'react';
+import React, { useState } from 'react';
 import Card from './Card';
 import RandomCard from './RandomCard';
+import './table.css';
+import cards from '../assets/cards.png';
 
-const Player = ({ name}) => {
+const Player = (props) => {
+    // State to track whether to show cards or not
+    const [showCards, setShowCards] = useState(true);
+
     return (
-        <div className="player">
-            <span className="player-name">{name}</span>
+        <div className={props.className}>
+            <span className="player-name">{props.name}</span>
             <div className="player-cards">
-                {/* Render one random Card component */}
-                <RandomCard />
-                <RandomCard />
+                {showCards ? (
+                    <>
+                        <RandomCard />
+                    </>
+                ) : (
+                    <img className="hidden-cards" src={cards} alt="Player Cards" />
+                )}
             </div>
+            <button onClick={() => setShowCards(!showCards)}>
+                Toggle Cards
+            </button>
         </div>
     );
 };

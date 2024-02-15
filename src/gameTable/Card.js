@@ -1,11 +1,11 @@
 import React from 'react';
 
-const Card = ({ pic, suit, value }) => {
-  return (
-    <div className="card">
-      <img src={pic} alt={`${value} of ${suit}`} />
-    </div>
-  );
+const Card = (props) => {
+    return (
+        <div className="card">
+            <img src={props.pic} alt={`${props.value} of ${props.suit}`} />
+        </div>
+    );
 };
 
 export default Card;
