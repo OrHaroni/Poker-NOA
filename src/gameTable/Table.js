@@ -3,8 +3,13 @@ import React from 'react';
 import Player from './Player';
 import './table.css'; // Import the table CSS file
 import tableImg from '../assets/emptyTable.png'; // Import the image
+import { root } from '../index.js';
+import Login from '../login/login.js';
 
 function Table(props) {
+    const ClickBack = () => {
+        root.render(<Login />);
+      };
     // Array to hold the Player components
     const players = [];
 
@@ -17,7 +22,7 @@ function Table(props) {
 
     return (
         <>
-        <button className='exit-button'>Back</button>
+        <button className='exit-button' onClick={ClickBack}>Back</button>
         <div className="table">
             <div>
                 {/* Background image */}

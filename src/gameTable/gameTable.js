@@ -11,7 +11,7 @@ function GameTable() {
             <Row>
                 <Col>
                     {/* Render the Table component up to 4*/}
-                    <Table player_num={4} />
+                    <Table players_num={4} />
                 </Col>
             </Row>
         </Container>
