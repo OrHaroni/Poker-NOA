@@ -57,17 +57,22 @@ const  CardsDeck = () => {
   ];
 
   // Generate a random index within the cards array
-  const randomIndex = Math.floor(Math.random() * cards.length);
-  const randomCard = cards[randomIndex];
+  const randomIndex1 = Math.floor(Math.random() * cards.length);
+  const randomIndex2 = Math.floor(Math.random() * cards.length);
+  const randomCard1 = cards[randomIndex1];
+  const randomCard2 = cards[randomIndex2];
 
   return (
-      <div className="card">
-          <div className="player-cards">
-              {/* Render one random Card component */}
-              <Card pic={randomCard.pic} suit={randomCard.suit} value={randomCard.value} />
-          </div>
-      </div>
-  );
+    <div className="RandomCard">
+        {/* Render two random Card components */}
+        <div className="right">
+            <Card pic={randomCard1.pic} suit={randomCard1.suit} value={randomCard1.value} />
+        </div>
+        <div className="left">
+            <Card pic={randomCard2.pic} suit={randomCard2.suit} value={randomCard2.value} />
+        </div>
+    </div>
+);
 };
 
 export default CardsDeck;
