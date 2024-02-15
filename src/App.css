@@ -116,6 +116,25 @@ body {
 .mp-4{
   margin-top: 3%;
 }
+.lobby-table {
+  width: 100%;
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+.lobby-table table {
+  width: 100%; /* Spread table to full width of parent */
+  border-collapse: collapse;
+}
+
+.lobby-table th, .lobby-table td {
+  padding: 20px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.lobby-table th:last-child, .lobby-table td:last-child {
+  text-align: center;
+}
 
 .exit-button {
   background-color: #ff6347; /* Red color for the button */
