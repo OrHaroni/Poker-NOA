@@ -16,6 +16,8 @@ function Table(props) {
     }
 
     return (
+        <>
+        <button className='exit-button'>Back</button>
         <div className="table">
             <div>
                 {/* Background image */}
@@ -26,6 +28,7 @@ function Table(props) {
                 </div>
             </div>
         </div>
+        </>
     );
 }
 

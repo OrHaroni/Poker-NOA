@@ -4,13 +4,13 @@ import RandomCard from './RandomCard';
 import './table.css';
 import cards from '../assets/cards.png';
 
-const Player = (props) => {
+const Player = ({ name, className }) => {
     // State to track whether to show cards or not
     const [showCards, setShowCards] = useState(true);
 
     return (
-        <div className={props.className}>
-            <span className="player-name">{props.name}</span>
+        <div className={className}>
+            <span className="player-name">{name}</span>
             <div className="player-cards">
                 {showCards ? (
                     <>

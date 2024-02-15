@@ -4,26 +4,31 @@ import { root } from '../index.js';
 import GameTable from '../gameTable/gameTable';
 import '../App.css';
 import logo from '../assets/logo.png'; 
+import Register from '../register/Register';
 
 function Login() {
-  const ClickRegister = () => {
+  const ClickLogin = () => {
     root.render(<GameTable />);
+  };
+  const ClickRegister = () => {
+    root.render(<Register />);
   };
 
   return (
     <>
-      <div className="upper-bg"></div>
+      <div className="upper-bg">
+      <button className='exit-button'>Back</button>
+      </div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container p-4 rounded in-Login">
           <header className="reg-head text-center mb-4">
-            Welcome Back!
+            Login
           </header>
           <div className="mb-3">
             <label htmlFor="username" className="form-label">
               Username
             </label>
             <input
-              onKeyDown={ClickRegister}
               type="text"
               className="form-control"
               id="username"
@@ -34,14 +39,13 @@ function Login() {
               Password
             </label>
             <input
-              onKeyDown={ClickRegister}
               type="password"
               className="form-control"
               id="password"
             />
           </div>
           <button
-            onClick={ClickRegister}
+            onClick={ClickLogin}
             id="buttonLogin"
             type="submit"
             className="btn btn-primary btn-block our-btn"

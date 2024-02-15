@@ -12,6 +12,8 @@ body {
 .upper-bg {
   height: 100px;
   background-color: #126936; /* Green color */
+  background: linear-gradient(to right, #126936, #063d07); /* Gradient from Darker green to Green */
+
 }
 
 .background {
@@ -19,7 +21,7 @@ body {
   justify-content: center;
   align-items: center;
   height: calc(100vh - 100px);
-  background-color: #a81a18; /* Darker green color */
+  background: linear-gradient(to right, #a81a18, #460505); /* Gradient from Darker green to Green */
 }
 
 .form-container {
@@ -30,13 +32,16 @@ body {
   width: 50%; /* Adjusted width to take up half of the container */
   height: 400px;
   background-color: #126936; /* Green color */
+  background: linear-gradient(to right, #126936, #154113); /* Gradient from Darker green to Green */
+
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 50px 20px; /* Adjusted margin to add space */
 }
 
 .reg-head {
-  font-size: 24px;
+  font-size: 44px;
+  position: relative;
   color: #000; /* Black text color */
 }
 
@@ -53,6 +58,13 @@ body {
   border: 1px solid #63b8a7; /* Dark green border color */
   border-radius: 4px;
 }
+.confirm-password-container {
+  position: relative;
+  width: 28%; /* Adjusted width for confirm password container */
+  margin-bottom: 1rem;
+  left: -1.5%;
+}
+
 
 .our-btn {
   background-color: #a81a18; /* Dark green button color */
@@ -95,8 +107,28 @@ body {
 .logo-image {
   width: 100%; /* Make the image fill the entire container */
   height: 100%;
+  position: relative;
+  top: 25%;
   object-fit: cover; /* Preserve the aspect ratio and cover the container */
   border-radius: 0 8px 8px 0; /* Optional: Add rounded corners to the right side */
 }
 
+.mp-4{
+  margin-top: 3%;
+}
 
+.exit-button {
+  background-color: #ff6347; /* Red color for the button */
+  color: #000000; /* White text color */
+  border: none;
+  padding: 10px 20px; /* Adjust padding as needed */
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  font-weight: bolder;
+}
+
+.exit-button:hover {
+  background-color: #cc4738; /* Darker red color on hover */
+}
