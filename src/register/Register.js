@@ -4,6 +4,7 @@ import logo from '../assets/logo.png';
 import { root } from '../index.js';
 import Login from '../login/login.js';
 import { sendSwal } from '../lobby/lobby.js';
+import registerServer from '../serverCalls/register.js';
 
 function Register() {
 
@@ -42,7 +43,19 @@ function Register() {
       sendSwal("password and confirm password are not the same", "warning");
     }
     else {
-      root.render(<Login />);
+      const newUser = {"username": username.current.value,
+                        "password": password.current.value,
+                        "email": email.current.value};
+      let validation = registerServer(newUser);
+      //Invalid username
+      if (validation === -1) {
+        sendSwal("Username is already taken", "warning");
+      } //Invalid email
+      else if (validation === -2) {
+        sendSwal("Email is already taken", "warning");
+      } else if(validation === 0) {
+        root.render(<Login />);
+      }
     }
     //Make some things to add the new user to the database and than only
     //if you added him, go to login again.
