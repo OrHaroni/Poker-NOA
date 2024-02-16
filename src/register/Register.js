@@ -71,67 +71,68 @@ function Register() {
       </div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container p-4 rounded in-Login">
+        <div className="mb-5">
           <header className="reg-head text-center mb-4">Register</header>
-          
-          <div className="mb-4">
-            <div className="mb-3">
-              <label htmlFor="username" className="form-label">
-                Username
-              </label>
-              <input
-                onKeyDown={ClickEnter}
-                type="text"
-                className="form-control"
-                id="username"
-                ref={username}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="username" className="form-label">
-                Email address
-              </label>
-              <input
-                onKeyDown={ClickEnter}
-                type="text"
-                className="form-control"
-                id="email"
-                ref={email}
-              />
-            </div>
-            <div className="mb-3">
-              <label htmlFor="password" className="form-label">
-                Password
-              </label>
-              <input
-                onKeyDown={ClickEnter}
-                type="password"
-                className="form-control"
-                id="password"
-                ref={password}
-              />
-            </div>
-            <div className="mb-3"> 
-              <label htmlFor="confirm-password" className="form-label t">
-              Confirm Password
-              </label>
-              <input
-                onKeyDown={ClickEnter}
-                type="password"
-                className="form-control confirm-password"
-                id="confirm-password"
-                ref={password_confirm}
-              />
-            </div>
+            <div className="mb-4">
+              <div className="mb-3">
+                <label htmlFor="username" className="form-label">
+                  Username
+                </label>
+                <input
+                  onKeyDown={ClickEnter}
+                  type="text"
+                  className="form-control"
+                  id="username"
+                  ref={username}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="username" className="form-label">
+                  Email address
+                </label>
+                <input
+                  onKeyDown={ClickEnter}
+                  type="text"
+                  className="form-control"
+                  id="email"
+                  ref={email}
+                />
+              </div>
+              <div className="mb-3">
+                <label htmlFor="password" className="form-label">
+                  Password
+                </label>
+                <input
+                  onKeyDown={ClickEnter}
+                  type="password"
+                  className="form-control"
+                  id="password"
+                  ref={password}
+                />
+              </div>
+              <div className="mb-3"> 
+                <label htmlFor="confirm-password" className="form-label t">
+                Confirm Password
+                </label>
+                <input
+                  onKeyDown={ClickEnter}
+                  type="password"
+                  className="form-control confirm-password"
+                  id="confirm-password"
+                  ref={password_confirm}
+                />
+              </div>
 
+            </div>
+            <button
+              onClick={ClickRegister}
+              id="buttonLogin"
+              type="submit"
+              className="btn btn-primary btn-block our-btn"
+            >
+              Register
+            </button>
           </div>
-          <button
-            onClick={ClickRegister}
-            id="buttonLogin"
-            type="submit"
-            className="btn btn-primary btn-block our-btn"
-          >
-            Register
-          </button>
         </div>
         <div className="image-container">
           <img src={logo} alt="Dealer" className="logo-image" />
