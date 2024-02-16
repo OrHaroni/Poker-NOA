@@ -12,6 +12,7 @@
 .player {
     /* Your player styles */
     /* Example: */
+    position: relative;
     width: 25%;
     height: 10%;
 }
@@ -30,12 +31,11 @@
 
 /* Apply styling for the RandomCard components */
 .RandomCard {
-    /* Your RandomCard styles */
-    /* Example: */
+    margin-top: 16%;
+    margin-left: 4%;
     position: relative;
     display: flex;
-    width: 100%; /* Adjust width as needed */
-
+    width: 100%; 
 }
 
 /* Apply styles for positioning right and left */
@@ -47,46 +47,42 @@
 
 .RandomCard .left {
     position: relative;
-    transform: rotate(50deg);
+    transform: rotate(30deg);
     left: -43%;
-
 }
 
 /* Additional styles for each player's cards */
 .player1 {
     position: relative;
-    left: 15%; /* Adjust the left position for the first player */
+    left: 15%;
     top:12%;
 }
 
 .player2{
     position: relative;
-    left: 75%; /* Adjust the left position for the second player */
+    left: 75%; 
     top:2%;
 }
 
 .player3 {
     position: relative;
-    left: 75%; /* Adjust the left position for the third player */
+    left: 75%; 
     top:23%;
 }
 
 .player4{
     position: relative;
     top:12%;
-    left: 13%; /* Adjust the left position for the fourth player */
+    left: 13%;
 }
 
-
-/* Set a fixed size for the cards */
 .card {
-    width: 100px; /* Adjust the card width as needed */
-    height: 150px; /* Adjust the card height as needed */
+    width: 100px; 
+    height: 150px;
 }
 
 .hidden-cards {
     position: relative;
-
-    width: 55%; /* Set the same size as the visible cards */
+    width: 45%; 
     top:20%;
 }

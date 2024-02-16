@@ -1,5 +1,6 @@
+// Player.js
+
 import React, { useState } from 'react';
-import Card from './Card';
 import RandomCard from './RandomCard';
 import './table.css';
 import cards from '../assets/cards.png';
@@ -13,9 +14,7 @@ const Player = (props) => {
             <span className="player-name">{props.name}</span>
             <div className="player-cards">
                 {showCards ? (
-                    <>
-                        <RandomCard />
-                    </>
+                    <RandomCard />
                 ) : (
                     <img className="hidden-cards" src={cards} alt="Player Cards" />
                 )}
