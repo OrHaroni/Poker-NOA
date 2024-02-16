@@ -6,6 +6,7 @@ import logo from '../assets/logo.png';
 import Register from '../register/Register';
 import Lobby from '../lobby/lobby.js';
 import { sendSwal } from '../lobby/lobby.js';
+import { userExistsWithPassword } from '../serverCalls/login.js'
 
 function Login() {
 
@@ -26,7 +27,13 @@ function Login() {
       sendSwal("Password is empty", "warning");
     }
     else {
-      root.render(<Lobby />);
+      //Check if the username and password are correct for 1 user.
+      let isCorrectPassword = userExistsWithPassword(username.current.value, password.current.value);
+      if (!isCorrectPassword) {
+        sendSwal("Username or Password are incorrect", "warning");
+      } else {
+        root.render(<Lobby />);
+      }
     }
   };
   const ClickRegister = () => {
