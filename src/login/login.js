@@ -1,14 +1,33 @@
 // src/LoginPage.js
-import React from 'react';
+import React, { useRef } from 'react';
 import { root } from '../index.js';
 import '../App.css';
-import logo from '../assets/logo.png'; 
+import logo from '../assets/logo.png';
 import Register from '../register/Register';
 import Lobby from '../lobby/lobby.js';
+import { sendSwal } from '../lobby/lobby.js';
 
 function Login() {
-  const ClickLogin = () => {
-    root.render(<Lobby />);
+
+  const username = useRef(null);
+  const password = useRef(null);
+
+  const ClickEnter = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent default form submission
+      ClickLogin();
+    }
+  };
+  const ClickLogin = async () => {
+    if (username.current.value === '') {
+      sendSwal("Username is empty", "warning");
+    }
+    else if (password.current.value === '') {
+      sendSwal("Password is empty", "warning");
+    }
+    else {
+      root.render(<Lobby />);
+    }
   };
   const ClickRegister = () => {
     root.render(<Register />);
@@ -20,7 +39,7 @@ function Login() {
   return (
     <>
       <div className="upper-bg">
-      <button className='exit-button' onClick={ClickExit}>Back</button>
+        <button className='exit-button' onClick={ClickExit}>Back</button>
       </div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container p-4 rounded in-Login">
@@ -32,9 +51,11 @@ function Login() {
               Username
             </label>
             <input
+              onKeyDown={ClickEnter}
               type="text"
               className="form-control"
               id="username"
+              ref={username}
             />
           </div>
           <div className="mb-3">
@@ -42,9 +63,11 @@ function Login() {
               Password
             </label>
             <input
+              onKeyDown={ClickEnter}
               type="password"
               className="form-control"
               id="password"
+              ref={password}
             />
           </div>
           <button

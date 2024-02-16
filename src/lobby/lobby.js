@@ -4,6 +4,15 @@ import GameTable from '../gameTable/gameTable';
 import '../App.css';
 import logo from '../assets/logo.png';
 import Login from '../login/login.js';
+import Swal from 'sweetalert2'
+
+export function sendSwal(message, icon) {
+    /* eslint-disable no-undef */
+    Swal.fire({
+      text: message,
+      icon: icon,
+    });
+  }
 
 function Lobby() {
     const clickBack = () => {
