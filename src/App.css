@@ -33,7 +33,7 @@ body {
   height: 55%;
   background-color: #126936; /* Green color */
   background: linear-gradient(to right, #126936, #154113); /* Gradient from Darker green to Green */
-
+  height: 70%;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 50px 20px; /* Adjusted margin to add space */
@@ -121,6 +121,11 @@ body {
 .mp-4{
   margin-top: 3%;
 }
+.mb-5{
+  position: relative;
+  height: 50%;
+  height:fit-content ;
+}
 .lobby-table {
   width: 100%;
   margin: 0 auto; /* Center the container horizontally */
@@ -142,6 +147,9 @@ body {
 }
 
 .exit-button {
+  margin-left: 1%;
+  margin-top: 1%;
+  margin-bottom:1%;
   background-color: #ff6347; /* Red color for the button */
   color: #000000; /* White text color */
   border: none;
@@ -153,6 +161,27 @@ body {
   font-weight: bolder;
 }
 
+.add-money{
+  margin-left: 0%;
+  margin-top: 0%;
+  margin-bottom:0%;
+  margin-right:0%;
+  background-color: #ff6347; /* Red color for the button */
+  color: #000000; /* White text color */
+  border: none;
+  padding: 10px 20px; /* Adjust padding as needed */
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  font-weight: bolder;
+}
+.add-money:hover {
+  background-color: #cc4738; /* Darker red color on hover */
+
+}
+
 .exit-button:hover {
   background-color: #cc4738; /* Darker red color on hover */
+
 }
