@@ -1,0 +1,88 @@
+/* table.css */
+
+.table {
+    position: absolute;
+    top: 35%;
+    left: 57%;
+    height: 45%;
+    width: 85%;
+    transform: translate(-50%, -50%);
+}
+
+.player {
+    /* Your player styles */
+    /* Example: */
+    position: relative;
+    width: 25%;
+    height: 10%;
+}
+
+.players {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 200%;
+    width: 70%;
+}
+
+.player-cards {
+    position: absolute;
+}
+
+/* Apply styling for the RandomCard components */
+.RandomCard {
+    margin-top: 16%;
+    margin-left: 4%;
+    position: relative;
+    display: flex;
+    width: 100%; 
+}
+
+/* Apply styles for positioning right and left */
+.RandomCard .right {
+    position: relative;
+    transform: rotate(10deg);
+    top:0%;
+}
+
+.RandomCard .left {
+    position: relative;
+    transform: rotate(30deg);
+    left: -43%;
+}
+
+/* Additional styles for each player's cards */
+.player1 {
+    position: relative;
+    left: 15%;
+    top:12%;
+}
+
+.player2{
+    position: relative;
+    left: 75%; 
+    top:2%;
+}
+
+.player3 {
+    position: relative;
+    left: 75%; 
+    top:23%;
+}
+
+.player4{
+    position: relative;
+    top:12%;
+    left: 13%;
+}
+
+.card {
+    width: 100px; 
+    height: 150px;
+}
+
+.hidden-cards {
+    position: relative;
+    width: 45%; 
+    top:20%;
+}
