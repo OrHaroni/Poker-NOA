@@ -6,7 +6,7 @@ import { root } from '../index.js';
 function Add_Money_Page() {
   const moneyAmountRef = useRef(null);
 
-  const handleAddMoney = () => {
+  const ClickAddMoney = () => {
     const enteredAmount = moneyAmountRef.current.value;
 
     if (enteredAmount !== '' && parseFloat(enteredAmount) > 0) {
@@ -33,7 +33,7 @@ function Add_Money_Page() {
               ref={moneyAmountRef}
             />
           </div>
-          <button className="our-btn" onClick={handleAddMoney}>
+          <button className="our-btn" onClick={ClickAddMoney}>
             Add Money
           </button>
         </div>
