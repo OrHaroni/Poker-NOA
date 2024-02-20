@@ -1,8 +1,9 @@
 
-import React from 'react';
+import React, { useState } from 'react';
 import Card from './Card';
 
 const  CardsDeck = () => {
+  const [usedCards, setUsedCards] = useState([]);
   const cards = [
     { pic: require('../assets/cards/10_of_clubs.png'), suit: 'Clubs', value: '10' },
     { pic: require('../assets/cards/10_of_diamonds.png'), suit: 'Diamonds', value: '10' },
@@ -56,11 +57,17 @@ const  CardsDeck = () => {
     { pic: require('../assets/cards/ace_of_spades.png'), suit: 'Spades', value: 'Ace' },
   ];
 
-  // Generate a random index within the cards array
-  const randomIndex1 = Math.floor(Math.random() * cards.length);
-  const randomIndex2 = Math.floor(Math.random() * cards.length);
-  const randomCard1 = cards[randomIndex1];
-  const randomCard2 = cards[randomIndex2];
+  // Function to draw a random card and remove it from the available cards
+  const drawRandomCardAndRemove = () => {
+    const availableCards = cards.filter(card => !usedCards.includes(card));
+    const randomIndex = Math.floor(Math.random() * availableCards.length);
+    const randomCard = availableCards[randomIndex];
+    setUsedCards([...usedCards, randomCard]);
+    return randomCard;
+};
+  const randomCard1 = drawRandomCardAndRemove();
+  const randomCard2 = drawRandomCardAndRemove();
+
 
   return (
     <div className="RandomCard">
