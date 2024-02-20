@@ -1,10 +1,9 @@
 import React, { useRef } from 'react';
-import Swal from 'sweetalert2';
 import '../App.css';
 import Lobby, { sendSwal } from '../lobby/lobby.js';
 import { root } from '../index.js';
 
-function Add_Money_Page({ onAddMoney: parentAddMoney }) {
+function Add_Money_Page() {
   const moneyAmountRef = useRef(0);
 
   const handleChange = (e) => {
