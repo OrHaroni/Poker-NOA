@@ -5,7 +5,7 @@ import '../App.css';
 import logo from '../assets/logo.png';
 import Login from '../login/login.js';
 import Swal from 'sweetalert2';
-import Money from '../money/money.js';
+import Add_Money_Page from '../Add_Money_Page/Add_Money_Page.js';
 
 export function sendSwal(message, icon) {
   /* eslint-disable no-undef */
@@ -51,7 +51,7 @@ function Lobby() {
 
   // Function to handle adding money
   const addMoney = () => {
-    root.render(<Money />);
+    root.render(<Add_Money_Page />);
   };
 
   return (

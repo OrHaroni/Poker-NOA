@@ -4,7 +4,7 @@ import '../App.css';
 import Lobby, { sendSwal } from '../lobby/lobby.js';
 import { root } from '../index.js';
 
-function Money({ onAddMoney: parentAddMoney }) {
+function Add_Money_Page({ onAddMoney: parentAddMoney }) {
   const moneyAmountRef = useRef(0);
 
   const handleChange = (e) => {
@@ -48,4 +48,4 @@ function Money({ onAddMoney: parentAddMoney }) {
   );
 }
 
-export default Money;
+export default Add_Money_Page;
