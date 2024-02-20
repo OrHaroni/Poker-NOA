@@ -6,8 +6,8 @@ import { root } from '../index.js';
 function Add_Money_Page() {
   const moneyAmountRef = useRef(null);
 
-  const ClickAddMoney = () => {
-    const enteredAmount = moneyAmountRef.current.value;
+  const handleAddMoney = () => {
+    const selectedAmount = moneyAmountRef.current.value;
 
     if (selectedAmount !== '') {
       sendSwal(`Money added successfully! Amount: ${selectedAmount}`, 'success');
@@ -35,7 +35,7 @@ function Add_Money_Page() {
               <option value="400">400</option>
             </select>
           </div>
-          <button className="our-btn" onClick={ClickAddMoney}>
+          <button className="our-btn" onClick={handleAddMoney}>
             Add Money
           </button>
         </div>
