@@ -7,13 +7,13 @@ function Add_Money_Page() {
   const moneyAmountRef = useRef(null);
 
   const handleAddMoney = () => {
-    const enteredAmount = moneyAmountRef.current.value;
+    const selectedAmount = moneyAmountRef.current.value;
 
-    if (enteredAmount !== '' && parseFloat(enteredAmount) > 0) {
-      sendSwal('Money added successfully!', 'success');
+    if (selectedAmount !== '') {
+      sendSwal(`Money added successfully! Amount: ${selectedAmount}`, 'success');
       root.render(<Lobby />);
     } else {
-      sendSwal('Please enter a valid amount.', 'error');
+      sendSwal('Please select a valid amount.', 'error');
     }
   };
 
@@ -27,11 +27,13 @@ function Add_Money_Page() {
             <label htmlFor="moneyAmount" className="form-label">
               Amount:
             </label>
-            <input
-              className="form-control"
-              id="moneyAmount"
-              ref={moneyAmountRef}
-            />
+            <select className="form-control" id="moneyAmount" ref={moneyAmountRef}>
+              <option value="">Select Amount</option>
+              <option value="100">100</option>
+              <option value="200">200</option>
+              <option value="300">300</option>
+              <option value="400">400</option>
+            </select>
           </div>
           <button className="our-btn" onClick={handleAddMoney}>
             Add Money
