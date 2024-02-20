@@ -4,21 +4,16 @@ import Lobby, { sendSwal } from '../lobby/lobby.js';
 import { root } from '../index.js';
 
 function Add_Money_Page() {
-  const moneyAmountRef = useRef(0);
-
-  const handleChange = (e) => {
-    // Update the current value of the useRef
-    moneyAmountRef.current = e.target.value;
-  };
+  const moneyAmountRef = useRef(null);
 
   const handleAddMoney = () => {
-    if (moneyAmountRef.current > 0) {
+    const enteredAmount = moneyAmountRef.current.value;
+
+    if (enteredAmount !== '' && parseFloat(enteredAmount) > 0) {
       sendSwal('Money added successfully!', 'success');
       root.render(<Lobby />);
     } else {
-      if (moneyAmountRef.current !== '') {
-        sendSwal('Please enter a valid amount.', 'error');
-      }
+      sendSwal('Please enter a valid amount.', 'error');
     }
   };
 
@@ -35,7 +30,7 @@ function Add_Money_Page() {
             <input
               className="form-control"
               id="moneyAmount"
-              onChange={handleChange}
+              ref={moneyAmountRef}
             />
           </div>
           <button className="our-btn" onClick={handleAddMoney}>
