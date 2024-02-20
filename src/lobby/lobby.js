@@ -48,8 +48,6 @@ function Lobby() {
     );
   }
 
-  // State to keep track of the money amount
-  const [moneyAmount, setMoneyAmount] = useState(0);
 
   // Function to handle adding money
   const addMoney = () => {
