@@ -60,6 +60,9 @@ function Lobby(props) {
         <button className="exit-button" onClick={clickBack} id="buttonBack">
           Back
         </button>
+        <button className="money-amount">
+          money: {props.user.moneyAmount}
+        </button>
       </div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container form-container-extention p-4 rounded in-Login">
