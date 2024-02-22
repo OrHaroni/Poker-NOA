@@ -1,0 +1,35 @@
+/* This file is for architecture of the Data base */
+
+Users DB:
+id: nubmer. distinct key
+username: string;
+password: string;
+email: string;
+isApprovedByEmail: Bool; (need only ones to change and check in every log-in)
+moneyAmount: nubmer;
+nickname: string; (?)
+lastTimeAddedMoney: Date; (?)
+BiggestWin (in 1 round): Number; (statistics)
+NumberOfWins (in 1 round): Number; (statistics)
+gamesPlayed: Number; (statistics)
+**ADD HERE FOR MORE**
+
+
+game table DB:
+id: Number. distinct key;
+players_num: Number;
+max_players_num: Number;
+password: string; (will be empty for tables without one)
+moneyAmountOnTable: Number; (the current number of money on the table, updated during the game) (not really sure we need this, can save it just in the server and send to the players every time)
+bigBlind: Number; (I dont understand this but think needed)
+smallBlind: Number; (I dont understand this but think needed)
+cardOnTable: array (?) (not really sure we need this, can save it just in the server and send to the players every time)
+**ADD HERE FOR MORE**
+
+
+ActiveUsers (For Socket.io)
+**NAOR PLEASE GO FROM HERE**
+
+
+
+**ADD HERE MORE TABLES**
