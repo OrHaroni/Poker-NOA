@@ -8,7 +8,7 @@ import Lobby from '../lobby/lobby.js';
 
 function Table(props) {
     const ClickBack = () => {
-        root.render(<Lobby />);
+        root.render(<Lobby user={props.user} />);
       };
     // Array to hold the Player components
     const players = [];

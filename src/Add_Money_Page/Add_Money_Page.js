@@ -5,7 +5,11 @@ import { root } from '../index.js';
 import { addMoney } from '../serverCalls/Add_Money_page.js';
 
 function Add_Money_Page(props) {
-  console.log(props.user);
+
+  const ClickBack = () => {
+    root.render(<Lobby user={props.user}/>);
+  };
+
   const moneyAmountRef = useRef(null);
 
   const handleAddMoney = async () => {
@@ -29,7 +33,9 @@ function Add_Money_Page(props) {
 
   return (
     <>
-      <div className="upper-bg"></div>
+      <div className="upper-bg">
+      <button className='exit-button' onClick={ClickBack}>Back</button>
+      </div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container form-container-extention p-4 rounded">
         <header className="reg-head text-center mb-4">This is your current amount of money: {props.user.moneyAmount}</header>

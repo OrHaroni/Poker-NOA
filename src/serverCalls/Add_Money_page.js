@@ -3,7 +3,7 @@
 export async function addMoney(username, ammount) {
     const data = {"username" : username, "ammount" : ammount};
 
-    const res = await fetch('http://localhost:8080/addMoney', {
+    const res = await fetch('http://localhost:8080/users/addMoney', {
       'method' : 'post',
       "headers" : {
         'Content-Type': 'application/json',
@@ -12,7 +12,6 @@ export async function addMoney(username, ammount) {
     });
 
     let updatedUser = await res.json();
-    console.log(updatedUser);
     let status = res.status;
     return [updatedUser, status];
 }

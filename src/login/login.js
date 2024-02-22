@@ -32,9 +32,6 @@ function Login() {
       if (status !== 200) {
         sendSwal("Username or Password are incorrect", "warning");
       } else {
-        console.log("this is the connected user: ");
-        console.log(user);
-        sendSwal("Logged in Succesfully!", "success");
         root.render(<Lobby user={user} />);
       }
     }

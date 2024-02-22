@@ -1,6 +1,6 @@
 
 const registerServer = async (user) => {
-    const res = await fetch('http://localhost:8080/register', {
+    const res = await fetch('http://localhost:8080/users/register', {
         'method' : 'post',
         "headers" : {
           'Content-Type': 'application/json',

@@ -20,7 +20,7 @@ function Lobby(props) {
     root.render(<Login />);
   };
   const GenericClickTable = () => {
-    root.render(<GameTable />);
+    root.render(<GameTable user={props.user} />);
   };
 
   // List that demonstrates all the rows of the open tables

@@ -1,7 +1,7 @@
 
 export async function userExistsWithPassword(username, password) {
     const data = {"username" : username, "password" : password};
-    const res = await fetch('http://localhost:8080/validateUser', {
+    const res = await fetch('http://localhost:8080/users/validateUser', {
       'method' : 'post',
       "headers" : {
         'Content-Type': 'application/json',

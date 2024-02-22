@@ -6,7 +6,7 @@ const getAllUsers = async (req, res) => {
         res.status(200).json(users);
     }
     else{
-        res.status(500);
+        res.status(500).json({});
     }
 }
 
@@ -37,7 +37,6 @@ const addUser = async (req, res) => {
         res.status(303).json({});
     }
     else {
-        console.log("in 200");
         res.status(200).json({});
     }
 }
