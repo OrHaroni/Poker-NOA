@@ -52,7 +52,7 @@ function Add_Money_Page(props) {
               <option value="400">400</option>
             </select>
           </div>
-          <button className="our-btn" onClick={handleAddMoney}>
+          <button className="add-money" onClick={handleAddMoney}>
             Add Money
           </button>
         </div>

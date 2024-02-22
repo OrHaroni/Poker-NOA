@@ -162,11 +162,11 @@ body {
 }
 .money-amount {
   position: relative;
-  left: 85%;
+  left: 84%;
   margin-left: 1%;
   margin-top: 1%;
   margin-bottom:1%;
-  background-color: #ff6347; /* Red color for the button */
+  background-color: #4169E1; /* Blue color for the button */
   color: #000000; /* White text color */
   border: none;
   padding: 10px 20px; /* Adjust padding as needed */
@@ -177,17 +177,17 @@ body {
   font-weight: bolder;
 }
 .money-amount:hover {
-  background-color: #cc4738; /* Darker red color on hover */
+  background-color: #3555b8; /* Darker blue color on hover */
 
 }
 
-.add-money{
+.add-money {
   margin-left: 0%;
   margin-top: 0%;
-  margin-bottom:0%;
-  margin-right:0%;
-  background-color: #ff6347; /* Red color for the button */
-  color: #000000; /* White text color */
+  margin-bottom: 0%;
+  margin-right: 0%;
+  background-color: #4169E1; /* Blue color for the button */
+  color: #ffffff; /* White text color */
   border: none;
   padding: 10px 20px; /* Adjust padding as needed */
   font-size: 16px;
@@ -196,12 +196,28 @@ body {
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
   font-weight: bolder;
 }
-.add-money:hover {
-  background-color: #cc4738; /* Darker red color on hover */
 
+.add-money:hover {
+  background-color: #3555b8; /* Darker blue color on hover */
 }
 
 .exit-button:hover {
   background-color: #cc4738; /* Darker red color on hover */
 
+}
+
+.add-table-btn {
+  background-color: #8B4513; /* Brown background color */
+  color: #fff; /* White text color */
+  padding: 10px 20px; /* Adjust padding as needed */
+  border: none; /* Remove border */
+  border-radius: 5px; /* Add rounded corners */
+  font-size: 16px; /* Adjust font size */
+  cursor: pointer; /* Show pointer cursor on hover */
+  transition: background-color 0.3s ease; /* Smooth background color transition */
+  font-weight: bolder;
+}
+
+.add-table-btn:hover {
+  background-color: #A0522D; /* Slight change in brown on hover */
 }
