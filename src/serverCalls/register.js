@@ -1,24 +1,14 @@
-import { userList } from "./login.js";
 
+const registerServer = async (user) => {
+    const res = await fetch('http://localhost:8080/users/register', {
+        'method' : 'post',
+        "headers" : {
+          'Content-Type': 'application/json',
+        },
+        'body': JSON.stringify(user)
+      });
 
-function isUserExist(username) {
-    return userList.some(obj => obj.username === username);
-};
-
-function isEmailExist(email) {
-    return userList.some(obj => obj.email === email);
-};
-
-
-const registerServer = (user) => {
-    if (isUserExist(user.username)) {
-        return -1; //User is exist
-    } else if (isEmailExist(user.email)) {
-        return -2; //Email is exist
-    } else {
-        userList.push(user);
-        return 0;//Username and Email are not taken
-    }
+      return await res.status;
 };
 
 export default registerServer;

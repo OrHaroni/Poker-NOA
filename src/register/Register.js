@@ -20,7 +20,7 @@ function Register() {
     }
   };
 
-  const ClickRegister = () => {
+  const ClickRegister = async () => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -46,14 +46,15 @@ function Register() {
       const newUser = {"username": username.current.value,
                         "password": password.current.value,
                         "email": email.current.value};
-      let validation = registerServer(newUser);
+      let status = await registerServer(newUser);
       //Invalid username
-      if (validation === -1) {
+      if (status === 302) {
         sendSwal("Username is already taken", "warning");
       } //Invalid email
-      else if (validation === -2) {
+      else if (status === 303) {
         sendSwal("Email is already taken", "warning");
-      } else if(validation === 0) {
+      } else if(status === 200) {
+        sendSwal("Registered succesfully", "success");
         root.render(<Login />);
       }
     }

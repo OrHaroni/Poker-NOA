@@ -41,7 +41,7 @@ app.use(cors());
 // app.use(express.static('../public'));
 
 
-// app.use('/api/Users', userRoutes);
+app.use('/users', userRoutes);
 // app.use('/api/Tokens', tokenRoutes);
 // app.use('/api/Chats', chatRoutes);
 

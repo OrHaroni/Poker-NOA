@@ -15,12 +15,12 @@ export function sendSwal(message, icon) {
   });
 }
 
-function Lobby() {
+function Lobby(props) {
   const clickBack = () => {
     root.render(<Login />);
   };
   const GenericClickTable = () => {
-    root.render(<GameTable />);
+    root.render(<GameTable user={props.user} />);
   };
 
   // List that demonstrates all the rows of the open tables
@@ -51,7 +51,7 @@ function Lobby() {
 
   // Function to handle adding money
   const addMoney = () => {
-    root.render(<Add_Money_Page />);
+    root.render(<Add_Money_Page user={props.user} />);
   };
 
   return (
