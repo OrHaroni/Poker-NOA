@@ -2,19 +2,29 @@ import React, { useRef } from 'react';
 import '../App.css';
 import Lobby, { sendSwal } from '../lobby/lobby.js';
 import { root } from '../index.js';
+import { addMoney } from '../serverCalls/Add_Money_page.js';
 
-function Add_Money_Page() {
+function Add_Money_Page(props) {
+  console.log(props.user);
   const moneyAmountRef = useRef(null);
 
-  const handleAddMoney = () => {
-    const selectedAmount = moneyAmountRef.current.value;
+  const handleAddMoney = async () => {
+  const selectedAmount = moneyAmountRef.current.value;
 
-    if (selectedAmount !== '') {
+  if (selectedAmount !== '') {
+    const [updatedUser, status] = await addMoney(props.user.username, selectedAmount);
+
+    if(status === 200) {
       sendSwal(`Money added successfully! Amount: ${selectedAmount}`, 'success');
-      root.render(<Lobby />);
-    } else {
-      sendSwal('Please select a valid amount.', 'error');
+      root.render(<Lobby user={updatedUser}/>);
     }
+    else {
+      sendSwal('Couldnt add money', 'error');
+      root.render(<Lobby user={props.user}/>);
+    }
+  } else {
+    sendSwal('Please select an amount.', 'error');
+  }
   };
 
   return (
@@ -22,6 +32,7 @@ function Add_Money_Page() {
       <div className="upper-bg"></div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container form-container-extention p-4 rounded">
+        <header className="reg-head text-center mb-4">This is your current amount of money: {props.user.moneyAmount}</header>
           <header className="reg-head text-center mb-4">Add Money</header>
           <div className="form-group">
             <label htmlFor="moneyAmount" className="form-label">

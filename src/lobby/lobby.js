@@ -15,7 +15,7 @@ export function sendSwal(message, icon) {
   });
 }
 
-function Lobby() {
+function Lobby(props) {
   const clickBack = () => {
     root.render(<Login />);
   };
@@ -51,7 +51,7 @@ function Lobby() {
 
   // Function to handle adding money
   const addMoney = () => {
-    root.render(<Add_Money_Page />);
+    root.render(<Add_Money_Page user={props.user} />);
   };
 
   return (

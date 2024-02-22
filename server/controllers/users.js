@@ -42,6 +42,25 @@ const addUser = async (req, res) => {
     }
 }
 
+const addMoney = async (req, res) => {
+    let username = req.body.username;
+    let moneyAmount = req.body.moneyAmount;
+
+    let updatedUser = await userServices.addMoney(username, moneyAmount);
+    if(updatedUser) {
+        //if we didnt could add
+        if(updatedUser.moneyAmount === moneyAmount) {
+            res.status(301).json(updatedUser);
+        }
+        else {
+            res.status(200).json(updatedUser);
+        }
+    }
+    else {
+        res.status(404).json({});
+    }
+}
+
 module.exports = {
-    getAllUsers, validateUser, addUser
+    getAllUsers, validateUser, addUser, addMoney
 }

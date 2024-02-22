@@ -35,7 +35,7 @@ function Login() {
         console.log("this is the connected user: ");
         console.log(user);
         sendSwal("Logged in Succesfully!", "success");
-        root.render(<Lobby />);
+        root.render(<Lobby user={user} />);
       }
     }
   };

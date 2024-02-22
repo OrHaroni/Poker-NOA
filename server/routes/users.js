@@ -9,7 +9,11 @@ router.route('/users').get(userControllers.getAllUsers);
 router.route('/validateUser').post(userControllers.validateUser);
 
 //try to register a user
-router.route('/register').post(userControllers.addUser)
+router.route('/register').post(userControllers.addUser);
+
+//Add money
+router.route('/addMoney').post(userControllers.addMoney);
+
 
 
 module.exports = router;

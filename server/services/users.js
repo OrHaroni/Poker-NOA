@@ -43,6 +43,17 @@ const addUser = async (user) => {
     return 0; //everything good
 }
 
+const addMoney = async (username, moneyAmount) => {
+    const user = userList.find(user => user.username === username);
+    if(user) {
+        console.log("Found user!");
+        console.log(user);
+        user.moneyAmount = 250;
+        console.log(user);
+    }
+    return user;
+}
+
 module.exports = {
-    getAllUsers, validateUser, addUser
+    getAllUsers, validateUser, addUser, addMoney
   }
