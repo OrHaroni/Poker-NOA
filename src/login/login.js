@@ -6,7 +6,7 @@ import logo from '../assets/logo.png';
 import Register from '../register/Register';
 import Lobby from '../lobby/lobby.js';
 import { sendSwal } from '../lobby/lobby.js';
-import { userExistsWithPassword } from '../serverCalls/login.js'
+import { userExistsWithPassword, GetAllUser } from '../serverCalls/login.js'
 
 function Login() {
 
@@ -28,10 +28,13 @@ function Login() {
     }
     else {
       //Check if the username and password are correct for 1 user.
-      let isCorrectPassword = userExistsWithPassword(username.current.value, password.current.value);
-      if (!isCorrectPassword) {
+      let [user, status] = await userExistsWithPassword(username.current.value, password.current.value);
+      if (status !== 200) {
         sendSwal("Username or Password are incorrect", "warning");
       } else {
+        console.log("this is the connected user: ");
+        console.log(user);
+        sendSwal("Logged in Succesfully!", "success");
         root.render(<Lobby />);
       }
     }
