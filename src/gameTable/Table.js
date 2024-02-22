@@ -22,7 +22,14 @@ function Table(props) {
 
     return (
         <>
-        <button className='exit-button' onClick={ClickBack}>Back</button>
+        <div className="upper-bg">
+        <button className="exit-button" onClick={ClickBack} id="buttonBack">
+          Back
+        </button>
+        <button className="money-amount">
+          money: {props.user.moneyAmount}
+        </button>
+      </div>
         <div className="table">
             <div>
                 {/* Background image */}
