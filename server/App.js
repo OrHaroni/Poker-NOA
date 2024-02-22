@@ -17,7 +17,7 @@ app.get('/', (req, res) => {
   });
 
 const userRoutes = require('./routes/users.js');
-// const chatRoutes = require('./routes/chat.js');
+const tableRoutes = require('./routes/tables.js');
 // const tokenRoutes = require('./routes/token.js');
 
 
@@ -42,7 +42,7 @@ app.use(cors());
 
 
 app.use('/users', userRoutes);
-// app.use('/api/Tokens', tokenRoutes);
+app.use('/tables', tableRoutes);
 // app.use('/api/Chats', chatRoutes);
 
 app.listen(process.env.PORT);
