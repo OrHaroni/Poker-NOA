@@ -8,5 +8,8 @@ router.route('/users').get(userControllers.getAllUsers);
 //Validate a user that wants to connect
 router.route('/validateUser').post(userControllers.validateUser);
 
+//try to register a user
+router.route('/register').post(userControllers.addUser)
+
 
 module.exports = router;

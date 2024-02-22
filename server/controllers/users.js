@@ -25,6 +25,23 @@ const validateUser = async (req, res) => {
     }
 }
 
+const addUser = async (req, res) => {
+    const new_user = req.body;
+
+    let status = await userServices.addUser(new_user);
+    //user taken
+    if (status === 2) {
+        res.status(302).json({});
+    } //email taken
+    else if (status === 1) {
+        res.status(303).json({});
+    }
+    else {
+        console.log("in 200");
+        res.status(200).json({});
+    }
+}
+
 module.exports = {
-    getAllUsers, validateUser
+    getAllUsers, validateUser, addUser
 }

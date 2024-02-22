@@ -4,6 +4,18 @@ const {userList} = require('../models/users.js');
 const getAllUsers = async () => {
     return userList;
 }
+const isEmailTaken = async (email) => {
+    if(userList.find(user => user.email === email)) {
+        return true;
+    }
+    return false;
+}
+const isUsernameTaken = async (username) => {
+    if(userList.find(user => user.username === username)) {
+        return true;
+    }
+    return false;
+}
 
 const validateUser = async (username, password) => {
 
@@ -15,6 +27,22 @@ const validateUser = async (username, password) => {
     }
 };
 
+const addUser = async (user) => {
+    const username = user.username;
+    const email = user.email;
+
+    if(await isUsernameTaken(username)) {
+        return 2; //username taken 
+    }
+    else if (await isEmailTaken(email)) {
+        return 1; //email taken
+    }
+    //Now know its not taken
+    user.moneyAmount = 0;
+    userList.push(user);
+    return 0; //everything good
+}
+
 module.exports = {
-    getAllUsers, validateUser
+    getAllUsers, validateUser, addUser
   }
