@@ -11,10 +11,10 @@ const getAllTables = async (req, res) => {
 }
 
 const validateTable = async (req, res) => {
-    const id = req.body.id;
+    const name = req.body.name;
     const password = req.body.password
 
-    const table = await tableService.validateTable(id, password);
+    const table = await tableService.validateTable(name, password);
     //if we have user and password
     if(table) {
         res.status(200).json(table);
@@ -26,9 +26,10 @@ const validateTable = async (req, res) => {
 }
 
 const addTable = async (req, res) => {
-    const new_table = req.body;
+    const new_table = req.body.table;
+    const userCreated = req.body.nickname;
 
-    let status = await tableService.addTable(new_table);
+    let status = await tableService.addTable(new_table, userCreated);
     //table name taken
     if (status === 2) {
         res.status(302).json({});

@@ -46,7 +46,8 @@ function Register() {
     else {
       const newUser = {"username": username.current.value,
                         "password": password.current.value,
-                        "email": email.current.value};
+                        "email": email.current.value,
+                        "nickname": nickname.current.value};
       let status = await registerServer(newUser);
       //Invalid username
       if (status === 302) {

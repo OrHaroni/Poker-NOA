@@ -55,10 +55,9 @@ const addUser = async (user) => {
         return 1; //email taken
     }
     //If didnt input any nickname. gives the username as nickname
-    if (user.nickname === '' || user.nickname) {
+    if (user.nickname === '') {
         user.nickname = user.username;
     }
-
     const newUser = new userSchema(user);
     await newUser.save();
     } catch(error) {

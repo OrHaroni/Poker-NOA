@@ -10,6 +10,9 @@ const userSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  nickname: { 
+    type: String
+  },
   email: {
     type: String,
     required: true,
@@ -23,7 +26,6 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  nickname: String, // Optional field- if doesnt has nickname in register, put his username as nickname
   lastTimeAddedMoney: Date, // Optional field
   biggestWin: {
     type: Number,
