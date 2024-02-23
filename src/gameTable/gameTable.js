@@ -11,7 +11,7 @@ function GameTable(props) {
             <Row>
                 <Col>
                     {/* Render the Table component up to 4*/}
-                    <Table user={props.user} players_num={4} />
+                    <Table table={props.table} user={props.user} players_num={4} />
                 </Col>
             </Row>
         </Container>

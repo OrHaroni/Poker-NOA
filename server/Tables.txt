@@ -24,6 +24,8 @@ moneyAmountOnTable: Number; (the current number of money on the table, updated d
 bigBlind: Number; (I dont understand this but think needed)
 smallBlind: Number; (I dont understand this but think needed)
 cardOnTable: array (?) (not really sure we need this, can save it just in the server and send to the players every time)
+
+createUser: String; maybe the username of the user who created this table ?
 **ADD HERE FOR MORE**
 
 
