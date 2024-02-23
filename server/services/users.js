@@ -1,35 +1,52 @@
-const {userList} = require('../models/users.js');
+const userSchema = require('../models/users.js');
 
 
-const getAllUsers = async () => {
-    return userList;
-}
-const isEmailTaken = async (email) => {
-    if(userList.find(user => user.email === email)) {
-        return true;
+// Function to retrieve all users
+async function getAllUsers() {
+    try {
+      const users = await userSchema.find({});
+      return users;
+    } catch (error) {
+      console.error('Error retrieving users:', error);
+      throw error;
     }
-    return false;
-}
-const isUsernameTaken = async (username) => {
-    if(userList.find(user => user.username === username)) {
-        return true;
+  }
+// Function to check if an email is already taken
+async function isEmailTaken(email) {
+    try {
+      const user = await userSchema.findOne({ "email": email });
+      return (user !== null); // If user is found, email is taken
+    } catch (error) {
+      console.error('Error checking email availability:', error);
+      throw error;
     }
-    return false;
-}
+  }
+  
+  // Function to check if a username is already taken
+  async function isUsernameTaken(username) {
+    try {
+      const user = await userSchema.findOne({ "username": username });
+      return (user !== null); // If user is found, username is taken
+    } catch (error) {
+      console.error('Error checking username availability:', error);
+      throw error;
+    }
+  }
 
 const validateUser = async (username, password) => {
-
-    const user = userList.find(user => user.username === username);
-    if (user && user.password === password) {
-        return user; // Return the user if found and password matches
-    } else {
-        return null; // Return null if user not found or password doesn't match
-    }
+    try {
+        const user = await userSchema.findOne({ "username": username, "password": password });
+        return user; // If user is found, authentication is successful
+      } catch (error) {
+        console.error('Error validation user:', error);
+        throw error;
+      }
 };
 
 const addUser = async (user) => {
     const username = user.username;
     const email = user.email;
+    try{
 
     if(await isUsernameTaken(username)) {
         return 2; //username taken 
@@ -37,18 +54,32 @@ const addUser = async (user) => {
     else if (await isEmailTaken(email)) {
         return 1; //email taken
     }
-    //Now know its not taken
-    user.moneyAmount = 0;
-    userList.push(user);
+    //If didnt input any nickname. gives the username as nickname
+    if (user.nickname === '' || user.nickname) {
+        user.nickname = user.username;
+    }
+
+    const newUser = new userSchema(user);
+    await newUser.save();
+    } catch(error) {
+        console.error('Error adding user in servies:', error);
+        throw error;
+    }
     return 0; //everything good
 }
 
-const addMoney = async (username, moneyAmount) => {
-    const user = userList.find(user => user.username === username);
-    if(user) {
-        user.moneyAmount = 250;
-    }
-    return user;
+const addMoney = async (username, moneyAmountToAdd) => {
+    try {
+        const user = await userSchema.findOneAndUpdate(
+          { username: username },
+          { $inc: { moneyAmount: moneyAmountToAdd } }, // Increment the moneyAmount field by moneyAmountToAdd
+          { new: true }
+        );
+        return user;
+      } catch (error) {
+        console.error('Error adding money to user:', error);
+        throw error;
+      }
 }
 
 module.exports = {

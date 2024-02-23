@@ -1,7 +1,7 @@
 
 
 export async function addMoney(username, ammount) {
-    const data = {"username" : username, "ammount" : ammount};
+    const data = {"username" : username, "moneyAmount" : ammount};
 
     const res = await fetch('http://localhost:8080/users/addMoney', {
       'method' : 'post',
