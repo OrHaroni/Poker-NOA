@@ -1,8 +1,46 @@
-/* The DB untill we add the mongoose DB */
-const userList = [
-    {"username": "1", "password": "1", "email": "1@1.com", "moneyAmount" : 0},
-    {"username": "2", "password": "2", "email": "2@2.com", "moneyAmount" : 0},
-    {"username": "3", "password": "3", "email": "3@3.com", "moneyAmount" : 0}
-];
+const mongoose = require('mongoose');
 
-module.exports = { userList };
+const userSchema = new mongoose.Schema({
+  username: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  password: {
+    type: String,
+    required: true
+  },
+  nickname: { 
+    type: String
+  },
+  email: {
+    type: String,
+    required: true,
+    unique: true
+  },
+  isApprovedByEmail: {
+    type: Boolean,
+    default: false
+  },
+  moneyAmount: {
+    type: Number,
+    default: 0
+  },
+  lastTimeAddedMoney: Date, // Optional field
+  biggestWin: {
+    type: Number,
+    default: 0
+  },
+  numberOfWins: {
+    type: Number,
+    default: 0
+  },
+  gamesPlayed: {
+    type: Number,
+    default: 0
+  }
+});
+
+const User = mongoose.model('User', userSchema);
+
+module.exports = User;

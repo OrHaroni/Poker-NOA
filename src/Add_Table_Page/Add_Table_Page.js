@@ -20,7 +20,7 @@ function Add_Money_Page(props) {
       return;
     }
     if(maxNumPlayers !== '') {
-        const status = await addTable(name, maxNumPlayers, password);
+        const status = await addTable(name, maxNumPlayers, password, props.user.nickname);
         if(status === 302) {
             sendSwal('This name is already taken', 'warning');
         } else if (status === 303) {

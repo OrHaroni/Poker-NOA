@@ -1,28 +1,41 @@
-const {tableList} = require('../models/tables.js');
+const tableSchema = require('../models/tables.js')
 
-const getAllTables = async () => {
-    return tableList;
-}
+// Function to retrieve all users
+async function getAllTables() {
+    try {
+      const tables = await tableSchema.find({});
+      return tables;
+    } catch (error) {
+      console.error('Error retrieving tables:', error);
+      throw error;
+    }
+  }
 
 const isTableNameTaken = async (name) => {
-    if(tableList.find(table => table.name === name)) {
-        return true;
-    }
-    return false;
+    try {
+        const table = await tableSchema.findOne({ "name": name });
+        return (table !== null); // If user is found, email is taken
+      } catch (error) {
+        console.error('Error checking name availability:', error);
+        throw error;
+      }
 }
 
-const validateTable = async (id, password) => {
-    const table = tableList.find(table => table.id === id);
-    if (table && table.password === password) {
-        return table; // Return the table if found and password matches
-    } else {
-        return null; // Return null if table not found or password doesn't match
-    }
+const validateTable = async (name, password) => {
+    try {
+        const table = await tableSchema.findOne({ "name": name, "password": password });
+        return table; // If user is found, authentication is successful
+      } catch (error) {
+        console.error('Error validation table:', error);
+        throw error;
+      }
 }
 
-const addTable = async (table) => {
+const addTable = async (table, userCreated) => {
     const name = table.name;
     const max_players_num = table.max_players_num;
+
+    try{
 
     if(await isTableNameTaken(name)) {
         return 2; //table name is taken 
@@ -30,14 +43,22 @@ const addTable = async (table) => {
     else if (max_players_num > 4) {
         return 1; //max players number is too big
     }
+
     //Now we know its valid
-    table.id = 7; //with mongoose will be automated
     table.players_num = 0;
     table.moneyAmountOnTable = 0;
     table.bigBlind = 10;
     table.smallBlind = 5;
     table.cardOnTable = [];
-    tableList.push(table);
+    table.playersOnTable = [];
+    table.createdBy = userCreated;
+
+    const newTable = new tableSchema(table);
+    await newTable.save();
+    } catch(error) {
+        console.error('Error adding table in servies:', error);
+        throw error;
+    }
     return 0; //everything good
 }
 

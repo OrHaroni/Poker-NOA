@@ -23,7 +23,7 @@ function Lobby(props) {
   const clickBack = () => {
     root.render(<Login />);
   };
-  const GenericClickTable = async (id, event) => {
+  const GenericClickTable = async (name, event) => {
     const inputFieldPassword = event.target.parentElement.nextElementSibling.querySelector('input');
     let password;
     if(inputFieldPassword) {
@@ -34,7 +34,7 @@ function Lobby(props) {
     }
 
     //Check if correct password of table.
-    const [table, retStatus] = await enterTable(id, password);
+    const [table, retStatus] = await enterTable(name, password);
     if(retStatus === 200) {
       root.render(<GameTable table={table} user={props.user} />);
     }
@@ -65,9 +65,12 @@ function Lobby(props) {
 const TagTableList = tablesList.map((table, index) => (
   <tr key={index}>
     <td>{table.name}</td>
+    <td>{table.createdBy}</td>
     <td>{table.players_num}/{table.max_players_num}</td>
+    <td>{table.moneyAmountOnTable}</td>
+    <td>{table.smallBlind}/{table.bigBlind}</td>
     <td>
-    <button onClick={(event) => GenericClickTable(table.id, event)}>Join table</button>
+    <button onClick={(event) => GenericClickTable(table.name, event)}>Join table</button>
     </td>
     <td>
       {table.password !== '' ? <input
@@ -89,7 +92,8 @@ const TagTableList = tablesList.map((table, index) => (
   const addTable = () => {
    root.render(<Add_Table_Page user={props.user} />);
   }
-
+  console.log("This is the table list");
+  console.log(tablesList);
   return (
     <>
       <div className="upper-bg">
@@ -114,7 +118,10 @@ const TagTableList = tablesList.map((table, index) => (
               <thead>
                 <tr>
                   <th>Table name</th>
+                  <th>Created by</th>
                   <th>Number of players</th>
+                  <th>Money on the table</th>
+                  <th>Small/Big blind</th>
                   <th>Join</th>
                   <th>Password</th>
                 </tr>

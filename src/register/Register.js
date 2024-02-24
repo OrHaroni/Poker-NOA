@@ -10,6 +10,7 @@ function Register() {
 
   const username = useRef(null);
   const email = useRef(null);
+  const nickname = useRef(null);
   const password = useRef(null);
   const password_confirm = useRef(null);
 
@@ -45,7 +46,8 @@ function Register() {
     else {
       const newUser = {"username": username.current.value,
                         "password": password.current.value,
-                        "email": email.current.value};
+                        "email": email.current.value,
+                        "nickname": nickname.current.value};
       let status = await registerServer(newUser);
       //Invalid username
       if (status === 302) {
@@ -77,7 +79,7 @@ function Register() {
             <div className="mb-4">
               <div className="mb-3">
                 <label htmlFor="username" className="form-label">
-                  Username
+                  Username<span class="required">*</span>
                 </label>
                 <input
                   onKeyDown={ClickEnter}
@@ -89,7 +91,7 @@ function Register() {
               </div>
               <div className="mb-3">
                 <label htmlFor="username" className="form-label">
-                  Email address
+                  Email address<span class="required">*</span>
                 </label>
                 <input
                   onKeyDown={ClickEnter}
@@ -100,8 +102,20 @@ function Register() {
                 />
               </div>
               <div className="mb-3">
+                <label htmlFor="username" className="form-label">
+                  Nickname
+                </label>
+                <input
+                  onKeyDown={ClickEnter}
+                  type="text"
+                  className="form-control"
+                  id="email"
+                  ref={nickname}
+                />
+              </div>
+              <div className="mb-3">
                 <label htmlFor="password" className="form-label">
-                  Password
+                  Password<span class="required">*</span>
                 </label>
                 <input
                   onKeyDown={ClickEnter}
@@ -113,7 +127,7 @@ function Register() {
               </div>
               <div className="mb-3"> 
                 <label htmlFor="confirm-password" className="form-label t">
-                Confirm Password
+                Confirm Password<span class="required">*</span>
                 </label>
                 <input
                   onKeyDown={ClickEnter}

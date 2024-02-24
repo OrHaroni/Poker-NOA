@@ -28,15 +28,12 @@ app.use(express.urlencoded({ limit: '50mb', extended: true }));
 // Using cors middleware to enable cross-origin requests
 app.use(cors());
 
-// // Connecting to MongoDB
-// const mongoose = require('mongoose');
+// Connecting to MongoDB
+const mongoose = require('mongoose');
 // const { copyFileSync } = require('fs');
-// mongoose.connect("mongodb://127.0.0.1:27017/DB" , {
-//     useNewUrlParser: true,
-//     useUnifiedTopology: true,
-//   })
-//   .then(() => console.log('Connected to MongoDB'))
-//   .catch((e) => console.log(e));
+mongoose.connect("mongodb://127.0.0.1:27017/poker-noa")
+  .then(() => console.log('poker-noa server is connected to MongoDB'))
+  .catch((e) => console.log(e));
 
 // app.use(express.static('../public'));
 

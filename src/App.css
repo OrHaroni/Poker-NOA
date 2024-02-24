@@ -221,3 +221,7 @@ body {
 .add-table-btn:hover {
   background-color: #A0522D; /* Slight change in brown on hover */
 }
+
+.required {
+  color: red; /* Set the color of the asterisk to red */
+}
