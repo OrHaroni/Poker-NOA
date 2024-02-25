@@ -162,7 +162,7 @@ body {
 }
 .money-amount {
   position: relative;
-  left: 84%;
+  left: 83%;
   margin-left: 1%;
   margin-top: 1%;
   margin-bottom:1%;
@@ -224,4 +224,47 @@ body {
 
 .required {
   color: red; /* Set the color of the asterisk to red */
+}
+
+.tr-button {
+  background-color: #007bff;
+  border: none;
+  color: white;
+  padding: 8px 12px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  font-size: 14px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+  font-weight: bolder;
+}
+
+.tr-button:hover {
+  background-color: #0056b3;
+}
+
+.tr-button:focus {
+  outline: none;
+}
+
+.login-btn {
+  margin-left: 0%;
+  margin-top: 0%;
+  margin-bottom: 0%;
+  margin-right: 0%;
+  background-color: #4169E1; /* Blue color for the button */
+  color: #ffffff; /* White text color */
+  border: none;
+  padding: 10px 20px; /* Adjust padding as needed */
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  font-weight: bolder;
+}
+
+.login-btn:hover {
+  background-color: #3555b8; /* Darker blue color on hover */
 }

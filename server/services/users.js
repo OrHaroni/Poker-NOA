@@ -33,6 +33,17 @@ async function isEmailTaken(email) {
     }
   }
 
+// Function to check if a username is already taken
+async function isNicknameTaken(nickname) {
+  try {
+    const user = await userSchema.findOne({ "nickname": nickname });
+    return (user !== null); // If user is found, username is taken
+  } catch (error) {
+    console.error('Error checking username availability:', error);
+    throw error;
+  }
+}
+
 const validateUser = async (username, password) => {
     try {
         const user = await userSchema.findOne({ "username": username, "password": password });
@@ -58,6 +69,11 @@ const addUser = async (user) => {
     if (user.nickname === '') {
         user.nickname = user.username;
     }
+    
+    if(await isNicknameTaken(user.nickname)) {
+      return 3; //nickname is taken
+    }
+    
     const newUser = new userSchema(user);
     await newUser.save();
     } catch(error) {

@@ -26,22 +26,22 @@ function Register() {
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
     if(username.current.value === '') {
-      sendSwal("Username is empty", "warning");
+      sendSwal("Username is empty", "error");
     }
     else if(email.current.value === '') {
-      sendSwal("email is empty", "warning");
+      sendSwal("email is empty", "error");
     }
     else if(!emailRegex.test(email.current.value)) {
-      sendSwal("Invalid email", "warning");
+      sendSwal("Invalid email", "error");
     }
     else if(password.current.value === '') {
-      sendSwal("Password is empty", "warning");
+      sendSwal("Password is empty", "error");
     }
     else if(password_confirm.current.value === ''){
-      sendSwal("Confirm password is empty", "warning");
+      sendSwal("Confirm password is empty", "error");
     }
     else if (password.current.value !== password_confirm.current.value) {
-      sendSwal("password and confirm password are not the same", "warning");
+      sendSwal("password and confirm password are not the same", "error");
     }
     else {
       const newUser = {"username": username.current.value,
@@ -51,10 +51,12 @@ function Register() {
       let status = await registerServer(newUser);
       //Invalid username
       if (status === 302) {
-        sendSwal("Username is already taken", "warning");
+        sendSwal("Username is already taken", "error");
       } //Invalid email
       else if (status === 303) {
-        sendSwal("Email is already taken", "warning");
+        sendSwal("Email is already taken", "error");
+      } else if(status === 304) {
+        sendSwal("Nickname is already taken", "error");
       } else if(status === 200) {
         sendSwal("Registered succesfully", "success");
         root.render(<Login />);

@@ -16,15 +16,15 @@ function Add_Money_Page(props) {
     const password = passRef.current.value;
 
     if (name === '') {
-      sendSwal('Please enter a name', 'warning');
+      sendSwal('Please enter a name', 'error');
       return;
     }
     if(maxNumPlayers !== '') {
         const status = await addTable(name, maxNumPlayers, password, props.user.nickname);
         if(status === 302) {
-            sendSwal('This name is already taken', 'warning');
+            sendSwal('This name is already taken', 'error');
         } else if (status === 303) {
-            sendSwal('Max players in too big', 'warning');
+            sendSwal('Max players in too big', 'error');
         }
         else if (status === 200) {
             sendSwal("added new table succesfully", "success");
@@ -34,7 +34,7 @@ function Add_Money_Page(props) {
         }
     }
     else {
-        sendSwal('Please select an amount.', 'warning');
+        sendSwal('Please select an amount.', 'error');
     }
 
   };
@@ -54,13 +54,13 @@ function Add_Money_Page(props) {
       <header className="reg-head text-center mb-4">Add new table</header>
       <div className="form-group">
         <label htmlFor="tableName" className="form-label">
-          Table Name
+          Table Name<span class="required">*</span>
         </label>
         <input type="text" className="form-control" id="tableName" name="tableName" ref={nameRef}/>
       </div>
       <div className="form-group">
         <label htmlFor="moneyAmount" className="form-label">
-          number of players
+          number of players<span class="required">*</span>
         </label>
         <select className="form-control" id="moneyAmount" ref={maxNumPlayersRef}>
           <option value="">Select Amount</option>
