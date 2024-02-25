@@ -21,16 +21,16 @@ function Login() {
   };
   const ClickLogin = async () => {
     if (username.current.value === '') {
-      sendSwal("Username is empty", "warning");
+      sendSwal("Username is empty", "error");
     }
     else if (password.current.value === '') {
-      sendSwal("Password is empty", "warning");
+      sendSwal("Password is empty", "error");
     }
     else {
       //Check if the username and password are correct for 1 user.
       let [user, status] = await userExistsWithPassword(username.current.value, password.current.value);
       if (status !== 200) {
-        sendSwal("Username or Password are incorrect", "warning");
+        sendSwal("Username or Password are incorrect", "error");
       } else {
         root.render(<Lobby user={user} />);
       }
@@ -46,7 +46,7 @@ function Login() {
   return (
     <>
       <div className="upper-bg">
-        <button className='exit-button' onClick={ClickExit}>Back</button>
+        <button className='exit-button' onClick={ClickExit}>Exit</button>
       </div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container p-4 rounded in-Login">
@@ -81,7 +81,7 @@ function Login() {
             onClick={ClickLogin}
             id="buttonLogin"
             type="submit"
-            className="btn btn-primary btn-block our-btn"
+            className="login-btn"
           >
             Login
           </button>

@@ -70,7 +70,7 @@ const TagTableList = tablesList.map((table, index) => (
     <td>{table.moneyAmountOnTable}</td>
     <td>{table.smallBlind}/{table.bigBlind}</td>
     <td>
-    <button onClick={(event) => GenericClickTable(table.name, event)}>Join table</button>
+    <button className="tr-button" onClick={(event) => GenericClickTable(table.name, event)}>Join table</button>
     </td>
     <td>
       {table.password !== '' ? <input

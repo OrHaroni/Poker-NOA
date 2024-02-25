@@ -36,6 +36,9 @@ const addUser = async (req, res) => {
     else if (status === 1) {
         res.status(303).json({});
     }
+    else if (status === 3) {
+        res.status(304).json({});
+    }
     else {
         res.status(200).json({});
     }
