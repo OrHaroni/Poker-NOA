@@ -268,3 +268,7 @@ body {
 .login-btn:hover {
   background-color: #3555b8; /* Darker blue color on hover */
 }
+.number-btn{
+  position: relative;
+  width: 108%;
+}
