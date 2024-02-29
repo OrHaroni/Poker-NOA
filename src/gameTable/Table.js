@@ -1,6 +1,7 @@
 
 import React from 'react';
 import Player from './Player';
+import OurPlayer from './OurPlayer.js';
 import './table.css'; // Import the table CSS file
 import tableImg from '../assets/emptyTable.png'; // Import the image
 import { root } from '../index.js';
@@ -40,6 +41,7 @@ function Table(props) {
                 </div>
             </div>
         </div>
+        <OurPlayer key={5} name={"OurPlayer"} className={"our-player"}/>
         </>
     );
 }

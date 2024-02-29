@@ -17,6 +17,7 @@
     height: 10%;
 }
 
+
 .players {
     position: absolute;
     top: 0;
@@ -27,6 +28,11 @@
 
 .player-cards {
     position: absolute;
+}
+.our-player-cards{
+    position: absolute;
+    height: 10%;
+    width: 10%;
 }
 
 /* Apply styling for the RandomCard components */
@@ -75,14 +81,31 @@
     top:12%;
     left: 13%;
 }
+.our-player{
+    position: fixed;
+    top: 70%;
+    left: 40%;
+    width: 100%;
+}
 
 .card {
-    width: 100px; 
-    height: 150px;
+    width: 100%; 
+    height: 100%;
 }
 
 .hidden-cards {
     position: relative;
     width: 45%; 
+    top:20%;
+}
+
+.our-hidden-cards{
+    position: relative;
+    width: 20%; 
+    top:20%;
+}
+.our-cards{
+    position: relative;
+    width: 50%; 
     top:20%;
 }
