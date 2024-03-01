@@ -66,7 +66,7 @@ const TagTableList = tablesList.map((table, index) => (
   <tr key={index}>
     <td>{table.name}</td>
     <td>{table.createdBy}</td>
-    <td>{table.players_num}/{table.max_players_num}</td>
+    <td>{table.playersOnTable.length}/{table.max_players_num}</td>
     <td>{table.moneyAmountOnTable}</td>
     <td>{table.smallBlind}/{table.bigBlind}</td>
     <td>
@@ -92,8 +92,6 @@ const TagTableList = tablesList.map((table, index) => (
   const addTable = () => {
    root.render(<Add_Table_Page user={props.user} />);
   }
-  console.log("This is the table list");
-  console.log(tablesList);
   return (
     <>
       <div className="upper-bg">

@@ -6,10 +6,6 @@ const tableSchema = new Schema({
     type: String,
     requied: true
   },
-  players_num: {
-    type: Number,
-    required: true
-  },
   max_players_num: {
     type: Number,
     required: true
@@ -34,47 +30,19 @@ const tableSchema = new Schema({
     type: [String],
     default: []
   },
-   playersOnTable: [{
-    username: {
-      type: String,
-      required: true,
-      unique: true
-    },
-    password: {
-      type: String,
-      required: true
-    },
-    nickname: { 
-      type: String
-    },
-    email: {
-      type: String,
-      required: true,
-      unique: true
-    },
-    isApprovedByEmail: {
-      type: Boolean,
-      default: false
-    },
-    moneyAmount: {
-      type: Number,
-      default: 0
-    },
-    lastTimeAddedMoney: Date, // Optional field
-    biggestWin: {
-      type: Number,
-      default: 0
-    },
-    numberOfWins: {
-      type: Number,
-      default: 0
-    },
-    gamesPlayed: {
-      type: Number,
-      default: 0
-    }
-
-  }],
+  //object that is a list with default of empty list
+  playersOnTable: {
+    type: [{
+      nickname: { 
+        type: String
+      },
+      moneyAmount: {
+        type: Number,
+        default: 0
+      }
+    }],
+    default: []
+  },
   createdBy: {
     type: String,
     required: true

@@ -24,18 +24,45 @@ const isTableNameTaken = async (name) => {
 
 const validateTable = async (tableName, password, username) => {
     try {
-        const table = await tableSchema.findOne({ "tableName": tableName, "password": password });
-        // add user to table
-        if(table) {
-          const user = await userSchema.findOne({ "username": username });
-            table.playersOnTable.push(user);
-            await table.save();
-        }
-        return table; // If user is found, authentication is successful
+
+      return await tableSchema.findOne({ "tableName": tableName, "password": password });
+  
       } catch (error) {
         console.error('Error validation table:', error);
         throw error;
       }
+}
+
+const joinUserIntoTable = async (tableName, username, moneyToEnterWith) => {
+  try {
+    const table = await tableSchema.findOne({"name": tableName});//No need for password because already validated.
+
+    if(table.playersOnTable.length === table.max_players_num) {
+      return 2; //table is full;
+    }
+    const user = await userSchema.findOne({"username": username });
+
+    if(user) {
+      if(user.moneyAmount < moneyToEnterWith) {
+        return 1; //no enough money.
+      }
+      else {
+        //Decrease the money for this user
+        user.moneyAmount -= moneyToEnterWith;
+        await user.save();
+
+        //create minimal parameters user
+        const minimalUser = {"nickname": user.nickname, "moneyAmount": user.moneyAmount};
+        table.playersOnTable.push(minimalUser);
+        await table.save();
+        return 0;//0 for no money problem.
+      }
+    }
+  } catch(error){
+        console.error('Error joining into table:', error);
+        throw error;
+  }
+
 }
 
 const addTable = async (table, userCreated) => {
@@ -69,12 +96,15 @@ const addTable = async (table, userCreated) => {
     return 0; //everything good
 }
 
-const leaveTable = async (tableName,username) => {
+const leaveTable = async (tableName, nickname) => {
     try {
-        const table = await tableSchema.findOne({ "name": tableName });
-        const user = await userSchema.findOne({ "username": username });
-        table.playersOnTable.remove(user);
-        await table.save();
+      
+        // Update the table by pulling the player with the given nickname from the array
+        await tableSchema.updateOne(
+          { name: tableName },
+          { $pull: { playersOnTable: { nickname: nickname } } }
+        );
+
         return 0 ;
       } catch (error) {
         console.error('Error leaving table:', error);
@@ -87,5 +117,5 @@ const leaveTable = async (tableName,username) => {
 
 
 module.exports = {
-    getAllTables, validateTable, addTable, leaveTable
+    getAllTables, validateTable, addTable, leaveTable, joinUserIntoTable
   }

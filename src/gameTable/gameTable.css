@@ -28,3 +28,28 @@
     background-color: #cc4738; /* Darker red color on hover */
   
   }
+
+  .enter-table-modal {
+
+  }
+
+  .modal-center {
+    position: absolute;
+    top: 22%;
+    left: 23%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 40%;
+    width: 40%;
+}
+
+.modal-content {
+    text-align: center;
+}
+
+.modal-back-button {
+  position: absolute;
+  top: 0;
+  left: 0;
+}
