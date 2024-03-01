@@ -14,7 +14,6 @@ const OurPlayer = (props) => {
         const newCards = RandomTwoCards(); // Assuming RandomCard returns a card
         setGeneratedCard(newCards);
     }
-    
 
     return (
             <>

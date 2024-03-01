@@ -11,10 +11,11 @@ const getAllTables = async (req, res) => {
 }
 
 const validateTable = async (req, res) => {
-    const name = req.body.name;
+    const tableName = req.body.tableName;
     const password = req.body.password
+    const username = req.body.username;
 
-    const table = await tableService.validateTable(name, password);
+    const table = await tableService.validateTable(tableName, password, username);
     //if we have user and password
     if(table) {
         res.status(200).json(table);
@@ -42,6 +43,20 @@ const addTable = async (req, res) => {
     }
 }
 
+// handeling the leave table request
+const leaveTable = async (req, res) => {
+    const username = req.body.username;
+    const tableName = req.body.name;
+    const status = await tableService.leaveTable(tableName,username);
+    // 0 means the player was removed from the table, anything good
+    if(status == 0) {
+        res.status(200).json({});
+    }
+    else {
+        res.status(500).json({});
+    }
+}
+
 module.exports = {
-    getAllTables, validateTable, addTable
+    getAllTables, validateTable, addTable, leaveTable
   }

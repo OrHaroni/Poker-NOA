@@ -34,17 +34,52 @@ const tableSchema = new Schema({
     type: [String],
     default: []
   },
-  playersOnTable: {
-    type: [String],
-    default: []
-  },
+   playersOnTable: [{
+    username: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    password: {
+      type: String,
+      required: true
+    },
+    nickname: { 
+      type: String
+    },
+    email: {
+      type: String,
+      required: true,
+      unique: true
+    },
+    isApprovedByEmail: {
+      type: Boolean,
+      default: false
+    },
+    moneyAmount: {
+      type: Number,
+      default: 0
+    },
+    lastTimeAddedMoney: Date, // Optional field
+    biggestWin: {
+      type: Number,
+      default: 0
+    },
+    numberOfWins: {
+      type: Number,
+      default: 0
+    },
+    gamesPlayed: {
+      type: Number,
+      default: 0
+    }
+
+  }],
   createdBy: {
     type: String,
     required: true
   }
 });
-
-
 const Table = mongoose.model('Table', tableSchema);
 
 module.exports = Table;

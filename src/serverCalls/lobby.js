@@ -9,8 +9,8 @@ export async function GetAllTables(){
       return await res.json();
 }
 
-export async function enterTable(name, password) {
-    const data = {"name" : name, "password" : password};
+export async function enterTable(tableName, password, username) {
+    const data = {"tableName" : tableName, "password" : password, "username" : username};
     const res = await fetch('http://localhost:8080/tables/validateTable', {
       'method' : 'post',
       "headers" : {

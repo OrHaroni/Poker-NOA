@@ -11,5 +11,8 @@ router.route('/validateTable').post(tableControllers.validateTable);
 //try to register a user
 router.route('/addTable').post(tableControllers.addTable);
 
+// route for leave table
+router.route('/leaveTable').post(tableControllers.leaveTable);
+
 
 module.exports = router;

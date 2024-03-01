@@ -1,4 +1,5 @@
 const tableSchema = require('../models/tables.js')
+const userSchema = require('../models/users.js')
 
 // Function to retrieve all users
 async function getAllTables() {
@@ -21,9 +22,15 @@ const isTableNameTaken = async (name) => {
       }
 }
 
-const validateTable = async (name, password) => {
+const validateTable = async (tableName, password, username) => {
     try {
-        const table = await tableSchema.findOne({ "name": name, "password": password });
+        const table = await tableSchema.findOne({ "tableName": tableName, "password": password });
+        // add user to table
+        if(table) {
+          const user = await userSchema.findOne({ "username": username });
+            table.playersOnTable.push(user);
+            await table.save();
+        }
         return table; // If user is found, authentication is successful
       } catch (error) {
         console.error('Error validation table:', error);
@@ -62,6 +69,23 @@ const addTable = async (table, userCreated) => {
     return 0; //everything good
 }
 
+const leaveTable = async (tableName,username) => {
+    try {
+        const table = await tableSchema.findOne({ "name": tableName });
+        const user = await userSchema.findOne({ "username": username });
+        table.playersOnTable.remove(user);
+        await table.save();
+        return 0 ;
+      } catch (error) {
+        console.error('Error leaving table:', error);
+        throw error;
+      }
+}
+
+
+
+
+
 module.exports = {
-    getAllTables, validateTable, addTable
+    getAllTables, validateTable, addTable, leaveTable
   }
