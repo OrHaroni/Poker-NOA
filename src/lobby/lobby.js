@@ -23,7 +23,7 @@ function Lobby(props) {
   const clickBack = () => {
     root.render(<Login />);
   };
-  const GenericClickTable = async (enterTable, event) => {
+  const GenericClickTable = async (tableName, event) => {
     const inputFieldPassword = event.target.parentElement.nextElementSibling.querySelector('input');
     let password;
     if(inputFieldPassword) {
@@ -34,7 +34,7 @@ function Lobby(props) {
     }
 
     //Check if correct password of table.
-    const [table, retStatus] = await enterTable(enterTable, password,props.user.username);
+    const [table, retStatus] = await enterTable(tableName, password, props.user.username);
     if(retStatus === 200) {
       root.render(<GameTable table={table} user={props.user} />);
     }
