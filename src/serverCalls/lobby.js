@@ -22,3 +22,20 @@ export async function enterTable(tableName, password, username) {
     let status = res.status;
     return [table, status];
 }
+
+export async function joinUserIntoTable(tableName, username, moneyToEnterWith) {
+  const data = {"tableName" : tableName, "username" : username, "moneyToEnterWith": moneyToEnterWith};
+
+  const res = await fetch('http://localhost:8080/tables/joinUserIntoTable', {
+    'method' : 'post',
+    "headers" : {
+      'Content-Type': 'application/json',
+    },
+    'body': JSON.stringify(data)
+  });
+
+  let table = await res.json();
+  let status = res.status;
+
+  return status;
+}
