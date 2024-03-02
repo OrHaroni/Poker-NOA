@@ -1,8 +1,7 @@
 import React from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import './gameTable.css'; // Import the CSS file
 import Table from './Table'; // Import the Table component
-
+import './table.css';
 
 
 function GameTable(props) {
