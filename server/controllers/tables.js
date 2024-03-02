@@ -26,6 +26,28 @@ const validateTable = async (req, res) => {
     }
 }
 
+const joinUserIntoTable = async (req, res) => {
+    const tableName = req.body.tableName;
+    const username = req.body.username;
+    const moneyToEnterWith = req.body.moneyToEnterWith;
+
+    const status = await tableService.joinUserIntoTable(tableName, username, moneyToEnterWith);
+
+        if(status === 2) {
+            res.status(302).json({}); // table is full!
+        }
+        else if (status === 0) {
+            res.status(200).json({}); // enough money and decrease the player this money!
+        }
+        else if (status === 1) {
+            res.status(301).json({}); // not enough money!
+        }
+        else {
+        //not found (incorrect username or password)
+        res.status(404).json({});
+    }
+}
+
 const addTable = async (req, res) => {
     const new_table = req.body.table;
     const userCreated = req.body.nickname;
@@ -45,9 +67,9 @@ const addTable = async (req, res) => {
 
 // handeling the leave table request
 const leaveTable = async (req, res) => {
-    const username = req.body.username;
+    const nickname = req.body.nickname;
     const tableName = req.body.name;
-    const status = await tableService.leaveTable(tableName,username);
+    const status = await tableService.leaveTable(tableName, nickname);
     // 0 means the player was removed from the table, anything good
     if(status == 0) {
         res.status(200).json({});
@@ -58,5 +80,5 @@ const leaveTable = async (req, res) => {
 }
 
 module.exports = {
-    getAllTables, validateTable, addTable, leaveTable
+    getAllTables, validateTable, addTable, leaveTable, joinUserIntoTable
   }

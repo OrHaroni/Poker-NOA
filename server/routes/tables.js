@@ -8,6 +8,9 @@ router.route('/').get(tableControllers.getAllTables);
 //Validate a table that a user wants to go into
 router.route('/validateTable').post(tableControllers.validateTable);
 
+//join into a table after setting the money
+router.route('/joinUserIntoTable').post(tableControllers.joinUserIntoTable);
+
 //try to register a user
 router.route('/addTable').post(tableControllers.addTable);
 

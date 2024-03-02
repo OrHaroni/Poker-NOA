@@ -12,7 +12,7 @@ import dealer_img from '../assets/dealer.jpg';
 function Table(props) {
     const ClickBack =  async () => {
       // use leaveTable to leave the table, check the status and then go back to the lobby
-      let status= await leaveTable(props.table.name,props.user.username);
+      let status= await leaveTable(props.table.name, props.user.nickname);
       if(status===200){
         root.render(<Lobby user={props.user} />);
       }
