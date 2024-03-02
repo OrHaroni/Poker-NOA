@@ -1,7 +1,7 @@
 import React, { useRef, useState, useEffect } from 'react';
 import { Container, Row, Col } from 'react-bootstrap';
-import './gameTable.css'; // Import the CSS file
 import Table from './Table'; // Import the Table component
+import './table.css';
 import Modal from 'react-modal';
 import { root } from '../index.js';
 import Lobby from '../lobby/lobby.js';

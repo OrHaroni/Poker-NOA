@@ -7,7 +7,7 @@ import tableImg from '../assets/emptyTable.png'; // Import the image
 import { root } from '../index.js';
 import Lobby from '../lobby/lobby.js';
 import { leaveTable } from '../serverCalls/Table.js';
-
+import dealer_img from '../assets/dealer.jpg';
 
 function Table(props) {
     const ClickBack =  async () => {
@@ -33,7 +33,7 @@ function Table(props) {
 
     // Loop through the players and create a Player component for each one
     for (let i = 0; i < numOfPlayers; i++) {
-        if(playerOnTable[i].username!==props.user.username){
+        if(playerOnTable[i].username!==props.user.username && i <= 3){
           otherPlayers.push(
                 <Player name={playerOnTable[i].nickname} className={`player player${i + 1}`} />
             );
@@ -52,14 +52,10 @@ function Table(props) {
         </button>
       </div>
         <div className="table">
-            <div>
-                {/* Background image */}
-                <img src={tableImg} alt="Poker Table" className="table-image" />
-                {/* Players container */}
+        <img className='dealer-img' src={dealer_img} />
                 <div className="players">
                     {otherPlayers}
                 </div>
-            </div>
         </div>
         <OurPlayer  name={props.user.nickname} className={"our-player"}/>
         </>
