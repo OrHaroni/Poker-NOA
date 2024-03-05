@@ -185,3 +185,47 @@
     border: 2px solid black; /* Add a 2px black border */
     /* Add any additional styling as needed */
 }
+
+.form{
+    /* i want it to be center of the screen */
+    position: absolute;
+    left: 22%;
+    top: 8%
+
+}
+.modal-back-button{
+    position: absolute;
+    top: 0;
+    left: 0;
+    background-color: #ff6347;
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bolder;
+}
+/* Add this CSS to your stylesheet */
+.enter-button {
+    display: block;
+    margin: 1% auto; /* Center the button horizontally with a 1% margin on top and bottom */
+    background-color: #d6dc1d;
+    color: #000000;
+    border: none;
+    padding: 10px 20px;
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    font-weight: bolder;
+  }
+  
+  .enter-button:hover {
+    background-color: #515609;
+  }
+  .modal-content{
+    height: 40%;
+    width: 40%;
+  }

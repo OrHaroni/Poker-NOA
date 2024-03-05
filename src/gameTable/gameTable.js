@@ -7,81 +7,95 @@ import { root } from '../index.js';
 import Lobby from '../lobby/lobby.js';
 import { joinUserIntoTable } from '../serverCalls/lobby.js';
 import { sendSwal } from '../lobby/lobby.js';
+import OurPlayer from './OurPlayer.js';
 
 function GameTable(props) {
-    const [showModal, setShowModal] = useState(false);
-    const [money, setMoney] = useState(0);
-    const moneyRef = useRef(0);
+  const [showModal, setShowModal] = useState(false);
+  const [money, setMoney] = useState(0);
+  const moneyRef = useRef(0);
+  const [satDown, setSatDown] = useState(false);
 
-    useEffect(() => {
-        setShowModal(true); // Open the modal when the component mounts
-    }, []); // Empty dependency array to run the effect only once
+  const sitDownHandler = () => {
+    setShowModal(true); // Open the modal when sitting down
+    setSatDown(true);
+  };
 
-    const ClickEnter = (event) => {
-        if (event.key === 'Enter') {
-          event.preventDefault(); // Prevent default form submission
-          ClickEnterGame();
-        }
-      };
+  const standUpHandler = () => {
+    setSatDown(false);
+  };
 
-    const ClickEnterGame = async () => {
-        const moneyToEnterWith = moneyRef.current.value;
-        const tableName = props.table.name;
-        const username = props.user.username;
+  const ClickEnter = (event) => {
+    if (event.key === 'Enter') {
+      event.preventDefault(); // Prevent default form submission
+      ClickEnterGame();
+    }
+  };
 
-        const retStatus= await joinUserIntoTable(tableName, username, moneyToEnterWith);
-        if(retStatus === 200) {
-            setShowModal(false);
-        }
-        else if (retStatus === 301) {
-            sendSwal("You dont have enough money!", "error");
-        }
-        else if( retStatus === 302) {
-            sendSwal("This table is full!", "error");
-        }
-        else {
-            sendSwal("Unknown problem, 404", "error");
-        }
-        
-    };
+  const ClickEnterGame = async () => {
+    const moneyToEnterWith = moneyRef.current.value;
+    const tableName = props.table.name;
+    const username = props.user.username;
 
-    const ClickBack =  async () => {
-        root.render(<Lobby user={props.user} />);
-        }
+    const retStatus = await joinUserIntoTable(tableName, username, moneyToEnterWith);
+    if (retStatus === 200) {
+      setShowModal(false);
+    } else if (retStatus === 301) {
+      sendSwal("You dont have enough money!", "error");
+    } else if (retStatus === 302) {
+      sendSwal("This table is full!", "error");
+    } else {
+      sendSwal("Unknown problem, 404", "error");
+    }
+  };
 
-    return (
-        <>
-            <Modal isOpen={showModal} className="form-container p-4 rounded modal-center">
-                <button className="exit-button modal-back-button" onClick={ClickBack} id="buttonBack">
-                    Back
-                </button>
-                <div className="modal-content">
-                    <h2>Enter Amount</h2>
-                    <input
-                        type="text"
-                        value={money}
-                        onKeyDown={ClickEnter}
-                        onChange={(e) => {
-                            const input = e.target.value;
-                            if (/^\d*$/.test(input)) { // Only allow digits
-                                setMoney(input);
-                            }
-                        }}
-                        ref={moneyRef}
-                    />
-                    <button onClick={ClickEnterGame}>Enter Game</button>
-                </div>
-            </Modal>
-            <Container className="container">
-                <Row>
-                    <Col>
-                        {/* Render the Table component up to 4*/}
-                        <Table table={props.table} user={props.user} players_num={4} />
-                    </Col>
-                </Row>
-            </Container>
-        </>
-    );
+  const ClickBack = async () => {
+    root.render(<Lobby user={props.user} />);
+  };
+
+  return (
+    <>
+      <Modal isOpen={showModal} className="form form-container p-4 rounded modal-center">
+        <button className="exit-button modal-back-button" onClick={ClickBack} id="buttonBack">
+          X
+        </button>
+        <div className="modal-content">
+          <h2 className='amount-h'>Enter Amount</h2>
+          <input
+            type="text"
+            className='form-control'
+            value={money}
+            onKeyDown={ClickEnter}
+            onChange={(e) => {
+              const input = e.target.value;
+              if (/^\d*$/.test(input)) {
+                setMoney(input);
+              }
+            }}
+            ref={moneyRef}
+          />
+          <button className='enter-button' onClick={ClickEnterGame}>Enter Game</button>
+        </div>
+      </Modal>
+      <Container className="container">
+        <Row>
+          <Col>
+            <Table table={props.table} user={props.user} players_num={4} />
+            {satDown && <OurPlayer name={props.user.nickname} className={"our-player"} />}
+            {!satDown && (
+              <button className="exit-button" onClick={sitDownHandler} id="buttonBack">
+                Sit Down
+              </button>
+            )}
+            {satDown && (
+              <button className="exit-button" onClick={standUpHandler} id="buttonBack">
+                Stand up
+              </button>
+            )}
+          </Col>
+        </Row>
+      </Container>
+    </>
+  );
 }
 
 export default GameTable;
