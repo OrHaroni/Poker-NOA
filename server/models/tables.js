@@ -27,7 +27,18 @@ const tableSchema = new Schema({
     required: true
   },
   cardOnTable: {
-    type: [String],
+    type: [{
+      id: { 
+        type: Number
+      },
+      suit: {
+        type: String
+      },
+      value: {
+        type: String,
+
+      }
+    }],
     default: []
   },
   //object that is a list with default of empty list
