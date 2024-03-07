@@ -17,7 +17,7 @@ function GameTable(props) {
 
   const sitDownHandler = () => {
     setShowModal(true); // Open the modal when sitting down
-    setSatDown(true);
+    
   };
 
   const standUpHandler = () => {
@@ -32,6 +32,7 @@ function GameTable(props) {
   };
 
   const ClickEnterGame = async () => {
+    setSatDown(true);
     const moneyToEnterWith = moneyRef.current.value;
     const tableName = props.table.name;
     const username = props.user.username;
@@ -48,14 +49,14 @@ function GameTable(props) {
     }
   };
 
-  const ClickBack = async () => {
-    root.render(<Lobby user={props.user} />);
+  const ClickClose = async () => {
+      setShowModal(false); // Open the modal when sitting dow
   };
 
   return (
     <>
       <Modal isOpen={showModal} className="form form-container p-4 rounded modal-center">
-        <button className="exit-button modal-back-button" onClick={ClickBack} id="buttonBack">
+        <button className="exit-button modal-back-button" onClick={ClickClose} id="buttonBack">
           X
         </button>
         <div className="modal-content">
