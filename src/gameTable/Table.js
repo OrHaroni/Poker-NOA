@@ -1,6 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import Player from './Player';
-import Modal from 'react-modal';
+import OurPlayer from './OurPlayer.js';
+import './table.css'; // Import the table CSS file
+import tableImg from '../assets/emptyTable.png'; // Import the image
 import { root } from '../index.js';
 import Lobby from '../lobby/lobby.js';
 import { leaveTable } from '../serverCalls/Table.js';

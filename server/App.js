@@ -3,114 +3,16 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const path = require('path');
-const socketIO  = require("socket.io"); 
-const io = socketIO(server);  
-const Table = require('./models/tables.js');
-const connectedUsers =require('./models/connectedUsers.js'); 
-const allUsers = require('./models/users.js');
+const socketManager = require("./socketManager.js"); // Adjust the path if needed
 
 
-// when starting the serer,delete all the connected users (in case the server was not closed properly and the connected users were not deleted). 
-// const deleteAllConnectedUsers = async () => { 
-//   //delete all the connected users 
-// await connectedUsers.deleteMany({}).exec(); 
-// } 
-// deleteAllConnectedUsers(); 
+// Initialize socket.io
+socketManager.initialize(server);
 
+const io = socketManager.getIO();
 
 
 io.on('connection', async (socket) => { 
-  // add user to connected users 
-  // when user connect, we want to add him to the connected users with his socket id.
-  socket.on('userConnected', async(username) => { 
-    const temp = new connectedUsers({ username: username, socketId: socket.id }); 
-      await temp.save(); 
-  }); 
- 
-  // if we get joinTable event, we will want to send all the players on table with the given name, to render the table.
-  socket.on('joinTable', async (tableName, username) => {
-    const table = await Table.findOne({ name: tableName });
-    // if its the first player on the table, we dont want to send him the render event because he is the one that joined the table.
-    if(table.playersOnTable.length > 1 || table.spectators.length > 0) {
-    // Iterate over each player on the table , if its not the user that joined the table, send him the render event.
-    for (const player of table.playersOnTable) {
-      // assume nickname is unique !!!
-        const user = await allUsers.findOne({ nickname: player.nickname });
-        const connectedUser = await connectedUsers.findOne({ username: user.username });
-        // Check if the user exists and is not the user that joined the table
-        if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render');
-        }
-    }
-    // now want to send the spectators the render event.
-
-    for (const spectator of table.spectators) {
-      const usernameToRender = await connectedUsers.findOne({ username: spectator });
-      console.log("usernameToRender: ", usernameToRender, "socketId: ", usernameToRender.socketId);
-      io.to(usernameToRender.socketId).emit('render');
-      }
-  }
-});
-  // if we get leaveTable event, we will want to send all the players on table with the given name, to render the table.
-  socket.on('leaveTable', async (tableName, username) => {
-    const table = await Table.findOne({ name: tableName });
-    // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
-    for (const player of table.playersOnTable) {
-      // assume nickname is unique !!!
-        const user = await allUsers.findOne({ nickname: player.nickname });
-        const connectedUser = await connectedUsers.findOne({ username: user.username });
-        // Check if the user exists and is not the user that leave the table
-        if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render');
-        }
-    }
-    // now want to send the spectators the render event.
-    for (const player of table.spectators) {
-      // assume nickname is unique !!!
-        const user = await allUsers.findOne({ nickname: player });
-        const connectedUser = await connectedUsers.findOne({ username: user.username });
-        // Check if the user exists and is not the user that leave the table
-        if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render');
-        }
-    }
-  });
-  socket.on('standUp', async (tableName, username) => {
-    // after stand up the username is a spectator so we need to change the database, add him to the spectators and remove him from the players on table.
-    const table = await Table.findOne({ name: tableName });
-    // remove the user from the players on table
-    table.playersOnTable = table.playersOnTable.filter(player => player.nickname !== username);
-    // add the user to the spectators
-    table.spectators.push(username);
-    await table.save();
-    // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
-    for (const player of table.playersOnTable) {
-      // assume nickname is unique !!!
-        const user = await allUsers.findOne({ nickname: player.nickname });
-        const connectedUser = await connectedUsers.findOne({ username: user.username });
-        // Check if the user exists and is not the user that leave the table
-        if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render');
-        }
-    }
-    // now want to send the spectators the render event.
-    for (const player of table.spectators) {
-      // assume nickname is unique !!!
-        const user = await allUsers.findOne({ nickname: player });
-        const connectedUser = await connectedUsers.findOne({ username: user.username });
-        // Check if the user exists and is not the user that leave the table
-        if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render');
-        }
-    }
-  });
-  socket.on('exit',async (username) => { 
-    // remove user from connected users 
-    await connectedUsers.deleteOne({ username
-    });
-  }); 
- 
-  
    socket.on('disconnect',async () => { 
      // remove user from connected users 
     //  await connectedUsers.deleteOne({ socketId: socket.id }); 
@@ -125,11 +27,60 @@ io.on('connection', async (socket) => {
     //   }
    }); 
   
-   socket.on('close', async () => { 
-     // Disconnect users and clean up resources here 
-    //delete all the connected users 
-    await connectedUsers.deleteMany({}).exec(); 
- }); 
+
+         /*                       *
+          *                       *
+          *                       *
+          * User Functionalities  *
+          *                       *
+          *                       * 
+          *                       */
+  // add user to connected users 
+  // when user connect, we want to add him to the connected users with his socket id.
+  socket.on('userConnected', async (username) => {
+    socketManager.userConnected(username, socket)}); 
+
+  socket.on('exit',async (username) => { 
+      socketManager.exit(username);
+    }); 
+
+    socket.on('close', async () => { 
+      socketManager.close();
+   }); 
+
+
+         /*                       *
+          *                       *
+          *                       *
+          * Table Functionalities *
+          *                       *
+          *                       * 
+          *                       */
+
+  // if we get joinTable event, we will want to send all the players on table with the given name, to render the table.
+  socket.on('joinTable', async (tableName, username) => {
+    socketManager.joinTable(tableName, username);
+  });
+
+  // if we get leaveTable event, we will want to send all the players on table with the given name, to render the table.
+  socket.on('leaveTable', async (tableName, username) => {
+    socketManager.leaveTable(tableName, username);
+  });
+   
+  socket.on('standUp', async (tableName, username) => {
+    socketManager.standUp(tableName, username);
+  });
+
+
+         /*                       *
+          *                       *
+          *                       *
+          * Game Functionalities  *
+          *                       *
+          *                       * 
+          *                       */
+ socket.on('raiseTable', socketManager.TableRaise);
+
  }); 
 
 
