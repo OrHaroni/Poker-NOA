@@ -11,6 +11,17 @@ async function getAllTables() {
       throw error;
     }
   }
+  // get players on table based on the table name
+  async function getPlayersOnTable(tableName) {
+    try {
+      const table = await tableSchema.findOne({ "name": tableName });
+      return table.playersOnTable;
+    } catch (error) {
+      console.error('Error retrieving players on table:', error);
+      throw error;
+    }
+  }
+
 
 const isTableNameTaken = async (name) => {
     try {
@@ -24,9 +35,13 @@ const isTableNameTaken = async (name) => {
 
 const validateTable = async (tableName, password, username) => {
     try {
-
-      return await tableSchema.findOne({ "tableName": tableName, "password": password });
-  
+      // finding the table by the name and password, and adding the username to the spectators list 
+      let table = await tableSchema.findOne({ "tableName": tableName, "password": password });
+      if(table) {
+        table.spectators.push(username);
+        await table.save();
+      }
+      return table;
       } catch (error) {
         console.error('Error validation table:', error);
         throw error;
@@ -53,6 +68,8 @@ const joinUserIntoTable = async (tableName, username, moneyToEnterWith) => {
 
         //create minimal parameters user
         const minimalUser = {"nickname": user.nickname, "moneyAmount": user.moneyAmount};
+        // remove the user from the spectators 
+        table.spectators = table.spectators.filter(spectator => spectator !== username);
         table.playersOnTable.push(minimalUser);
         await table.save();
         return 0;//0 for no money problem.
@@ -117,5 +134,5 @@ const leaveTable = async (tableName, nickname) => {
 
 
 module.exports = {
-    getAllTables, validateTable, addTable, leaveTable, joinUserIntoTable
+    getAllTables, validateTable, addTable, leaveTable, joinUserIntoTable ,getPlayersOnTable
   }

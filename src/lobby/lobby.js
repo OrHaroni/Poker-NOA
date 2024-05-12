@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { root } from '../index.js';
-import GameTable from '../gameTable/gameTable';
+import GameTable from '../gameTable/GamePage.js';
 import '../App.css';
 import logo from '../assets/logo.png';
 import Login from '../login/login.js';
@@ -10,6 +10,14 @@ import { GetAllTables } from '../serverCalls/lobby.js';
 import { enterTable } from '../serverCalls/lobby.js';
 import Add_Table_Page from '../Add_Table_Page/Add_Table_Page.js'
 
+// Initialize the socket connection
+
+
+// this io is the io from the index.html file on the public folder
+<script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
+
+
+// later on !!!! user socket to render the tables,render the amout of players on the table...
 
 export function sendSwal(message, icon) {
   /* eslint-disable no-undef */
@@ -21,6 +29,8 @@ export function sendSwal(message, icon) {
 
 function Lobby(props) {
   const clickBack = () => {
+    // use socket to send disconnect message to the server.
+    props.socket.emit('exit', props.user.username);
     root.render(<Login />);
   };
   const GenericClickTable = async (tableName, event) => {
@@ -36,7 +46,8 @@ function Lobby(props) {
     //Check if correct password of table.
     const [table, retStatus] = await enterTable(tableName, password, props.user.username);
     if(retStatus === 200) {
-      root.render(<GameTable table={table} user={props.user} />);
+      // if the status is good, we want to use socket io to send all the players to the table to render the table.
+      root.render(<GameTable table={table} user={props.user} socket={props.socket} />);
     }
     else if(retStatus === 404) {
       sendSwal("Incorrect password, try again.", "error");
@@ -44,7 +55,7 @@ function Lobby(props) {
   };
 
   // List that demonstrates all the rows of the open tables
-  // later on will get it from the DB
+  // later on will get it from the DB 
 
   const [tablesList, setTablesList] = useState([]);
 
@@ -86,11 +97,13 @@ const TagTableList = tablesList.map((table, index) => (
 
   // Function to handle adding money
   const addMoney = () => {
-    root.render(<Add_Money_Page user={props.user} />);
+    // need to past socket because i need the socket back when i want to go back to the lobby in the Add_Money_Page
+    root.render(<Add_Money_Page user={props.user} socket={props.socket} />);
   };
 
   const addTable = () => {
-   root.render(<Add_Table_Page user={props.user} />);
+    // need to past socket because i need the socket back when i want to go back to the lobby in the Add_Table_Page
+   root.render(<Add_Table_Page user={props.user} socket={props.socket} />);
   }
   return (
     <>
