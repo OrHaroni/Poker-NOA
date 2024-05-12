@@ -54,6 +54,10 @@ const tableSchema = new Schema({
     }],
     default: []
   },
+  spectators: {
+    type: [String],
+    default: []
+  },
   createdBy: {
     type: String,
     required: true
