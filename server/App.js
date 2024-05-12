@@ -3,11 +3,14 @@ const app = express();
 const http = require('http');
 const server = http.createServer(app);
 const path = require('path');
-const socketIO  = require("socket.io"); 
-const io = socketIO(server);  
-const Table = require('./models/tables.js');
 const connectedUsers =require('./models/connectedUsers.js'); 
-const allUsers = require('./models/users.js');
+const socketManager = require("./socketManager.js"); // Adjust the path if needed
+
+
+// Initialize socket.io
+socketManager.initialize(server);
+
+const io = socketManager.getIO();
 
 
 // when starting the serer,delete all the connected users (in case the server was not closed properly and the connected users were not deleted). 
@@ -130,6 +133,49 @@ io.on('connection', async (socket) => {
     //delete all the connected users 
     await connectedUsers.deleteMany({}).exec(); 
  }); 
+
+         /*                       *
+          *                       *
+          *                       *
+          * User Functionalities  *
+          *                       *
+          *                       * 
+          *                       */
+  // add user to connected users 
+  // when user connect, we want to add him to the connected users with his socket id.
+  socket.on('userConnected', async (username) => {
+    socketManager.userConnected(username, socket)}); 
+
+
+         /*                       *
+          *                       *
+          *                       *
+          * Table Functionalities *
+          *                       *
+          *                       * 
+          *                       */
+
+  // if we get joinTable event, we will want to send all the players on table with the given name, to render the table.
+  socket.on('joinTable', async (tableName, username) => {
+    socketManager.joinTable(tableName, username);
+  });
+
+  // if we get leaveTable event, we will want to send all the players on table with the given name, to render the table.
+  socket.on('leaveTable', async (tableName, username) => {
+    socketManager.leaveTable(tableName, username);
+  });
+   
+
+
+         /*                       *
+          *                       *
+          *                       *
+          * Game Functionalities  *
+          *                       *
+          *                       * 
+          *                       */
+ socket.on('raiseTable', socketManager.TableRaise);
+
  }); 
 
 
