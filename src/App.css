@@ -197,9 +197,27 @@ body {
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
   font-weight: bolder;
 }
-
 .add-money:hover {
   background-color: #3555b8; /* Darker blue color on hover */
+}
+
+.refresh-button {
+  margin-left: 0%;
+  margin-top: 0%;
+  margin-bottom: 0%;
+  margin-right: 0%;
+  background-color: #911469; /* Blue color for the button */
+  color: #ffffff; /* White text color */
+  border: none;
+  padding: 10px 20px; /* Adjust padding as needed */
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  font-weight: bolder;
+}
+.refresh-button:hover {
+  background-color: #570e3b; /* Darker blue color on hover */
 }
 
 .exit-button:hover {
