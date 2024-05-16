@@ -3,18 +3,18 @@ const Table = require('./models/tables.js');
 const connectedUsers =require('./models/connectedUsers.js'); 
 const allUsers = require('./models/users.js');
 
-let ioInstance;
+let io;
 
 function initialize(server) {
-  ioInstance = socketIO(server);
+  io = socketIO(server);
   // Setup socket.io event handlers, if needed
 }
 
 function getIO() {
-  if (!ioInstance) {
+  if (!io) {
     throw new Error("Socket.io has not been initialized.");
   }
-  return ioInstance;
+  return io;
 }
 
          /*                       *
@@ -136,14 +136,28 @@ standUp = async (tableName, username) => {
           *                       *
           *                       * 
           *                       */
-TableRaise = async () => {
+raise = async (tableName, username,amout) => {
     console.log("Do Raise!");
+  };
+
+fold = async (tableName, username) => {
+    console.log("Do fold!");
+  };
+
+check = async (tableName, username) => {
+    console.log("Do check!");
+  };
+call = async (tableName, username) => {
+    console.log("Do call!");
   };
 
 module.exports = {
   initialize,
   getIO,
-  TableRaise,
+  raise,
+  fold,
+  call,
+  check,
   userConnected,
   joinTable,
   leaveTable,

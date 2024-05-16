@@ -110,7 +110,7 @@ function GameTable(props) {
         <Row>
           <Col>
             <Table table={props.table} user={props.user} players_num={4} socket={props.socket} />
-            {satDown && <OurPlayer name={props.user.nickname} className={"our-player"} />}
+            {satDown && <OurPlayer name={props.user.nickname} className={"our-player"} socket={props.socket} table={props.table} />}
             {!satDown && (
               <button className="exit-button" onClick={sitDownHandler} id="buttonBack">
                 Sit Down
