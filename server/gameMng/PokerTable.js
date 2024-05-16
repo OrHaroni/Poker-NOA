@@ -9,7 +9,7 @@ class ActiveTable {
     this.name = name;
     this.maxPlayers = maxPlayers;
     this.players = []; // Array to store players seated at the table
-    this.players = []; // Array to store spectators of the game
+    this.spectators = []; // Array to store spectators of the game
     this.deck = [...genericDeck]; // Array to store the deck of cards
     this.cardsOnTable = []; // Array to store cards on the table
     this.moneyOnTable = 0;
@@ -38,28 +38,67 @@ class ActiveTable {
       }
     }
   
-    // Method to deal cards to all players at the table
-    dealCards(deck) {
+    // Method to draw cards to all players at the table
+    drawCardsToAllPlayers() {
       // Assuming deck is an array of card objects
       this.players.forEach(player => {
-        player.receiveCard(deck.pop());
-        player.receiveCard(deck.pop());
+        player.receiveCard(DrawCard(this.deck));
+        player.receiveCard(DrawCard(this.deck));
       });
     }
-  
-    // Method to deal community cards
-    dealCommunityCards(deck, numCards) {
-      for (let i = 0; i < numCards; i++) {
-        this.communityCards.push(deck.pop());
-      }
-    }
-  
-    // Method to clear community cards
-    clearCommunityCards() {
-      this.communityCards = [];
-    }
-  }
 
+    /* Clears hand of all players (at end of round) */
+    clearHandToAllPlayers() {
+        this.players.forEach(player => {
+            player.clearHand();
+            player.clearHand();
+            });
+    }
+  
+    // Method to clear ths cards on the table in the end of a round
+    resetCardsTable() {
+      this.cardsOnTable = [];
+    }
+
+     /* Reset the Deck to the generic one again */
+    resetDeck() {
+        this.deck = [...genericDeck];
+    }
+
+    /* Draws the flop 3 cards */
+    drawFlop() {
+        this.cardsOnTable.push(DrawCard(this.deck));
+        this.cardsOnTable.push(DrawCard(this.deck));
+        this.cardsOnTable.push(DrawCard(this.deck));
+    }
+
+    /* Draws the turn 1 card */
+    drawTurn() {
+        this.cardsOnTable.push(DrawCard(this.deck));
+    }
+
+    /* Draws the river 1 card */
+    drawRiver() {
+        this.cardsOnTable.push(DrawCard(this.deck));
+    }
+
+  } /* END OF CLASS ActiveTable */
+
+
+
+
+/* Static function that draws a card */ 
+function DrawCard(deck) {
+    const randomIndex = Math.floor(Math.random() * deck.length);
+    const cardToReturn = deck[randomIndex];
+    // Filter out the selected card from the deck
+    const updatedDeck = deck.filter(item => item.id !== cardToReturn.id);
+    // Update the deck with the filtered array
+    deck.length = 0; // Clear the existing deck
+    Array.prototype.push.apply(deck, updatedDeck); // Re-add filtered cards to the deck
+
+    return cardToReturn;
+}
 module.exports = {
     ActiveTable
 }
