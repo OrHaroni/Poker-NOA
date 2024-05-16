@@ -1,4 +1,6 @@
+const { ActiveTable } = require('../gameMng/PokerTable.js');
 const tableService = require('../services/tables.js');
+const {tablesList} = require("../localDB.js");
 
 const getAllTables = async (req, res) => {
     const tables = await tableService.getAllTables();
@@ -73,6 +75,8 @@ const addTable = async (req, res) => {
         res.status(303).json({});
     }
     else {
+         /* Add the table into the local db */
+        tablesList.push(new ActiveTable(new_table.name, new_table.max_players_num, new_table.bigBlind, new_table.smallBlind));
         res.status(200).json({});
     }
 }

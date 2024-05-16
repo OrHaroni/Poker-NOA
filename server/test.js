@@ -1,4 +1,3 @@
-const {playersList, tablesList} = require("./localDB");
 const { Player } = require("./gameMng/PokerPlayers.js");
 const { ActiveTable } = require("./gameMng/PokerTable.js");
 

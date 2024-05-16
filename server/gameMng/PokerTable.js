@@ -4,8 +4,7 @@ const gameUtiles = require("./gameUtiles.js");
 const genericDeck = gameUtiles.GenericFullDeck;
 
 class ActiveTable {
-    constructor(id, name, maxPlayers, big, small) {
-    this.id = id;
+    constructor(name, maxPlayers, big, small) {
     this.name = name;
     this.maxPlayers = maxPlayers;
     this.players = []; // Array to store players seated at the table
