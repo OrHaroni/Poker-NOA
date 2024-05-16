@@ -2,6 +2,8 @@ const socketIO = require("socket.io");
 const Table = require('./models/tables.js');
 const connectedUsers =require('./models/connectedUsers.js'); 
 const allUsers = require('./models/users.js');
+const {playersList, tablesList} = require("./localDB");
+const { Player } = require("./gameMng/PokerPlayers.js");
 
 let io;
 
@@ -50,8 +52,16 @@ close = async() => {
           *                       * 
           *                       */
 
-joinTable = async (tableName, username) => {
+joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
+    /* Find the table in the DB */
     const table = await Table.findOne({ name: tableName });
+
+    /* Add the Player into the local DB for this table */
+    const newPlayer = new Player(nickname, moneyToEnterWith);
+    console.log("Player to add:");
+    console.log(newPlayer);
+    const local_table = tablesList.find(table => table.name === tableName);
+    local_table.addPlayer(newPlayer);
     // if its the first player on the table, we dont want to send him the render event because he is the one that joined the table.
     if(table.playersOnTable.length > 1 || table.spectators.length > 0) {
     // Iterate over each player on the table , if its not the user that joined the table, send him the render event.

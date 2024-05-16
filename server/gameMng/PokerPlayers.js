@@ -2,8 +2,7 @@ const PokerTable = require("./PokerTable");
 const User = require("../models/users.js");
 
 class Player {
-  constructor(id, nickname, moneyOnTable) {
-    this.id;
+  constructor(nickname, moneyOnTable) {
     this.nickname = nickname;
     this.moneyOnTable = moneyOnTable;
     this.hand = []; // The player's hand of cards
