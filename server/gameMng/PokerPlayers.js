@@ -1,14 +1,45 @@
 const PokerTable = require("./PokerTable");
 const User = require("../models/users.js");
-const socketManager = require("./socketManager.js");
 
-// Get the io object
-const io = socketManager.getIO();
+class Player {
+  constructor(id, nickname, moneyOnTable) {
+    this.id;
+    this.nickname = nickname;
+    this.moneyOnTable = moneyOnTable;
+    this.hand = []; // The player's hand of cards
+  }
 
-// Attach the event listener to the io object
-io.on('connection', (socket) => {
-  // Listen for the 'raiseTable' event
-  socket.on('raiseTable', async () => {
-    console.log("Do Raise!");
-  });
-});
+  // Method to add chips to the player's stack
+  addChips(amount) {
+    this.chips += amount;
+  }
+
+  // Method to remove chips from the player's stack
+  removeChips(amount) {
+    if (this.chips >= amount) {
+      this.chips -= amount;
+      return true; // Chips removed successfully
+    } else {
+      return false; // Insufficient chips
+    }
+  }
+
+  // Method to receive cards into the player's hand
+  receiveCard(card) {
+    this.hand.push(card);
+  }
+
+  // Method to clear the player's hand
+  clearHand() {
+    this.hand = [];
+  }
+
+  // Method to display the player's hand
+  showHand() {
+    console.log(`${this.name}'s hand: ${this.hand.map(card => card.toString()).join(', ')}`);
+  }
+}
+
+module.exports = {
+  Player
+}
