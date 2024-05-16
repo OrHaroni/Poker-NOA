@@ -8,10 +8,12 @@ class ActiveTable {
     this.name = name;
     this.maxPlayers = maxPlayers;
     this.players = []; // Array to store players seated at the table
+    this.playersWithCards = []; // Array to store players with cards
     this.spectators = []; // Array to store spectators of the game
     this.deck = [...genericDeck]; // Array to store the deck of cards
     this.cardsOnTable = []; // Array to store cards on the table
     this.moneyOnTable = 0;
+    this.moneyToCall = 0;
     this.bigBlind = big;
     this.smallBlind = small;
     }
@@ -36,6 +38,17 @@ class ActiveTable {
         return false; // Player not found at the table
       }
     }
+    // Method to remove a player from the table
+    removePlayerWithCards(playerName) {
+      const index = this.removePlayerWithCards.findIndex(player => player.name === playerName);
+      if (index !== -1) {
+        this.players.splice(index, 1);
+        return true; // Player removed successfully
+      } else {
+        return false; // Player not found at the table
+      }
+    }
+        
   
     // Method to draw cards to all players at the table
     drawCardsToAllPlayers() {

@@ -147,19 +147,64 @@ standUp = async (tableName, username) => {
           *                       * 
           *                       */
 raise = async (tableName, username,amout) => {
-    console.log("Do Raise!");
-  };
+    console.log("Do raise!");
+    // get the table
+    const table = tablesList.find(table => table.name === tableName);
+    if(table == null) {
+      return false;
+    }
+    // get the player
+    const player = table.playersWithCards.find(player => player.nickname === username);
+    // get the player's chips
+    if(player.removeChips(amout)) {
+      //There is enaugh chips to raise
+        //check the min amount to call
+        if(table.moneyToCall > amout) {
+          //The player does not have enaugh chips to call
+          return false;
+        }
+        //cheange the min amount to call
+        table.moneyToCall = amout;
+      return true;
+    }
+    //There is not enaugh chips to raise
+    return false; 
+};
 
 fold = async (tableName, username) => {
     console.log("Do fold!");
-  };
+    const table = tablesList.find(table => table.name === tableName);
+    if(table == null) {
+      return false;
+    }
+    const player = table.PlayerWithCards.find(player => player.nickname === username)
+    // remove the player from the players with cards
+    table.playersWithCards = table.playersWithCards.filter(player => player.nickname !== username);
+    player.clearHand();
+};
 
 check = async (tableName, username) => {
     console.log("Do check!");
-  };
+    const table = tablesList.find(table => table.name === tableName);
+    if(table == null) {
+      return false;
+    }
+};
+
 call = async (tableName, username) => {
     console.log("Do call!");
-  };
+    // get the table
+    const table = tablesList.find(table => table.name === tableName);
+    if(table == null) {
+      return false;
+    }
+    // get the player
+    const player = table.playersWithCards.find(player => player.nickname === username);
+    // get the player's chips
+    if(player.removeChips(table.moneyToCall)) {
+      return true;
+    }
+};
 
 module.exports = {
   initialize,
