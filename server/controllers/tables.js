@@ -5,6 +5,13 @@ const {tablesList} = require("../localDB.js");
 const getAllTables = async (req, res) => {
     const tables = await tableService.getAllTables();
     if(tables) {
+        //Updating the local DB
+        tables.forEach(ServerTable => {
+            const temp = (tablesList.find(table => table.name === ServerTable.name));
+            if(!temp) {
+                tablesList.push(new ActiveTable(ServerTable.name, ServerTable.bigBlind, ServerTable.smallBlind));
+            }
+        });
         res.status(200).json(tables);
     }
     else {
@@ -76,7 +83,7 @@ const addTable = async (req, res) => {
     }
     else {
          /* Add the table into the local db */
-        tablesList.push(new ActiveTable(new_table.name, new_table.max_players_num, new_table.bigBlind, new_table.smallBlind));
+        tablesList.push(new ActiveTable(new_table.name, new_table.bigBlind, new_table.smallBlind));
         res.status(200).json({});
     }
 }
