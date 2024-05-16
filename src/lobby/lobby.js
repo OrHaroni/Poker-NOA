@@ -59,7 +59,7 @@ function Lobby(props) {
     <tr key={index}>
       <td>{table.name}</td>
       <td>{table.createdBy}</td>
-      <td>{table.playersOnTable.length}/{table.max_players_num}</td>
+      <td>{table.playersOnTable.length}/{5}</td>
       <td>{table.moneyAmountOnTable}</td>
       <td>{table.smallBlind}/{table.bigBlind}</td>
       <td>

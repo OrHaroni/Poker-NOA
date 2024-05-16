@@ -52,7 +52,7 @@ const joinUserIntoTable = async (tableName, username, moneyToEnterWith) => {
   try {
     const table = await tableSchema.findOne({"name": tableName});//No need for password because already validated.
 
-    if(table.playersOnTable.length === table.max_players_num) {
+    if(table.playersOnTable.length === 5) {
       return 2; //table is full;
     }
     const user = await userSchema.findOne({"username": username });
@@ -84,15 +84,11 @@ const joinUserIntoTable = async (tableName, username, moneyToEnterWith) => {
 
 const addTable = async (table, userCreated) => {
     const name = table.name;
-    const max_players_num = table.max_players_num;
 
     try{
 
     if(await isTableNameTaken(name)) {
         return 2; //table name is taken 
-    }
-    else if (max_players_num > 4) {
-        return 1; //max players number is too big
     }
 
     //Now we know its valid

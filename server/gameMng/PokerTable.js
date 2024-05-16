@@ -4,9 +4,8 @@ const gameUtiles = require("./gameUtiles.js");
 const genericDeck = gameUtiles.GenericFullDeck;
 
 class ActiveTable {
-    constructor(name, maxPlayers, big, small) {
+    constructor(name, big, small) {
     this.name = name;
-    this.maxPlayers = maxPlayers;
     this.players = []; // Array to store players seated at the table
     this.spectators = []; // Array to store spectators of the game
     this.deck = [...genericDeck]; // Array to store the deck of cards
@@ -18,7 +17,7 @@ class ActiveTable {
   
     // Method to add a player to the table
     addPlayer(player) {
-      if (this.players.length < this.maxPlayers) {
+      if (this.players.length < 5) {
         this.players.push(player);
         return true; // Player added successfully
       } else {
