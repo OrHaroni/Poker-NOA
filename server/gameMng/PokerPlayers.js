@@ -10,13 +10,13 @@ class Player {
 
   // Method to add chips to the player's stack
   addChips(amount) {
-    this.chips += amount;
+    this.moneyOnTable += amount;
   }
 
   // Method to remove chips from the player's stack
   removeChips(amount) {
-    if (this.chips >= amount) {
-      this.chips -= amount;
+    if (this.moneyOnTable >= amount) {
+      this.moneyOnTable -= amount;
       return true; // Chips removed successfully
     } else {
       return false; // Insufficient chips
