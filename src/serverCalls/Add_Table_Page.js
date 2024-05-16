@@ -1,5 +1,5 @@
-export async function addTable(name, maxPlayersNum, password, nickname) {
-    const data = {"table": {"name" : name,"max_players_num": maxPlayersNum , "password" : password}, "nickname": nickname};
+export async function addTable(name, password, nickname) {
+    const data = {"table": {"name" : name, "password" : password}, "nickname": nickname};
     const res = await fetch('http://localhost:8080/tables/addTable', {
       'method' : 'post',
       "headers" : {

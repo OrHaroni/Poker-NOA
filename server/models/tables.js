@@ -6,10 +6,6 @@ const tableSchema = new Schema({
     type: String,
     requied: true
   },
-  max_players_num: {
-    type: Number,
-    required: true
-  },
   password: {
     type: String,
     default: ''

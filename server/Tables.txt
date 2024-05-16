@@ -18,7 +18,6 @@ gamesPlayed: Number; (statistics)
 game table DB:
 id: Number. distinct key;
 players_num: Number;
-max_players_num: Number;
 password: string; (will be empty for tables without one)
 moneyAmountOnTable: Number; (the current number of money on the table, updated during the game) (not really sure we need this, can save it just in the server and send to the players every time)
 bigBlind: Number; (I dont understand this but think needed)
