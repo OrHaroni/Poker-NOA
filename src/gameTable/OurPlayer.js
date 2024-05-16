@@ -12,6 +12,14 @@ const OurPlayer = (props) => {
         const newCards = RandomTwoCards(); // Assuming RandomCard returns a card
         setGeneratedCard(newCards);
     }
+    //clickRaise function to send 'raise' event to the server
+    const clickRaise = () => {
+        props.socket.emit('raise', props.table, props.name, 100);
+    };
+    //clickCall function to send 'call' event to the server
+    const clickCall = () => {
+        props.socket.emit('call',  props.table, props.name);
+    };
 
 
     return (
@@ -19,10 +27,10 @@ const OurPlayer = (props) => {
             <div className="our-player">
                 <div className='our-cards'>{generatedCards}</div>
                 <span className='action-container'>
-                    <button className="action-button">
+                    <button className="action-button" onClick={clickRaise}>
                         Raise
                     </button>
-                    <button className="action-button">
+                    <button className="action-button" onClick={clickCall}>
                         Call
                     </button>
                 </span>

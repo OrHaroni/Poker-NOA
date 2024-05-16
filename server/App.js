@@ -79,8 +79,21 @@ io.on('connection', async (socket) => {
           *                       *
           *                       * 
           *                       */
- socket.on('raiseTable', socketManager.TableRaise);
+  socket.on('raise', async (tableName, username,amout) => {
+    socketManager.raise(tableName, username,amout);
+ });
 
+ socket.on('check', async (tableName, username) => {
+  socketManager.check(tableName, username);
+});
+socket.on('fold', async (tableName, username) => {
+  socketManager.fold(tableName, username);
+});
+socket.on('call', async (tableName, username) => {
+  socketManager.call(tableName, username);
+});
+    
+      
  }); 
 
 
