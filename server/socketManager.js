@@ -56,12 +56,17 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
     /* Find the table in the DB */
     const table = await Table.findOne({ name: tableName });
 
+    /* Get the connected user from the DB for its socket */
+    const tempConnectedUser = await connectedUsers.findOne({ username: username });
+
     /* Add the Player into the local DB for this table */
-    const newPlayer = new Player(nickname, moneyToEnterWith);
-    console.log("Player to add:");
-    console.log(newPlayer);
+    const newPlayer = new Player(nickname, moneyToEnterWith, tempConnectedUser.socketId);
     const local_table = tablesList.find(table => table.name === tableName);
     local_table.addPlayer(newPlayer);
+    local_table.drawCardsToAllPlayers();
+    console.log(local_table);
+    const cards = newPlayer.hand;
+    io.to(newPlayer.socket).emit('getCards', cards);
     // if its the first player on the table, we dont want to send him the render event because he is the one that joined the table.
     if(table.playersOnTable.length > 1 || table.spectators.length > 0) {
     // Iterate over each player on the table , if its not the user that joined the table, send him the render event.
@@ -78,7 +83,6 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
 
     for (const spectator of table.spectators) {
       const usernameToRender = await connectedUsers.findOne({ username: spectator });
-      console.log("usernameToRender: ", usernameToRender, "socketId: ", usernameToRender.socketId);
       io.to(usernameToRender.socketId).emit('render');
       }
   }

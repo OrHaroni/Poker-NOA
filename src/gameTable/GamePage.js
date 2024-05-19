@@ -47,14 +47,9 @@ function GameTable(props) {
     const tableName = props.table.name;
     const username = props.user.username;
     const nickname = props.user.nickname;
-    console.log(props);
-    console.log(props.user);
-    console.log(nickname);
     
     const retStatus = await joinUserIntoTable(tableName, username, moneyToEnterWith);
-    console.log("retStatus: ", retStatus);
     if (retStatus === 200) {
-      console.log(nickname);
       props.socket.emit('joinTable', tableName, username, nickname, moneyToEnterWith);
       setShowModal(false);
       setSatDown(true);
