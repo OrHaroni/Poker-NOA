@@ -24,7 +24,6 @@ const OurPlayer = (props) => {
 
     /* Get cards from the Server and make it into html */
     props.socket.off('getCards').on('getCards', (cards) => {
-        console.log("This is cards: ", cards);  
         const card1 = GenericDeck.find(card => card.id === cards[0].id);
         const card2 = GenericDeck.find(card => card.id === cards[1].id);
         const generated = 

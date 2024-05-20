@@ -8,14 +8,18 @@ import Lobby from '../lobby/lobby.js';
 import { leaveTable } from '../serverCalls/Table.js';
 import dealer_img from '../assets/dealer.jpg';
 import { getPlayersOnTable } from '../serverCalls/Table.js';
+import CommunitiCards from './CommuinityCards.js';
 
 // this io is the io from the index.html file on the public folder
 <script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
 
 function Table(props) {
   const [otherPlayers, setOtherPlayers] = useState(props.table.playersOnTable);
+  const [commuinityCards, setCommunityCards] = useState([]);
     // fecthData func to get the players on the table from the server (after a user joined the table or left the table ).
-    const fetchData = async () => {
+    const fetchData = async (cards) => {
+      console.log("User got this cards for table from render: ", cards);
+      setCommunityCards(cards);
       const updatedPlayers = await getPlayersOnTable(props.table.name);
       const updatedOtherPlayers = updatedPlayers.filter(player => player.nickname !== props.user.nickname);
       console.log("renderr");
@@ -33,6 +37,7 @@ function Table(props) {
               <Player key={index} name={player.nickname} className={`player player${index + 1}`} />
             ))}
         </div>
+        <CommunitiCards cards={commuinityCards}/>
       </div>      
     </>
   );
