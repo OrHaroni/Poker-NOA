@@ -24,6 +24,10 @@ function GameTable(props) {
   const moneyRef = useRef(0);
   const [satDown, setSatDown] = useState(false);
 
+
+  // game functionalities like raise, call, fold, check, etc.
+  // listen to yourTurn event to know when its your turn to play.
+  
   const sitDownHandler = () => {
     setShowModal(true); // Open the modal when sitting down
   };
@@ -110,7 +114,7 @@ function GameTable(props) {
         <Row>
           <Col>
             <Table table={props.table} user={props.user} players_num={4} socket={props.socket} />
-            {satDown && <OurPlayer name={props.user.nickname} className={"our-player"} socket={props.socket} table={props.table} />}
+            {satDown && <OurPlayer name={props.user.nickname} className={"our-player"} socket={props.socket} tablename={ props.table.name} />}
             {!satDown && (
               <button className="exit-button" onClick={sitDownHandler} id="buttonBack">
                 Sit Down

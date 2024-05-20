@@ -79,9 +79,11 @@ io.on('connection', async (socket) => {
           *                       *
           *                       * 
           *                       */
-  socket.on('raise', async (tableName, username,amout) => {
-    socketManager.raise(tableName, username,amout);
- });
+
+       
+//   socket.on('playerAction', async (action,table,name ,amount) => {
+//      await socketManager.playerAction(action,table,name ,amount);
+//  });
 
  socket.on('check', async (tableName, username) => {
   socketManager.check(tableName, username);
