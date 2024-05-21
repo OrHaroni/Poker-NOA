@@ -2,11 +2,12 @@ const PokerTable = require("./PokerTable");
 const User = require("../models/users.js");
 
 class Player {
-  constructor(nickname, moneyOnTable, socket) {
+  constructor(nickname, moneyOnTable,socket ,socketId) {
     this.nickname = nickname;
     this.moneyOnTable = moneyOnTable;
     this.hand = []; // The player's hand of cards
-    this.socket = socket; // So we can comunicate with this user
+    this.socket = socketId; // So we can comunicate with this user
+    this.fullSocket = socket;
   }
 
   // Method to add chips to the player's stack

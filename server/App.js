@@ -81,20 +81,8 @@ io.on('connection', async (socket) => {
           *                       */
 
        
-//   socket.on('playerAction', async (action,table,name ,amount) => {
-//      await socketManager.playerAction(action,table,name ,amount);
-//  });
 
- socket.on('check', async (tableName, username) => {
-  socketManager.check(tableName, username);
-});
-socket.on('fold', async (tableName, username) => {
-  socketManager.fold(tableName, username);
-});
-socket.on('call', async (tableName, username) => {
-  socketManager.call(tableName, username);
-});
-    
+
       
  }); 
 

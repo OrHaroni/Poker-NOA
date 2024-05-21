@@ -20,7 +20,6 @@ const OurPlayer = (props) => {
     }
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
-        console.log("aaclickraise table: ",props.name);
         props.socket.emit('playerAction',"raise",props.tablename,props.name, 100);
     };
     //clickCall function to send 'call' event to the server

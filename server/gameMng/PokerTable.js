@@ -52,7 +52,7 @@ class ActiveTable {
     // Method to draw cards to all players at the table
     drawCardsToAllPlayers() {
       // Assuming deck is an array of card objects
-      this.players.forEach(player => {
+      this.playersWithCards.forEach(player => {
         player.receiveCard(DrawCard(this.deck));
         player.receiveCard(DrawCard(this.deck));
       });
@@ -91,6 +91,9 @@ class ActiveTable {
     /* Draws the river 1 card */
     drawRiver() {
         this.cardsOnTable.push(DrawCard(this.deck));
+    }
+    startRound() {
+      this.playersWithCards = this.players;
     }
 
   } /* END OF CLASS ActiveTable */
