@@ -14,16 +14,14 @@ import { io } from 'socket.io-client';
 // this io is the io from the index.html file on the public folder
 <script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
 
-
-
-
+// Set the app element for react-modal
+Modal.setAppElement('#root');
 
 function GameTable(props) {
   const [showModal, setShowModal] = useState(false);
   const [money, setMoney] = useState(0);
   const moneyRef = useRef(0);
   const [satDown, setSatDown] = useState(false);
-
 
   // game functionalities like raise, call, fold, check, etc.
   // listen to yourTurn event to know when its your turn to play.
@@ -67,8 +65,9 @@ function GameTable(props) {
   };
 
   const ClickClose = async () => {
-      setShowModal(false); // Open the modal when sitting dow
+    setShowModal(false); // Close the modal
   };
+
   const ClickBack = async () => {
     const status = await leaveTable(props.table.name, props.user.nickname);
     if (status === 200) {
@@ -78,6 +77,7 @@ function GameTable(props) {
       console.log("Error leaving table");
     }
   };
+
   return (
     <>
       <Modal isOpen={showModal} className="form form-container p-4 rounded modal-center">
@@ -114,7 +114,7 @@ function GameTable(props) {
         <Row>
           <Col>
             <Table table={props.table} user={props.user} players_num={4} socket={props.socket} />
-            {satDown && <OurPlayer name={props.user.nickname} className={"our-player"} socket={props.socket} tablename={ props.table.name} />}
+            {satDown && <OurPlayer name={props.user.nickname} className={"our-player"} socket={props.socket} tablename={props.table.name} />}
             {!satDown && (
               <button className="exit-button" onClick={sitDownHandler} id="buttonBack">
                 Sit Down

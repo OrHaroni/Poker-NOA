@@ -8,90 +8,114 @@ const { set } = require("mongoose");
 
 let io;
 
+
+
+const waitForPlayerAction = (socket,currentPlayer, moneyToCall) => {
+  return new Promise((resolve) => {
+    if (currentPlayer.socket) {
+      io.to(currentPlayer.socket).emit('yourTurn', moneyToCall);
+
+      const onPlayerAction = (action) => {
+        console.log(`Received action from ${currentPlayer.nickname}: ${action}`);
+        resolve(action);
+        socket.off('playerAction', onPlayerAction);
+      };
+
+      socket.on('playerAction', onPlayerAction);
+    } else {
+      resolve(null); // Handle the case where the player has no socket
+    }
+  });
+};
+
+
+
+
+
+
+
+
 // function that run 1 round of the game of players actions. (like before the flop, after the flop, after the turn, after the river)
 
-async function runPlayersActions(socket, players) {
+async function runPlayersActions(socket,tableName) {
   let moneyToCall = 0;
+  const table = tablesList.find(table => table.name === tableName);
+  if(table == null) {
+    return false;
+  }
 
-  for (let currentPlayerIndex = 0; currentPlayerIndex < players.length; currentPlayerIndex++) {
-    const currentPlayer = players[currentPlayerIndex];
-    console.log(`${currentPlayer.nickname}'s turn`);
+  table.startRound();
+  //console.log("table is" , table);
+  for (const currentPlayer of table.playersWithCards) {
+    //if its the demo player, we want to skip him.
 
-    // Notify the current player that it's their turn
-    const user = await allUsers.findOne({ nickname: currentPlayer.nickname });
-    const connectedUser = await connectedUsers.findOne({ username: user.username });
-    if (connectedUser) {
-      io.to(connectedUser.socketId).emit('yourTurn', moneyToCall);
+    if(currentPlayer.nickname === "demo") {
+      continue;
     }
-
-    try {
-      const playerAction = await waitForPlayerAction(socket, currentPlayer.nickname, 30000);
-      console.log(`${currentPlayer.nickname} performed action:`, playerAction);
-    } catch (err) {
-      console.log(`${currentPlayer.nickname} folds`);
-    }
+  
+    console.log("current player is: ", currentPlayer.nickname);
+    const playerAction = await waitForPlayerAction(socket,currentPlayer, moneyToCall);
+    // Handle the player's action here
+    console.log(`Player ${currentPlayer.nickname} took action: ${playerAction}`);
   }
 }
 
-function waitForPlayerAction(socket, playerNickname, timeout) {
-  return new Promise((resolve, reject) => {
-    const onPlayerAction = (action, table, name, amount) => {
-      console.log(`Received action from ${name} during ${playerNickname}'s turn.`);
-      if (name === playerNickname) {
-        socket.off('playerAction', onPlayerAction);
-        resolve({ action, table, name, amount });
-      } else {
-        console.log(`Ignoring action from ${name} as it is not their turn.`);
-      }
-    };
+// function waitForPlayerAction(socket, playerNickname, timeout) {
+//   return new Promise((resolve, reject) => {
+//     const onPlayerAction = (action, table, name, amount) => {
+//       console.log(`Received action from ${name} during ${playerNickname}'s turn.`);
+//       if (name === playerNickname) {
+//         socket.off('playerAction', onPlayerAction);
+//         resolve({ action, table, name, amount });
+//       } else {
+//         console.log(`Ignoring action from ${name} as it is not their turn.`);
+//       }
+//     };
 
-    socket.on('playerAction', onPlayerAction);
+//     socket.on('playerAction', onPlayerAction);
 
-    const timer = setTimeout(() => {
-      socket.off('playerAction', onPlayerAction);
-      reject(new Error('Timeout'));
-    }, timeout);
+//     const timer = setTimeout(() => {
+//       socket.off('playerAction', onPlayerAction);
+//       reject(new Error('Timeout'));
+//     }, timeout);
 
-    socket.on('playerAction', () => {
-      clearTimeout(timer);
-    });
-  });
-}
+//     socket.on('playerAction', () => {
+//       clearTimeout(timer);
+//     });
+//   });
+// }
 
 
 //Modify the playerAction function to handle actions properly
-// playerAction = async (action, table, name, amount) => {
-//   console.log("player !!!!!!!!!!!!!!!!! action!");
-//   table = await Table.findOne({ name: table });
+playerAction = async (action, table, name, amount) => {
+  table = await Table.findOne({ name: table });
 
-//   // Implement action handling logic here based on the action
-//   // Example: if (action === 'raise') { ... }
+  // Implement action handling logic here based on the action
+  // Example: if (action === 'raise') { ... }
 
-//   // Notify all players and spectators about the state of the game and render!
-//   for (const player of table.playersOnTable) {
-//     const user = await allUsers.findOne({ nickname: player.nickname });
-//     const connectedUser = await connectedUsers.findOne({ username: user.username });
+  // Notify all players and spectators about the state of the game and render!
+  for (const player of table.playersOnTable) {
+    const user = await allUsers.findOne({ nickname: player.nickname });
+    const connectedUser = await connectedUsers.findOne({ username: user.username });
 
-//     if (connectedUser) {
-//       io.to(connectedUser.socketId).emit('render');
-//     }
-//   }
-// };
+    if (connectedUser) {
+      io.to(connectedUser.socketId).emit('render');
+    }
+  }
+};
   
 
 
 async function controlRound(socket,tableName) {
   // get the table
-  const table = await Table.findOne({ name: tableName });
   // get the players on the table
-  const players = table.playersOnTable;
   // Shuffle the deck
   // Deal cards to the players 
   // Set up initial game state
   
 
   // Start the before the flop round
-  runPlayersActions(socket,players);
+  runPlayersActions(socket,tableName);
   // start the flop round annd so...........................
 
   //run algo to decide who is the winner and give him the money.
@@ -144,7 +168,7 @@ close = async() => {
           *                       * 
           *                       */
 
-joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
+joinTable = async (socket,tableName, username, nickname, moneyToEnterWith) => {
     /* Find the table in the DB */
     const table = await Table.findOne({ name: tableName });
 
@@ -156,7 +180,7 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
     const local_table = tablesList.find(table => table.name === tableName);
     local_table.addPlayer(newPlayer);
     local_table.drawCardsToAllPlayers();
-    console.log(local_table);
+    //console.log(local_table);
     const cards = newPlayer.hand;
     io.to(newPlayer.socket).emit('getCards', cards);
     // if its the first player on the table, we dont want to send him the render event because he is the one that joined the table.
@@ -182,9 +206,8 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
   // need to check if the game isnt running yet..
   if(table.playersOnTable.length === 2) { // && game isnt running
     //call control round function
-    controlRound(socket,tableName);
-
-    
+    // wait 5 seconds for the players to see their cards
+    setTimeout(controlRound, 5000, socket,tableName);
   }
 };
 
@@ -250,6 +273,9 @@ standUp = async (tableName, username) => {
     for (const player of table.spectators) {
       // assume nickname is unique !!!
         const user = await allUsers.findOne({ nickname: player });
+        if(user == null) {
+          continue;
+        }
         const connectedUser = await connectedUsers.findOne({ username: user.username });
         // Check if the user exists and is not the user that leave the table
         if (connectedUser.username !== username) {

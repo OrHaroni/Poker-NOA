@@ -49,12 +49,12 @@ web_modules/
 *.tsbuildinfo
 
 # Optional npm cache directory
-.npm
+.npm 
 
 # Optional eslint cache
 .eslintcache
 
-# Optional stylelint cache
+# Optional stylelint1 cache
 .stylelintcache
 
 # Microbundle cache

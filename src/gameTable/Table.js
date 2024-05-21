@@ -22,8 +22,6 @@ function Table(props) {
       setCommunityCards(cards);
       const updatedPlayers = await getPlayersOnTable(props.table.name);
       const updatedOtherPlayers = updatedPlayers.filter(player => player.nickname !== props.user.nickname);
-      console.log("renderr");
-      console.log("updatedOtherPlayers: ", updatedOtherPlayers);
       setOtherPlayers(updatedOtherPlayers);
     };
     // every time we get a render event, we will call the fetchData func and update the state.
