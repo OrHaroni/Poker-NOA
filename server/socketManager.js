@@ -4,8 +4,118 @@ const connectedUsers =require('./models/connectedUsers.js');
 const allUsers = require('./models/users.js');
 const {playersList, tablesList} = require("./localDB");
 const { Player } = require("./gameMng/PokerPlayers.js");
+const { set } = require("mongoose");
 
 let io;
+
+// function that run 1 round of the game of players actions. (like before the flop, after the flop, after the turn, after the river)
+
+async function runPlayersActions(tableName) {
+  let moneyToCall = 0;
+  const table = tablesList.find(table => table.name === tableName);
+  if (table == null) {
+    return false;
+  }
+  for (const currentPlayer of table.playersWithCards) {
+    console.log("current player is: ", currentPlayer.nickname);
+    if (currentPlayer.socket) {
+      //Notify the current player that it's their turn
+      console.log('money to call is: ', table.moneyToCall); 
+      io.to(currentPlayer.socket).emit('yourTurn', table.moneyToCall);
+      try {
+        // Await the player's action or timeout
+        const playerAction = await new Promise((resolve, reject) => {
+          const turnTimeout = setTimeout(() => {
+            console.log('Player did not respond in time.- fold the player.');
+            fold(tableName, currentPlayer.nickname); // Fold the player (or take other action as needed)
+            reject(new Error('timeout')); // Reject on timeout
+          }, 10000); // 10 seconds
+          
+          currentPlayer.fullSocket.on('playerAction', (action,RaiseAmount) => {
+            clearTimeout(turnTimeout); // Clear the timeout if response is received
+            resolve({ action, RaiseAmount }); // Resolve with player action and raise amount as an object
+          });
+        });
+        let action = playerAction.action;
+        let raiseAmount = playerAction.RaiseAmount;
+        //Add logic to handle the player's action here
+        switch (action) {
+          case 'raise':
+            raise(tableName, currentPlayer.nickname, raiseAmount); // Raise the player
+            break;
+          case 'fold':
+            fold(tableName, currentPlayer.nickname); // Fold the player 
+            break;
+          case 'call':
+            call(tableName, currentPlayer.nickname); // Call the player
+            break;
+          case 'check':
+            check(tableName, currentPlayer.nickname); // Check the player
+            break;
+          default:
+            // Handle invalid action
+            console.error('Invalid player action:', playerAction);
+            break;
+        }
+
+          
+
+      } catch (err) {
+        if (err.message === 'timeout') {
+          // Handle the timeout scenario (e.g., skip turn, default action, etc.)
+          console.log('Handling player timeout...');
+        } else {
+          // Handle other potential errors
+          console.error('An error occurred:', err);
+        }
+      }
+      
+  }
+}
+}
+
+sendCardsToAllPlayers = async (table) => {
+  // draw cards to all the players on the table
+  // draw 2 cards to each player in the local DB.
+  table.drawCardsToAllPlayers();
+  for (const player of table.playersWithCards) {
+    const cards = player.hand;
+    io.to(player.socket).emit('getCards', cards);
+  }
+  
+};
+renderAll = async (table) => {
+  for (const player of table.playersWithCards) {
+         io.to(player.socket).emit('render', table.cardsOnTable);
+  }
+  // now want to send the spectators the render event.
+  for (const spectator of table.spectators) {
+    const usernameToRender = await connectedUsers.findOne({ username: spectator });
+    io.to(usernameToRender.socketId).emit('render', local_table.cardsOnTable);
+    }
+}
+
+async function controlRound(tableName) {
+  console.log("Control Round!");
+  // get the table
+  const table = tablesList.find(table => table.name === tableName);
+  // change all the players to players with cards to be able to play. 
+  table.startRound();
+  // Draw and send cards to all players
+  sendCardsToAllPlayers(table);
+  // start a round of players actions
+  await runPlayersActions(tableName);
+  // draw flop
+  table.drawFlop();// Only for testing for now.
+  renderAll(table);
+  // start a round of players actions
+  // draw turn
+  // start a round of players actions
+  // draw river
+  // start a round of players actions
+  // run algo to decide who is the winner and give him the money.
+}
+
 
 function initialize(server) {
   io = socketIO(server);
@@ -52,7 +162,7 @@ close = async() => {
           *                       * 
           *                       */
 
-joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
+joinTable = async (socket,tableName, username, nickname, moneyToEnterWith) => {
     /* Find the table in the DB */
     const table = await Table.findOne({ name: tableName });
 
@@ -60,13 +170,9 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
     const tempConnectedUser = await connectedUsers.findOne({ username: username });
 
     /* Add the Player into the local DB for this table */
-    const newPlayer = new Player(nickname, moneyToEnterWith, tempConnectedUser.socketId);
+    const newPlayer = new Player(nickname, moneyToEnterWith,socket, tempConnectedUser.socketId);
     const local_table = tablesList.find(table => table.name === tableName);
     local_table.addPlayer(newPlayer);
-    local_table.drawCardsToAllPlayers();
-    console.log(local_table);
-    const cards = newPlayer.hand;
-    io.to(newPlayer.socket).emit('getCards', cards);
     // if its the first player on the table, we dont want to send him the render event because he is the one that joined the table.
     if(table.playersOnTable.length > 1 || table.spectators.length > 0) {
     // Iterate over each player on the table , if its not the user that joined the table, send him the render event.
@@ -85,6 +191,12 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
       const usernameToRender = await connectedUsers.findOne({ username: spectator });
       io.to(usernameToRender.socketId).emit('render', local_table.cardsOnTable);
       }
+  }
+  // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
+  // need to check if the game isnt running yet..
+  if(table.playersOnTable.length === 2) { // && game isnt running
+    //call control round function
+    controlRound(tableName);
   }
 };
 
@@ -150,6 +262,9 @@ standUp = async (tableName, username) => {
     for (const player of table.spectators) {
       // assume nickname is unique !!!
         const user = await allUsers.findOne({ nickname: player });
+        if(user == null) {
+          continue;
+        }
         const connectedUser = await connectedUsers.findOne({ username: user.username });
         // Check if the user exists and is not the user that leave the table
         if (connectedUser.username !== username) {
@@ -198,6 +313,7 @@ fold = async (tableName, username) => {
     if(table == null) {
       return false;
     }
+    /// addddddddddddddddddddddddddddddddddddddar we need to fix the fold function here !!!!
     const player = table.PlayerWithCards.find(player => player.nickname === username)
     // remove the player from the players with cards
     table.playersWithCards = table.playersWithCards.filter(player => player.nickname !== username);

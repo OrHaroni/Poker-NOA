@@ -60,7 +60,6 @@ const GenericFullDeck = [
 
 async function updateCardsInTable(table) {
 
-    console.log("table: ", table.cardOnTable);
 
     try {
         const updatedTable = await tableSchema.findOneAndUpdate(
@@ -68,7 +67,6 @@ async function updateCardsInTable(table) {
             { $set: { cardOnTable: [] } }, // Update the cardOnTable field
             { new: true } // Return the updated document
         );
-        console.log('Updated Table:', updatedTable);
         return updatedTable;
     } catch (error) {
         console.error('Error updating table:', error);

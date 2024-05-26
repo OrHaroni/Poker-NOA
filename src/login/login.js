@@ -40,7 +40,6 @@ function Login() {
         // if the status is good, we want to use socket io to send to the server that the user is connected. (mainly to know the socket id of the user)
         socket.emit('userConnected', user.username);
         socket.emit('raiseTable',"User Test");
-        console.log("after emitting");
         // sending the socket as well so we can use it later on to listen to events.
         root.render(<Lobby user={user} socket={socket}/>);
       }

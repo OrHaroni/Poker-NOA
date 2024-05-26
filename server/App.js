@@ -59,7 +59,7 @@ io.on('connection', async (socket) => {
 
   // if we get joinTable event, we will want to send all the players on table with the given name, to render the table.
   socket.on('joinTable', async (tableName, username, nickname, moneyToEnterWith) => {
-    socketManager.joinTable(tableName, username, nickname, moneyToEnterWith);
+    socketManager.joinTable(socket,tableName, username, nickname, moneyToEnterWith);
   });
 
   // if we get leaveTable event, we will want to send all the players on table with the given name, to render the table.
@@ -79,20 +79,10 @@ io.on('connection', async (socket) => {
           *                       *
           *                       * 
           *                       */
-  socket.on('raise', async (tableName, username,amout) => {
-    socketManager.raise(tableName, username,amout);
- });
 
- socket.on('check', async (tableName, username) => {
-  socketManager.check(tableName, username);
-});
-socket.on('fold', async (tableName, username) => {
-  socketManager.fold(tableName, username);
-});
-socket.on('call', async (tableName, username) => {
-  socketManager.call(tableName, username);
-});
-    
+       
+
+
       
  }); 
 

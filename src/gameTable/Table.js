@@ -19,11 +19,11 @@ function Table(props) {
     // fecthData func to get the players on the table from the server (after a user joined the table or left the table ).
     const fetchData = async (cards) => {
       console.log("User got this cards for table from render: ", cards);
-      setCommunityCards(cards);
+      if(cards){
+        setCommunityCards(cards);
+      }
       const updatedPlayers = await getPlayersOnTable(props.table.name);
       const updatedOtherPlayers = updatedPlayers.filter(player => player.nickname !== props.user.nickname);
-      console.log("renderr");
-      console.log("updatedOtherPlayers: ", updatedOtherPlayers);
       setOtherPlayers(updatedOtherPlayers);
     };
     // every time we get a render event, we will call the fetchData func and update the state.

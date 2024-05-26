@@ -5,6 +5,11 @@ import cards from '../assets/cards.png';
 import Card from './Card';
 
 const OurPlayer = (props) => {
+
+    props.socket.off('yourTurn').on('yourTurn', yourTurn => {
+        console.log('aaMyTurn');
+    }
+    );
     // State to store the generated card
     const [generatedCards, setGeneratedCard] = useState(null);
 
@@ -15,11 +20,17 @@ const OurPlayer = (props) => {
     }
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
-        props.socket.emit('raise', props.table, props.name, 100);
+        props.socket.emit('playerAction',"raise", 100);
     };
     //clickCall function to send 'call' event to the server
     const clickCall = () => {
-        props.socket.emit('call',  props.table, props.name);
+        props.socket.emit('playerAction',"call",null);
+    };
+    const clickCheck = () => {
+        props.socket.emit('playerAction',"check",null);
+    };
+    const clickFold = () => {
+        props.socket.emit('playerAction',"fold",null);
     };
 
     /* Get cards from the Server and make it into html */
@@ -105,6 +116,12 @@ const OurPlayer = (props) => {
                     </button>
                     <button className="action-button" onClick={clickCall}>
                         Call
+                    </button>
+                    <button className="action-button" onClick={clickCheck}>
+                        Check
+                    </button>
+                    <button className="action-button" onClick={clickFold}>
+                        Fold
                     </button>
                 </span>
             </div>
