@@ -75,21 +75,27 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
         const user = await allUsers.findOne({ nickname: player.nickname });
         const connectedUser = await connectedUsers.findOne({ username: user.username });
         // Check if the user exists and is not the user that joined the table
-        if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render');
-        }
+        //if (connectedUser.username !== username) {
+           io.to(connectedUser.socketId).emit('render', local_table.cardsOnTable);
+       // }
     }
     // now want to send the spectators the render event.
 
     for (const spectator of table.spectators) {
       const usernameToRender = await connectedUsers.findOne({ username: spectator });
-      io.to(usernameToRender.socketId).emit('render');
+      io.to(usernameToRender.socketId).emit('render', local_table.cardsOnTable);
       }
   }
 };
 
 leaveTable = async (tableName, username) => {
     const table = await Table.findOne({ name: tableName });
+
+    /* Get the player out of all lists in local DB*/
+    const local_table = tablesList.find(table => table.name === tableName);
+    local_table.players = local_table.players.filter(player => player.nickname !== username);
+    local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== username);
+    local_table.spectators = local_table.spectators.filter(player => player.nickname !== username);
     // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
     for (const player of table.playersOnTable) {
       // assume nickname is unique !!!
@@ -97,7 +103,7 @@ leaveTable = async (tableName, username) => {
         const connectedUser = await connectedUsers.findOne({ username: user.username });
         // Check if the user exists and is not the user that leave the table
         if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render');
+           io.to(connectedUser.socketId).emit('render', local_table.cardsOnTable);
         }
     }
     // now want to send the spectators the render event.
@@ -107,7 +113,8 @@ leaveTable = async (tableName, username) => {
         const connectedUser = await connectedUsers.findOne({ username: user.username });
         // Check if the user exists and is not the user that leave the table
         if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render');
+          const local_table = tablesList.find(table => table.name === tableName);
+           io.to(connectedUser.socketId).emit('render', local_table.cardsOnTable);
         }
     }
 };
@@ -120,6 +127,14 @@ standUp = async (tableName, username) => {
     // add the user to the spectators
     table.spectators.push(username);
     await table.save();
+
+    /* Get the player out of the table list of players and make him spectator*/
+    const local_table = tablesList.find(table => table.name === tableName);
+    const playerToRemove = local_table.players.find(player => player.nickname === username);
+    local_table.players = local_table.players.filter(player => player.nickname !== username);
+    local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== username);
+    local_table.spectators.push(playerToRemove);
+
     // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
     for (const player of table.playersOnTable) {
       // assume nickname is unique !!!
@@ -127,7 +142,8 @@ standUp = async (tableName, username) => {
         const connectedUser = await connectedUsers.findOne({ username: user.username });
         // Check if the user exists and is not the user that leave the table
         if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render');
+          const local_table = tablesList.find(table => table.name === tableName);
+           io.to(connectedUser.socketId).emit('render', local_table.cardsOnTable);
         }
     }
     // now want to send the spectators the render event.
@@ -137,7 +153,8 @@ standUp = async (tableName, username) => {
         const connectedUser = await connectedUsers.findOne({ username: user.username });
         // Check if the user exists and is not the user that leave the table
         if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render');
+          const local_table = tablesList.find(table => table.name === tableName);
+           io.to(connectedUser.socketId).emit('render', local_table.cardsOnTable);
         }
     }
 };
