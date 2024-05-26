@@ -12,12 +12,7 @@ const OurPlayer = (props) => {
     );
     // State to store the generated card
     const [generatedCards, setGeneratedCard] = useState(null);
-
-    // Initial generation of random cards, if not already generated
-    if (!generatedCards) {
-        const newCards = RandomTwoCards(); // Assuming RandomCard returns a card
-        setGeneratedCard(newCards);
-    }
+    
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
         props.socket.emit('playerAction',"raise", 100);
