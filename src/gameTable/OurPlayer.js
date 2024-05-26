@@ -20,11 +20,17 @@ const OurPlayer = (props) => {
     }
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
-        props.socket.emit('playerAction',"raise",props.tablename,props.name, 100);
+        props.socket.emit('playerAction',"raise", 100);
     };
     //clickCall function to send 'call' event to the server
     const clickCall = () => {
-        props.socket.emit('playerAction',"call",props.tablename,props.name,null);
+        props.socket.emit('playerAction',"call",null);
+    };
+    const clickCheck = () => {
+        props.socket.emit('playerAction',"check",null);
+    };
+    const clickFold = () => {
+        props.socket.emit('playerAction',"fold",null);
     };
 
     /* Get cards from the Server and make it into html */
@@ -110,6 +116,12 @@ const OurPlayer = (props) => {
                     </button>
                     <button className="action-button" onClick={clickCall}>
                         Call
+                    </button>
+                    <button className="action-button" onClick={clickCheck}>
+                        Check
+                    </button>
+                    <button className="action-button" onClick={clickFold}>
+                        Fold
                     </button>
                 </span>
             </div>

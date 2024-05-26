@@ -20,25 +20,45 @@ async function runPlayersActions(tableName) {
     console.log("current player is: ", currentPlayer.nickname);
     if (currentPlayer.socket) {
       //Notify the current player that it's their turn
-      io.to(currentPlayer.socket).emit('yourTurn', moneyToCall);
+      console.log('money to call is: ', table.moneyToCall); 
+      io.to(currentPlayer.socket).emit('yourTurn', table.moneyToCall);
       try {
         // Await the player's action or timeout
         const playerAction = await new Promise((resolve, reject) => {
           const turnTimeout = setTimeout(() => {
             console.log('Player did not respond in time.- fold the player.');
-            fold(tableName, currentPlayer.nickname); // Fold the player (or take other action as needed
+            fold(tableName, currentPlayer.nickname); // Fold the player (or take other action as needed)
             reject(new Error('timeout')); // Reject on timeout
           }, 10000); // 10 seconds
           
-          currentPlayer.fullSocket.on('playerAction', (data) => {
+          currentPlayer.fullSocket.on('playerAction', (action,RaiseAmount) => {
             clearTimeout(turnTimeout); // Clear the timeout if response is received
-            resolve(data); // Resolve with player action
+            resolve({ action, RaiseAmount }); // Resolve with player action and raise amount as an object
           });
         });
+        let action = playerAction.action;
+        let raiseAmount = playerAction.RaiseAmount;
+        //Add logic to handle the player's action here
+        switch (action) {
+          case 'raise':
+            raise(tableName, currentPlayer.nickname, raiseAmount); // Raise the player
+            break;
+          case 'fold':
+            fold(tableName, currentPlayer.nickname); // Fold the player 
+            break;
+          case 'call':
+            call(tableName, currentPlayer.nickname); // Call the player
+            break;
+          case 'check':
+            check(tableName, currentPlayer.nickname); // Check the player
+            break;
+          default:
+            // Handle invalid action
+            console.error('Invalid player action:', playerAction);
+            break;
+        }
 
-        // Process the player's action
-        console.log('Player action received:', playerAction);
-        // Add logic to handle the player's action here
+          
 
       } catch (err) {
         if (err.message === 'timeout') {
@@ -64,6 +84,16 @@ sendCardsToAllPlayers = async (table) => {
   }
   
 };
+renderAll = async (table) => {
+  for (const player of table.playersWithCards) {
+         io.to(player.socket).emit('render', table.cardsOnTable);
+  }
+  // now want to send the spectators the render event.
+  for (const spectator of table.spectators) {
+    const usernameToRender = await connectedUsers.findOne({ username: spectator });
+    io.to(usernameToRender.socketId).emit('render', local_table.cardsOnTable);
+    }
+}
 
 async function controlRound(tableName) {
   console.log("Control Round!");
@@ -74,8 +104,10 @@ async function controlRound(tableName) {
   // Draw and send cards to all players
   sendCardsToAllPlayers(table);
   // start a round of players actions
-  runPlayersActions(tableName);
+  await runPlayersActions(tableName);
   // draw flop
+  table.drawFlop();// Only for testing for now.
+  renderAll(table);
   // start a round of players actions
   // draw turn
   // start a round of players actions

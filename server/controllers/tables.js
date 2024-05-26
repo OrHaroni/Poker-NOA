@@ -84,8 +84,6 @@ const addTable = async (req, res) => {
     else {
          /* Add the table into the local db */
         tablesList.push(new ActiveTable(new_table.name, new_table.bigBlind, new_table.smallBlind));
-        const t = tablesList.find(table => table.name === new_table.name);
-        t.drawFlop();// Only for testing for now.
         res.status(200).json({});
     }
 }
