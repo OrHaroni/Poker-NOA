@@ -86,7 +86,6 @@ sendCardsToAllPlayers = async (table) => {
 };
 
 renderAll = async (table) => {
-  console.log("Render All!");
   let size_of_arr = table.players.length * 2;
   let players_and_money = [];
 
