@@ -3,6 +3,8 @@ import RandomTwoCards from './RandomCard';
 import './table.css';
 import cards from '../assets/cards.png';
 import Card from './Card';
+import Timer from '../Animations/AnimatedTimer/Timer';
+import AnimatedMessage from '../Animations/AnimatedStart/AnimatedMessage';
 
 const OurPlayer = (props) => {
     // State to store the generated card
@@ -14,6 +16,12 @@ const OurPlayer = (props) => {
     /* The actual buttons */
     const [buttons, setButtons] = useState(<span className='action-container'></span>);
 
+    // State to control Timer visibility
+    const [showTimer, setShowTimer] = useState(false);
+
+    // State to control AnimatedMessage visibility
+    const [showMessage, setShowMessage] = useState(false);
+
     props.socket.off('yourTurn').on('yourTurn', (moneyToCall) => {
         if(moneyToCall === 0) {
             console.log('Setting buttons to 1 (Can Check)');
@@ -23,6 +31,9 @@ const OurPlayer = (props) => {
             console.log('Setting buttons to 2 (Cant Check)');
             setButtonsState(2);
         }
+        // Show Timer and AnimatedMessage
+        setShowTimer(true);
+        setShowMessage(true);
 
         console.log('aaMyTurn');
     }
@@ -37,6 +48,7 @@ const OurPlayer = (props) => {
                 /* Case where we can check */
                 temp_buttons =
                 <span className='action-container'>
+                    <Timer/>
                     <button className="action-button" onClick={clickCheck}>
                         Check
                     </button>
@@ -52,6 +64,7 @@ const OurPlayer = (props) => {
                 /* Case where we cant check */
                 temp_buttons =
                 <span className='action-container'>
+                    <Timer/>
                     <button className="action-button" onClick={clickRaise}>
                         Raise
                     </button>
@@ -72,16 +85,24 @@ const OurPlayer = (props) => {
     
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
+        setShowTimer(false);
+        setShowMessage(false);
         props.socket.emit('playerAction',"raise", 100);
     };
     //clickCall function to send 'call' event to the server
     const clickCall = () => {
+        setShowTimer(false);
+        setShowMessage(false);
         props.socket.emit('playerAction',"call",null);
     };
     const clickCheck = () => {
+        setShowTimer(false);
+        setShowMessage(false);
         props.socket.emit('playerAction',"check",null);
     };
     const clickFold = () => {
+        setShowTimer(false);
+        setShowMessage(false);
         props.socket.emit('playerAction',"fold",null);
     };
 
@@ -156,7 +177,6 @@ const OurPlayer = (props) => {
         { id: 51, pic: require('../assets/cards/jack_of_hearts.png'), suit: 'Hearts', value: 'Jack' },
         { id: 52, pic: require('../assets/cards/jack_of_spades.png'), suit: 'Spades', value: 'Jack' }
     ];
-
 
     return (
         <>

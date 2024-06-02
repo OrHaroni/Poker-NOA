@@ -9,6 +9,7 @@ import { leaveTable } from '../serverCalls/Table.js';
 import dealer_img from '../assets/dealer.jpg';
 import { getPlayersOnTable } from '../serverCalls/Table.js';
 import CommunitiCards from './CommuinityCards.js';
+import Timer from '../Animations/AnimatedTimer/Timer.js';
 
 // this io is the io from the index.html file on the public folder
 <script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
@@ -16,6 +17,9 @@ import CommunitiCards from './CommuinityCards.js';
 function Table(props) {
   const [otherPlayers, setOtherPlayers] = useState(props.table.Players);
   const [commuinityCards, setCommunityCards] = useState([]);
+  /* Array of states to the timers */
+  const [timers, setTimers] = useState([false, false, false, false]);
+  
     // fecthData func to get the players on the table from the server (after a user joined the table or left the table ).
     const fetchData = async (cards, players_with_money, size) => {
       if(cards){
@@ -43,7 +47,9 @@ function Table(props) {
         <img className='dealer-img' src={dealer_img} />
         <div className="players">
         {otherPlayers.map((player, index) => (
+          <span>
               <Player key={index} name={player} className={`player player${index + 1}`} />
+            </span>
             ))}
         </div>
         <CommunitiCards cards={commuinityCards}/>
