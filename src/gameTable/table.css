@@ -256,3 +256,8 @@
     height: 100px;
     background-color: rgba(93,183,121,255);
 }
+
+.player-name {
+    color: azure;
+    font-weight: bold;
+}
