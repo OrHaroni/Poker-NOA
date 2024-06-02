@@ -10,10 +10,6 @@ const tableSchema = new Schema({
     type: String,
     default: ''
   },
-  moneyAmountOnTable: {
-    type: Number,
-    default: 0
-  },
   bigBlind: {
     type: Number,
     required: true
@@ -22,37 +18,10 @@ const tableSchema = new Schema({
     type: Number,
     required: true
   },
-  cardOnTable: {
-    type: [{
-      id: { 
-        type: Number
-      },
-      suit: {
-        type: String
-      },
-      value: {
-        type: String,
-
-      }
-    }],
-    default: []
-  },
-  //object that is a list with default of empty list
-  playersOnTable: {
-    type: [{
-      nickname: { 
-        type: String
-      },
-      moneyAmount: {
-        type: Number,
-        default: 0
-      }
-    }],
-    default: []
-  },
-  spectators: {
-    type: [String],
-    default: []
+  numOfPlayers: {
+    type: Number,
+    required: true,
+    default: 0
   },
   createdBy: {
     type: String,

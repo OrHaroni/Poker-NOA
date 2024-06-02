@@ -46,6 +46,7 @@ function GameTable(props) {
 
   const ClickEnterGame = async () => {
     const moneyToEnterWith = moneyRef.current.value;
+    console.log(moneyToEnterWith);
     const tableName = props.table.name;
     const username = props.user.username;
     const nickname = props.user.nickname;

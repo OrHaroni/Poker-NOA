@@ -37,10 +37,6 @@ const validateTable = async (tableName, password, username) => {
     try {
       // finding the table by the name and password, and adding the username to the spectators list 
       let table = await tableSchema.findOne({ "tableName": tableName, "password": password });
-      if(table) {
-        table.spectators.push(username);
-        await table.save();
-      }
       return table;
       } catch (error) {
         console.error('Error validation table:', error);
@@ -52,9 +48,10 @@ const joinUserIntoTable = async (tableName, username, moneyToEnterWith) => {
   try {
     const table = await tableSchema.findOne({"name": tableName});//No need for password because already validated.
 
-    if(table.playersOnTable.length === 5) {
+    if(table.numOfPlayers === 5) {
       return 2; //table is full;
     }
+
     const user = await userSchema.findOne({"username": username });
 
     if(user) {
@@ -65,13 +62,8 @@ const joinUserIntoTable = async (tableName, username, moneyToEnterWith) => {
         //Decrease the money for this user
         user.moneyAmount -= moneyToEnterWith;
         await user.save();
-
         //create minimal parameters user
-        const minimalUser = {"nickname": user.nickname, "moneyAmount": user.moneyAmount};
         // remove the user from the spectators 
-        table.spectators = table.spectators.filter(spectator => spectator !== username);
-        table.playersOnTable.push(minimalUser);
-        await table.save();
         return 0;//0 for no money problem.
       }
     }
