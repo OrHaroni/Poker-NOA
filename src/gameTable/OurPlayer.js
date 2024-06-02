@@ -5,6 +5,7 @@ import cards from '../assets/cards.png';
 import Card from './Card';
 import Timer from '../Animations/AnimatedTimer/Timer';
 import AnimatedMessage from '../Animations/AnimatedStart/AnimatedMessage';
+import RangeInput from '../RangeInput/RangeInput';
 
 const OurPlayer = (props) => {
     // State to store the generated card
@@ -53,9 +54,18 @@ const OurPlayer = (props) => {
                     <button className="action-button" onClick={clickCheck}>
                         Check
                     </button>
-                    <button className="action-button" onClick={clickRaise}>
-                        Raise
-                    </button>
+                    <div className='raise-with-range'>
+                        <button className="action-button" onClick={clickRaise}>
+                            Raise
+                        </button>
+                        <RangeInput
+                            min={0}
+                            max={1000}
+                            step={100}
+                            initialValue={500}
+                            onValueChange={() => {}} /* Empty */
+                        />
+                    </div>
                     <button className="action-button" onClick={clickFold}>
                         Fold
                     </button>
@@ -65,10 +75,19 @@ const OurPlayer = (props) => {
                 /* Case where we cant check */
                 temp_buttons =
                 <span className='action-container'>
-                    <Timer/>
-                    <button className="action-button" onClick={clickRaise}>
-                        Raise
-                    </button>
+                                        <Timer/>
+                    <div className='raise-with-range'>
+                        <button className="action-button" onClick={clickRaise}>
+                            Raise
+                        </button>
+                        <RangeInput
+                            min={0}
+                            max={1000}
+                            step={100}
+                            initialValue={500}
+                            onValueChange={() => {}} /* Empty */
+                        />
+                    </div>
                     <button className="action-button" onClick={clickCall}>
                         Call
                     </button>
