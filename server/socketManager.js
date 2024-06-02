@@ -114,14 +114,20 @@ async function controlRound(tableName) {
   // start a round of players actions
   await runPlayersActions(tableName);
   // draw flop
-  table.drawFlop();// Only for testing for now.
+  table.drawFlop();
   renderAll(table);
-  // start a round of players actions
-  // draw turn
-  // start a round of players actions
-  // draw river
-  // start a round of players actions
+  await runPlayersActions(tableName);
+  table.drawTurn();
+  renderAll(table);
+  await runPlayersActions(tableName);
+  table.drawRiver();
+  renderAll(table);
   // run algo to decide who is the winner and give him the money.
+  
+  console.log("End of round!");
+  // clear the table
+  table.clearHandToAllPlayers();
+  table.resetCardsTable();
 }
 
 
@@ -266,7 +272,7 @@ standUp = async (tableName, username) => {
           *                       *
           *                       * 
           *                       */
-raise = async (tableName, username,amout) => {
+raise = async (tableName, nickname,amout) => {
     console.log("Do raise!");
     // get the table
     const table = tablesList.find(table => table.name === tableName);
@@ -274,7 +280,7 @@ raise = async (tableName, username,amout) => {
       return false;
     }
     // get the player
-    const player = table.playersWithCards.find(player => player.nickname === username);
+    const player = table.playersWithCards.find(player => player.nickname === nickname);
     // get the player's chips
     if(player.removeChips(amout)) {
       //There is enaugh chips to raise
@@ -291,28 +297,27 @@ raise = async (tableName, username,amout) => {
     return; 
 };
 
-fold = async (tableName, username) => {
+fold = async (tableName, nickname) => {
     console.log("Do fold!");
     const table = tablesList.find(table => table.name === tableName);
     if(table == null) {
       return false;
     }
-    /// addddddddddddddddddddddddddddddddddddddar we need to fix the fold function here !!!!
-    const player = table.PlayerWithCards.find(player => player.nickname === username)
+    const player = table.playersWithCards.find(player => player.nickname === nickname);
     // remove the player from the players with cards
-    table.playersWithCards = table.playersWithCards.filter(player => player.nickname !== username);
+    table.playersWithCards = table.playersWithCards.filter(player => player.nickname !== nickname);
     player.clearHand();
 };
 
 check = async (tableName, username) => {
     console.log("Do check!");
-    const table = tablesList.find(table => table.name === tableName);
-    if(table == null) {
-      return;
-    }
+    // const table = tablesList.find(table => table.name === tableName);
+    // if(table == null) {
+    //   return false;
+    // }
 };
 
-call = async (tableName, username) => {
+call = async (tableName, nickname) => {
     console.log("Do call!");
     // get the table
     const table = tablesList.find(table => table.name === tableName);
@@ -320,7 +325,7 @@ call = async (tableName, username) => {
       return;
     }
     // get the player
-    const player = table.playersWithCards.find(player => player.nickname === username);
+    const player = table.playersWithCards.find(player => player.nickname === nickname);
     // get the player's chips
     if(player.removeChips(table.moneyToCall)) {
       return;
