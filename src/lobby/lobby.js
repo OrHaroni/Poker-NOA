@@ -53,7 +53,6 @@ function Lobby(props) {
       props.socket.emit('joinScreenTable',tableName, props.user.username,props.user.nickname);
       // we have to get the table from the server and send it to the gameTable component.
       props.socket.off('getLocalTable').on('getLocalTable',  playersArray => {
-        console.log("User got this table for table from render: ", playersArray);
         let Localtable = {
           name: tableName,
           Players: playersArray,

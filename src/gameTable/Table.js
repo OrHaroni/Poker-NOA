@@ -17,13 +17,23 @@ function Table(props) {
   const [otherPlayers, setOtherPlayers] = useState(props.table.Players);
   const [commuinityCards, setCommunityCards] = useState([]);
     // fecthData func to get the players on the table from the server (after a user joined the table or left the table ).
-    const fetchData = async (cards) => {
+    const fetchData = async (cards, players_with_money, size) => {
       if(cards){
         setCommunityCards(cards);
       }
-      const updatedPlayers = await getPlayersOnTable(props.table.name);
-      const updatedOtherPlayers = updatedPlayers.filter(player => player !== props.user.nickname);
-      setOtherPlayers(updatedOtherPlayers);
+      let other_player = [];
+      let money = [];
+      for (let i = 0; i < size; i+=2){
+        if(players_with_money[i] === props.user.nickname){
+          continue;
+        }
+        other_player.push(players_with_money[i]);
+        money.push(players_with_money[i+1]);
+      }
+
+      // const updatedPlayers = await getPlayersOnTable(props.table.name);
+      // const updatedOtherPlayers = updatedPlayers.filter(player => player !== props.user.nickname);
+      setOtherPlayers(other_player);
     };
     // every time we get a render event, we will call the fetchData func and update the state.
     props.socket.off('render').on('render', fetchData);
@@ -33,7 +43,7 @@ function Table(props) {
         <img className='dealer-img' src={dealer_img} />
         <div className="players">
         {otherPlayers.map((player, index) => (
-              <Player key={index} name={player.nickname} className={`player player${index + 1}`} />
+              <Player key={index} name={player} className={`player player${index + 1}`} />
             ))}
         </div>
         <CommunitiCards cards={commuinityCards}/>

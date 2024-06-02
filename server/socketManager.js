@@ -12,7 +12,6 @@ let io;
 // function that run 1 round of the game of players actions. (like before the flop, after the flop, after the turn, after the river)
 
 async function runPlayersActions(tableName) {
-  let moneyToCall = 0;
   const table = tablesList.find(table => table.name === tableName);
   if (table == null) {
     return false;
@@ -30,7 +29,7 @@ async function runPlayersActions(tableName) {
             console.log('Player did not respond in time.- fold the player.');
             fold(tableName, currentPlayer.nickname); // Fold the player (or take other action as needed)
             reject(new Error('timeout')); // Reject on timeout
-          }, 10000); // 10 seconds
+          }, 20000); // 20 seconds
           
           currentPlayer.fullSocket.on('playerAction', (action,RaiseAmount) => {
             clearTimeout(turnTimeout); // Clear the timeout if response is received
@@ -59,7 +58,7 @@ async function runPlayersActions(tableName) {
             break;
         }
 
-          
+        
 
       } catch (err) {
         if (err.message === 'timeout') {
@@ -85,14 +84,22 @@ sendCardsToAllPlayers = async (table) => {
   }
   
 };
+
 renderAll = async (table) => {
+  console.log("Render All!");
+  let size_of_arr = table.players.length * 2;
+  let players_and_money = [];
+
   for (const player of table.players) {
-         io.to(player.socket).emit('render', table.cardsOnTable);
+    players_and_money.push(player.nickname, player.moneyOnTable);
+  }
+
+  for (const player of table.players) {
+         io.to(player.socket).emit('render', table.cardsOnTable,players_and_money, size_of_arr);
   }
   // now want to send the spectators the render event.
   for (const spectator of table.spectators) {
-    const usernameToRender = await connectedUsers.findOne({ username: spectator });
-    io.to(usernameToRender.socketId).emit('render', local_table.cardsOnTable);
+    io.to(spectator.socket).emit('render', table.cardsOnTable, players_and_money,size_of_arr);
     }
 }
 
@@ -167,7 +174,7 @@ joinScreenTable = async (socket,tableName, username, nickname) => {
   console.log("Join Screen Table!");
   /* Get the connected user from the DB for its socket */
   const tempConnectedUser = await connectedUsers.findOne({ username: username });
-  const newPlayer = new Player(nickname, 0, socket, tempConnectedUser.socketId);
+  const newPlayer = new Player(nickname, socket, tempConnectedUser.socketId);
   /* Add the Player into the local DB for this table */
   const local_table = tablesList.find(table => table.name === tableName);
   local_table.spectators.push(newPlayer);
@@ -213,7 +220,7 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
   // need to check if the game isnt running yet..
   if(local_table.players.length === 2) { // && game isnt running
     //call control round function
-    //controlRound(tableName);
+    controlRound(tableName);
   }
 };
 
