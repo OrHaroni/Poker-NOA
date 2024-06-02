@@ -16,6 +16,9 @@ import CommunitiCards from './CommuinityCards.js';
 function Table(props) {
   const [otherPlayers, setOtherPlayers] = useState(props.table.Players);
   const [commuinityCards, setCommunityCards] = useState([]);
+  /* Array of states to the timers */
+  const [timers, setTimers] = useState([false, false, false, false]);
+  
     // fecthData func to get the players on the table from the server (after a user joined the table or left the table ).
     const fetchData = async (cards, players_with_money, size) => {
       if(cards){
@@ -37,13 +40,23 @@ function Table(props) {
     };
     // every time we get a render event, we will call the fetchData func and update the state.
     props.socket.off('render').on('render', fetchData);
+
+    /* Socket that tell us the player that now its turn */
+    props.socket.off('WhosTurn').on('WhosTurn', (player_index) => {
+      const updatedTimers = timers.map((timer, i) => i === player_index); // Set true at the specified index, false elsewhere
+      setTimers(updatedTimers);
+    }
+    );
+    
   return (
     <>
       <div className="table">
         <img className='dealer-img' src={dealer_img} />
         <div className="players">
         {otherPlayers.map((player, index) => (
-              <Player key={index} name={player} className={`player player${index + 1}`} />
+              <span>
+              <Player key={index} name={player} className={`player player${index + 1}`} timer={timers[index]} />
+              </span>
             ))}
         </div>
         <CommunitiCards cards={commuinityCards}/>

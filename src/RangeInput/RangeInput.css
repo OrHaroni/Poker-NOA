@@ -1,0 +1,16 @@
+/* RangeInput.css */
+.range-input-container {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  
+  .range-input {
+    width: 200px;
+  }
+  
+  .range-value {
+    font-size: 1.2em;
+    font-weight: bold;
+  }
+  

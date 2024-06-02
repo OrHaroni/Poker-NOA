@@ -1,30 +1,128 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import RandomTwoCards from './RandomCard';
 import './table.css';
 import cards from '../assets/cards.png';
 import Card from './Card';
+import Timer from '../Animations/AnimatedTimer/Timer';
+import AnimatedMessage from '../Animations/AnimatedStart/AnimatedMessage';
+import RangeInput from '../RangeInput/RangeInput';
 
 const OurPlayer = (props) => {
+    // State to store the generated card
+    const [generatedCards, setGeneratedCard] = useState(null);
 
-    props.socket.off('yourTurn').on('yourTurn', yourTurn => {
+    /* State of the buttons */
+    const [buttonsState, setButtonsState] = useState(0);
+
+    /* The actual buttons */
+    const [buttons, setButtons] = useState(<span className='action-container'></span>);
+
+    // State to control Timer visibility
+    const [showTimer, setShowTimer] = useState(false);
+
+    // State to control AnimatedMessage visibility
+    const [showMessage, setShowMessage] = useState(false);
+
+    /* Socket that tell us its our turn */
+    props.socket.off('yourTurn').on('yourTurn', (moneyToCall) => {
+        if(moneyToCall === 0) {
+            console.log('Setting buttons to 1 (Can Check)');
+            setButtonsState(1); 
+        }
+        else {
+            console.log('Setting buttons to 2 (Cant Check)');
+            setButtonsState(2);
+        }
+        // Show Timer and AnimatedMessage
+        setShowTimer(true);
+        setShowMessage(true);
+
         console.log('aaMyTurn');
     }
     );
-    // State to store the generated card
-    const [generatedCards, setGeneratedCard] = useState(null);
+
+    /* Changing the buttons layout */
+    useEffect(() => {
+        console.log('In use effect with: ', buttonsState);
+        let temp_buttons;
+        switch (buttonsState) {
+            case 1:
+                /* Case where we can check */
+                temp_buttons =
+                <span className='action-container'>
+                    <Timer/>
+                    <button className="action-button" onClick={clickCheck}>
+                        Check
+                    </button>
+                    <div className='raise-with-range'>
+                        <button className="action-button" onClick={clickRaise}>
+                            Raise
+                        </button>
+                        <RangeInput
+                            min={0}
+                            max={1000}
+                            step={100}
+                            initialValue={500}
+                            onValueChange={() => {}} /* Empty */
+                        />
+                    </div>
+                    <button className="action-button" onClick={clickFold}>
+                        Fold
+                    </button>
+                </span>;
+                break;
+            case 2:
+                /* Case where we cant check */
+                temp_buttons =
+                <span className='action-container'>
+                                        <Timer/>
+                    <div className='raise-with-range'>
+                        <button className="action-button" onClick={clickRaise}>
+                            Raise
+                        </button>
+                        <RangeInput
+                            min={0}
+                            max={1000}
+                            step={100}
+                            initialValue={500}
+                            onValueChange={() => {}} /* Empty */
+                        />
+                    </div>
+                    <button className="action-button" onClick={clickCall}>
+                        Call
+                    </button>
+                    <button className="action-button" onClick={clickFold}>
+                        Fold
+                    </button>
+                </span>;
+                break
+            default:
+                temp_buttons = <span className='action-container'></span>;
+                break;
+        }
+        setButtons(temp_buttons);
+      }, [buttonsState]);
     
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
+        setShowTimer(false);
+        setShowMessage(false);
         props.socket.emit('playerAction',"raise", 100);
     };
     //clickCall function to send 'call' event to the server
     const clickCall = () => {
+        setShowTimer(false);
+        setShowMessage(false);
         props.socket.emit('playerAction',"call",null);
     };
     const clickCheck = () => {
+        setShowTimer(false);
+        setShowMessage(false);
         props.socket.emit('playerAction',"check",null);
     };
     const clickFold = () => {
+        setShowTimer(false);
+        setShowMessage(false);
         props.socket.emit('playerAction',"fold",null);
     };
 
@@ -100,24 +198,12 @@ const OurPlayer = (props) => {
         { id: 52, pic: require('../assets/cards/jack_of_spades.png'), suit: 'Spades', value: 'Jack' }
     ];
 
-
     return (
         <>
             <div className="our-player">
                 <div className='our-cards'>{generatedCards}</div>
                 <span className='action-container'>
-                    <button className="action-button" onClick={clickRaise}>
-                        Raise
-                    </button>
-                    <button className="action-button" onClick={clickCall}>
-                        Call
-                    </button>
-                    <button className="action-button" onClick={clickCheck}>
-                        Check
-                    </button>
-                    <button className="action-button" onClick={clickFold}>
-                        Fold
-                    </button>
+                    {buttons}
                 </span>
             </div>
         </>

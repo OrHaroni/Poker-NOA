@@ -1,0 +1,21 @@
+.timer-container {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 25px;
+    background-color: #282c34;
+  }
+  
+  .timer {
+    font-size: 25px;
+    color: #61dafb;
+    font-family: 'Courier New', Courier, monospace;
+    animation: fadeIn 1s ease-in-out infinite;
+  }
+  
+  @keyframes fadeIn {
+    0% { opacity: 0.2; }
+    50% { opacity: 1; }
+    100% { opacity: 0.2; }
+  }
+  
