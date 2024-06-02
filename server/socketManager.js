@@ -2,9 +2,10 @@ const socketIO = require("socket.io");
 const Table = require('./models/tables.js');
 const connectedUsers =require('./models/connectedUsers.js'); 
 const allUsers = require('./models/users.js');
-const {playersList, tablesList} = require("./localDB");
+const {tablesList} = require("./localDB");
 const { Player } = require("./gameMng/PokerPlayers.js");
 const { set } = require("mongoose");
+const { tab } = require("@testing-library/user-event/dist/tab.js");
 
 let io;
 
@@ -85,7 +86,7 @@ sendCardsToAllPlayers = async (table) => {
   
 };
 renderAll = async (table) => {
-  for (const player of table.playersWithCards) {
+  for (const player of table.Players) {
          io.to(player.socket).emit('render', table.cardsOnTable);
   }
   // now want to send the spectators the render event.
@@ -162,82 +163,79 @@ close = async() => {
           *                       * 
           *                       */
 
-joinTable = async (socket,tableName, username, nickname, moneyToEnterWith) => {
+joinScreenTable = async (socket,tableName, username, nickname) => {
+  console.log("Join Screen Table!");
+  /* Get the connected user from the DB for its socket */
+  const tempConnectedUser = await connectedUsers.findOne({ username: username });
+  const newPlayer = new Player(nickname, 0, socket, tempConnectedUser.socketId);
+  /* Add the Player into the local DB for this table */
+  const local_table = tablesList.find(table => table.name === tableName);
+  local_table.addPlayer(newPlayer);
+  let players = [];
+  for (const player of local_table.players) {
+    players.push(player.nickname);
+  }
+  io.to(tempConnectedUser.socketId).emit('getLocalTable', players);
+};
+
+joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
+    console.log("Join Table!");
     /* Find the table in the DB */
     const table = await Table.findOne({ name: tableName });
 
-    /* Get the connected user from the DB for its socket */
-    const tempConnectedUser = await connectedUsers.findOne({ username: username });
+
+    /* Add one to the number of players on the table */
+    table.numOfPlayers += 1;
+    await table.save();
 
     /* Add the Player into the local DB for this table */
-    const newPlayer = new Player(nickname, moneyToEnterWith,socket, tempConnectedUser.socketId);
     const local_table = tablesList.find(table => table.name === tableName);
-    local_table.addPlayer(newPlayer);
-    // if its the first player on the table, we dont want to send him the render event because he is the one that joined the table.
-    if(table.playersOnTable.length > 1 || table.spectators.length > 0) {
-    // Iterate over each player on the table , if its not the user that joined the table, send him the render event.
-    for (const player of table.playersOnTable) {
-      // assume nickname is unique !!!
-        const user = await allUsers.findOne({ nickname: player.nickname });
-        const connectedUser = await connectedUsers.findOne({ username: user.username });
-        // Check if the user exists and is not the user that joined the table
-        //if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render', local_table.cardsOnTable);
-       // }
-    }
-    // now want to send the spectators the render event.
+    /* find from spactators list the player that want to join the table */
+    const playerToJoin = local_table.spectators.find(player => player.nickname === nickname);
 
-    for (const spectator of table.spectators) {
-      const usernameToRender = await connectedUsers.findOne({ username: spectator });
-      io.to(usernameToRender.socketId).emit('render', local_table.cardsOnTable);
-      }
+    /* add him the money he entered with */
+    playerToJoin.moneyOnTable = moneyToEnterWith;
+    /* remove him from the spectators list */
+    local_table.spectators = local_table.spectators.filter(player => player.nickname !== nickname);
+    /* add him to the players on table list */
+    local_table.players.push(playerToJoin);
+
+
+    // if its the first player on the table, we dont want to send him the render event because he is the one that joined the table.
+    if(local_table.playersOnTable.length > 1 || local_table.spectators.length > 0) {
+    // Iterate over each player on the table , if its not the user that joined the table, send him the render event.
+      renderAll(local_table);
   }
+
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
-  if(table.playersOnTable.length === 2) { // && game isnt running
+  if(local_table.players.length === 2) { // && game isnt running
     //call control round function
-    controlRound(tableName);
+    //controlRound(tableName);
   }
 };
 
 leaveTable = async (tableName, username) => {
     const table = await Table.findOne({ name: tableName });
-
-    /* Get the player out of all lists in local DB*/
     const local_table = tablesList.find(table => table.name === tableName);
+    /* if the player in the local_table players minus one the number of players on the table */
+    if(local_table.players.find(player => player.nickname === username)) {
+      table.numOfPlayers -= 1;
+      await table.save();
+    }
+    /* Get the player out of all lists in local DB*/
     local_table.players = local_table.players.filter(player => player.nickname !== username);
     local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== username);
     local_table.spectators = local_table.spectators.filter(player => player.nickname !== username);
     // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
-    for (const player of table.playersOnTable) {
-      // assume nickname is unique !!!
-        const user = await allUsers.findOne({ nickname: player.nickname });
-        const connectedUser = await connectedUsers.findOne({ username: user.username });
-        // Check if the user exists and is not the user that leave the table
-        if (connectedUser.username !== username) {
-           io.to(connectedUser.socketId).emit('render', local_table.cardsOnTable);
-        }
-    }
-    // now want to send the spectators the render event.
-    for (const player of table.spectators) {
-      // assume nickname is unique !!!
-        const user = await allUsers.findOne({ nickname: player });
-        const connectedUser = await connectedUsers.findOne({ username: user.username });
-        // Check if the user exists and is not the user that leave the table
-        if (connectedUser.username !== username) {
-          const local_table = tablesList.find(table => table.name === tableName);
-           io.to(connectedUser.socketId).emit('render', local_table.cardsOnTable);
-        }
-    }
+    renderAll(local_table);
 };
 
 standUp = async (tableName, username) => {
     // after stand up the username is a spectator so we need to change the database, add him to the spectators and remove him from the players on table.
     const table = await Table.findOne({ name: tableName });
     // remove the user from the players on table
-    table.playersOnTable = table.playersOnTable.filter(player => player.nickname !== username);
-    // add the user to the spectators
-    table.spectators.push(username);
+    table.numOfPlayers -= 1;
     await table.save();
 
     /* Get the player out of the table list of players and make him spectator*/
@@ -248,30 +246,7 @@ standUp = async (tableName, username) => {
     local_table.spectators.push(playerToRemove);
 
     // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
-    for (const player of table.playersOnTable) {
-      // assume nickname is unique !!!
-        const user = await allUsers.findOne({ nickname: player.nickname });
-        const connectedUser = await connectedUsers.findOne({ username: user.username });
-        // Check if the user exists and is not the user that leave the table
-        if (connectedUser.username !== username) {
-          const local_table = tablesList.find(table => table.name === tableName);
-           io.to(connectedUser.socketId).emit('render', local_table.cardsOnTable);
-        }
-    }
-    // now want to send the spectators the render event.
-    for (const player of table.spectators) {
-      // assume nickname is unique !!!
-        const user = await allUsers.findOne({ nickname: player });
-        if(user == null) {
-          continue;
-        }
-        const connectedUser = await connectedUsers.findOne({ username: user.username });
-        // Check if the user exists and is not the user that leave the table
-        if (connectedUser.username !== username) {
-          const local_table = tablesList.find(table => table.name === tableName);
-           io.to(connectedUser.socketId).emit('render', local_table.cardsOnTable);
-        }
-    }
+    renderAll(local_table);
 };
 
 
@@ -301,10 +276,10 @@ raise = async (tableName, username,amout) => {
         }
         //cheange the min amount to call
         table.moneyToCall = amout;
-      return true;
+      return;
     }
     //There is not enaugh chips to raise
-    return false; 
+    return; 
 };
 
 fold = async (tableName, username) => {
@@ -324,7 +299,7 @@ check = async (tableName, username) => {
     console.log("Do check!");
     const table = tablesList.find(table => table.name === tableName);
     if(table == null) {
-      return false;
+      return;
     }
 };
 
@@ -333,13 +308,13 @@ call = async (tableName, username) => {
     // get the table
     const table = tablesList.find(table => table.name === tableName);
     if(table == null) {
-      return false;
+      return;
     }
     // get the player
     const player = table.playersWithCards.find(player => player.nickname === username);
     // get the player's chips
     if(player.removeChips(table.moneyToCall)) {
-      return true;
+      return;
     }
 };
 
@@ -351,6 +326,7 @@ module.exports = {
   call,
   check,
   userConnected,
+  joinScreenTable,
   joinTable,
   leaveTable,
   standUp,

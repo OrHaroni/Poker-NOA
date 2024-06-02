@@ -9,6 +9,8 @@ import Add_Money_Page from '../Add_Money_Page/Add_Money_Page.js';
 import { GetAllTables } from '../serverCalls/lobby.js';
 import { enterTable } from '../serverCalls/lobby.js';
 import Add_Table_Page from '../Add_Table_Page/Add_Table_Page.js'
+import Player from '../gameTable/Player.js';
+<script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
 
 export function sendSwal(message, icon) {
   /* eslint-disable no-undef */
@@ -46,10 +48,19 @@ function Lobby(props) {
   const GenericClickTable = async (tableName, event) => {
     const inputFieldPassword = event.target.parentElement.nextElementSibling.querySelector('input');
     let password = inputFieldPassword ? inputFieldPassword.value : '';
-
     const [table, retStatus] = await enterTable(tableName, password, props.user.username);
     if (retStatus === 200) {
-      root.render(<GameTable table={table} user={props.user} socket={props.socket} />);
+      props.socket.emit('joinScreenTable',tableName, props.user.username,props.user.nickname);
+      // we have to get the table from the server and send it to the gameTable component.
+      props.socket.off('getLocalTable').on('getLocalTable',  playersArray => {
+        console.log("User got this table for table from render: ", playersArray);
+        let Localtable = {
+          name: tableName,
+          Players: playersArray,
+        };
+        root.render(<GameTable table={Localtable} user={props.user} socket={props.socket} />);
+      }
+      );
     } else if (retStatus === 404) {
       sendSwal("Incorrect password, try again.", "error");
     }
@@ -59,7 +70,7 @@ function Lobby(props) {
     <tr key={index}>
       <td>{table.name}</td>
       <td>{table.createdBy}</td>
-      <td>{table.playersOnTable.length}/{5}</td>
+      <td>{6}/{5}</td>
       <td>{table.moneyAmountOnTable}</td>
       <td>{table.smallBlind}/{table.bigBlind}</td>
       <td>

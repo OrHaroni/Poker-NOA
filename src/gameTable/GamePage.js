@@ -46,13 +46,16 @@ function GameTable(props) {
 
   const ClickEnterGame = async () => {
     const moneyToEnterWith = moneyRef.current.value;
+    console.log(moneyToEnterWith);
     const tableName = props.table.name;
     const username = props.user.username;
     const nickname = props.user.nickname;
     
     const retStatus = await joinUserIntoTable(tableName, username, moneyToEnterWith);
     if (retStatus === 200) {
+      console.log("befor");
       props.socket.emit('joinTable', tableName, username, nickname, moneyToEnterWith);
+      console.log("after");
       setShowModal(false);
       setSatDown(true);
     } else if (retStatus === 301) {

@@ -57,6 +57,9 @@ io.on('connection', async (socket) => {
           *                       * 
           *                       */
 
+  socket.on('joinScreenTable', async (tableName,username,nickname) => {
+    socketManager.joinScreenTable(socket,tableName, username,nickname);
+  });
   // if we get joinTable event, we will want to send all the players on table with the given name, to render the table.
   socket.on('joinTable', async (tableName, username, nickname, moneyToEnterWith) => {
     socketManager.joinTable(socket,tableName, username, nickname, moneyToEnterWith);
