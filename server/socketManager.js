@@ -86,7 +86,7 @@ sendCardsToAllPlayers = async (table) => {
   
 };
 renderAll = async (table) => {
-  for (const player of table.Players) {
+  for (const player of table.players) {
          io.to(player.socket).emit('render', table.cardsOnTable);
   }
   // now want to send the spectators the render event.
@@ -170,7 +170,9 @@ joinScreenTable = async (socket,tableName, username, nickname) => {
   const newPlayer = new Player(nickname, 0, socket, tempConnectedUser.socketId);
   /* Add the Player into the local DB for this table */
   const local_table = tablesList.find(table => table.name === tableName);
-  local_table.addPlayer(newPlayer);
+  local_table.spectators.push(newPlayer);
+
+  /* Creating an array to send via socket */
   let players = [];
   for (const player of local_table.players) {
     players.push(player.nickname);
@@ -202,7 +204,7 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
 
 
     // if its the first player on the table, we dont want to send him the render event because he is the one that joined the table.
-    if(local_table.playersOnTable.length > 1 || local_table.spectators.length > 0) {
+    if(local_table.players.length > 1 || local_table.spectators.length > 0) {
     // Iterate over each player on the table , if its not the user that joined the table, send him the render event.
       renderAll(local_table);
   }
