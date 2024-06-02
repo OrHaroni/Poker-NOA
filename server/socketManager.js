@@ -22,6 +22,7 @@ async function runPlayersActions(tableName) {
       //Notify the current player that it's their turn
       console.log('money to call is: ', table.moneyToCall); 
       io.to(currentPlayer.socket).emit('yourTurn', table.moneyToCall);
+      sendTurnToAllPlayers(table.playersWithCards, currentPlayer);
       try {
         // Await the player's action or timeout
         const playerAction = await new Promise((resolve, reject) => {
@@ -72,6 +73,17 @@ async function runPlayersActions(tableName) {
       
   }
 }
+}
+
+sendTurnToAllPlayers = async (players, current_player) => {
+  /* Get the relative index on the table */
+  const player_index = players.findIndex(player => player.nickname === current_player.nickname);
+
+  /* Emit to all players, who's turn is it */
+  for(const player of players) {
+    console.log("Emitting to Player ", player.nickname, " That turn is for: ", player_index);
+    io.to(player.socket).emit('WhosTurn', player_index);
+  }
 }
 
 sendCardsToAllPlayers = async (table) => {

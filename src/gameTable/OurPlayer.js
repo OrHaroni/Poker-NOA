@@ -22,6 +22,7 @@ const OurPlayer = (props) => {
     // State to control AnimatedMessage visibility
     const [showMessage, setShowMessage] = useState(false);
 
+    /* Socket that tell us its our turn */
     props.socket.off('yourTurn').on('yourTurn', (moneyToCall) => {
         if(moneyToCall === 0) {
             console.log('Setting buttons to 1 (Can Check)');
