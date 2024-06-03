@@ -9,11 +9,13 @@ const Player = (props) => {
     return (
         <div className={props.className}>
             {props.timer ? <Timer /> : null}
-            <span className="player-name">name : {props.name}</span>
+            <span className="player-name">{props.name}</span>
+            {props.cards == [] ?
+            null :
             <div className="player-cards">
                 money : {props.money} $
                     <img className="hidden-cards" src={cards} alt="Player Cards" />
-            </div>
+            </div>}
         </div>
     );
 };

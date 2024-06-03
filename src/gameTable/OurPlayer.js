@@ -4,7 +4,6 @@ import './table.css';
 import cards from '../assets/cards.png';
 import Card from './Card';
 import Timer from '../Animations/AnimatedTimer/Timer';
-import AnimatedMessage from '../Animations/AnimatedStart/AnimatedMessage';
 import RangeInput from '../RangeInput/RangeInput';
 
 const OurPlayer = (props) => {
@@ -36,9 +35,8 @@ const OurPlayer = (props) => {
             console.log('Setting buttons to 2 (Cant Check)');
             setButtonsState(2);
         }
-        // Show Timer and AnimatedMessage
+        // Show Timer
         setShowTimer(true);
-        setShowMessage(true);
 
         console.log('aaMyTurn');
     }
@@ -109,28 +107,25 @@ const OurPlayer = (props) => {
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
         setShowTimer(false);
-        setShowMessage(false);
         props.socket.emit('playerAction',"raise", 100);
     };
     //clickCall function to send 'call' event to the server
     const clickCall = () => {
         setShowTimer(false);
-        setShowMessage(false);
         props.socket.emit('playerAction',"call",null);
     };
     const clickCheck = () => {
         setShowTimer(false);
-        setShowMessage(false);
         props.socket.emit('playerAction',"check",null);
     };
     const clickFold = () => {
         setShowTimer(false);
-        setShowMessage(false);
         props.socket.emit('playerAction',"fold",null);
     };
 
     /* Get cards from the Server and make it into html */
     props.socket.off('getCards').on('getCards', (cards) => {
+        if(cards) {
         const card1 = GenericDeck.find(card => card.id === cards[0].id);
         const card2 = GenericDeck.find(card => card.id === cards[1].id);
         const generated = 
@@ -144,6 +139,15 @@ const OurPlayer = (props) => {
                 </div>
             </div>;
         setGeneratedCard(generated);
+        }
+        else {
+            /* if the server sent null, player dont have cards */
+            setGeneratedCard(<div className="RandomCard">
+                <div className="right"></div>
+                <div className="left"></div>
+            </div>);
+        }
+        
     });
 
     const GenericDeck = [

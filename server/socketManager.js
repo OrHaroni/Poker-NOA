@@ -93,16 +93,18 @@ sendCardsToAllPlayers = async (table) => {
   for (const player of table.playersWithCards) {
     const cards = player.hand;
     io.to(player.socket).emit('getCards', cards);
+    renderAll(table);
   }
   
 };
 
 renderAll = async (table) => {
-  let size_of_arr = table.players.length * 2;
+  let size_of_arr = table.players.length * 3;
   let players_and_money = [];
 
   for (const player of table.players) {
-    players_and_money.push(player.nickname, player.moneyOnTable);
+    const has_cards = player.hand.length > 0;
+    players_and_money.push(player.nickname, player.moneyOnTable, has_cards);
   }
 
   for (const player of table.players) {
@@ -114,6 +116,31 @@ renderAll = async (table) => {
     }
 }
 
+endRound = async (table) => {
+
+  const winner = table.pickWinner().nickname;
+  console.log("Winner is: ", winner);
+
+  /* Send to all users the winner */
+  for(const player of table.playersWithCards)
+  {
+    io.to(player.socket).emit('getWinner', winner);
+  }
+
+  /* Clearing all parameter in table locally */
+  table.endRound();
+
+  /* Send all players null (empty hand) */
+  for(const player of table.playersWithCards)
+  {
+    /* Send them to trash the hand */
+    io.to(player.socket).emit('getCards', null);
+  }
+
+  /* Render to make clear state in every player */
+  renderAll(table);
+}
+
 async function controlRound(tableName) {
   console.log("Control Round!");
   // get the table
@@ -122,23 +149,27 @@ async function controlRound(tableName) {
   table.startRound();
   // Draw and send cards to all players
   sendCardsToAllPlayers(table);
+  
   // start a round of players actions
   await runPlayersActions(tableName);
-  // draw flop
+
+  /* Flop */
   table.drawFlop();
   renderAll(table);
   await runPlayersActions(tableName);
+
+  /* Turn */
   table.drawTurn();
   renderAll(table);
   await runPlayersActions(tableName);
+
+  /* River */
   table.drawRiver();
-  renderAll(table);
-  // run algo to decide who is the winner and give him the money.
-  
-  console.log("End of round!");
-  // clear the table
-  table.clearHandToAllPlayers();
-  table.resetCardsTable();
+  renderAll(table);  
+  await runPlayersActions(tableName);
+
+  /* End of round */
+  endRound(table);
 }
 
 

@@ -27,6 +27,8 @@ function GameTable(props) {
   const [communityCards, setCommunityCards] = useState([]);
   const [timers, setTimers] = useState([false, false, false, false]);
   const [moneyAmount, setMoneyAmount] = useState(0); // Use state for moneyAmount
+  const [playersCards, setPlayersCards] = useState([]);
+
 
   const fetchData = async (cards, players_with_money, size) => {
     if (cards) {
@@ -34,16 +36,19 @@ function GameTable(props) {
     }
     let other_player = [];
     let player_money = [];
-    for (let i = 0; i < size; i += 2) {
+    let hasCards = [];
+    for (let i = 0; i < size; i += 3) {
       if (players_with_money[i] === props.user.nickname) {
         setMoneyAmount(players_with_money[i + 1]); // Update the state
         continue;
       }
       other_player.push(players_with_money[i]);
       player_money.push(players_with_money[i + 1]);
+      hasCards.push(players_with_money[i+2]);
     }
     setOtherPlayers(other_player);
     setPlayerMoney(player_money);
+    setPlayersCards(hasCards);
   };
 
   useEffect(() => {
@@ -164,6 +169,8 @@ function GameTable(props) {
               setCommunityCards={setCommunityCards}
               timers={timers}
               setTimers={setTimers}
+              playersCards={playersCards}
+              setPlayersCards={setPlayersCards}
             />
             {satDown && <OurPlayer name={props.user.nickname} money={moneyAmount} className={"our-player"} socket={props.socket} tablename={props.table.name} />}
             {!satDown && (
