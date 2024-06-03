@@ -23,9 +23,12 @@ const OurPlayer = (props) => {
     // State to control AnimatedMessage visibility
     const [showMessage, setShowMessage] = useState(false);
 
-    /* Socket that tell us its our turn */
+    // State to store the money to call
+    const [moneyToCall, setMoneyToCall] = useState(0);
+    /* Socket that tells us it's our turn */
     props.socket.off('yourTurn').on('yourTurn', (moneyToCall) => {
-        if(moneyToCall === 0) {
+        setMoneyToCall(moneyToCall);
+        if (moneyToCall === 0) {
             console.log('Setting buttons to 1 (Can Check)');
             setButtonsState(1); 
         }
@@ -39,7 +42,7 @@ const OurPlayer = (props) => {
 
         console.log('aaMyTurn');
     }
-    );
+);
 
     /* Changing the buttons layout */
     useEffect(() => {
@@ -72,10 +75,10 @@ const OurPlayer = (props) => {
                 </span>;
                 break;
             case 2:
-                /* Case where we cant check */
+                /* Case where we can't check */
                 temp_buttons =
                 <span className='action-container'>
-                                        <Timer/>
+                    <Timer/>
                     <div className='raise-with-range'>
                         <button className="action-button" onClick={clickRaise}>
                             Raise
@@ -89,19 +92,19 @@ const OurPlayer = (props) => {
                         />
                     </div>
                     <button className="action-button" onClick={clickCall}>
-                        Call
+                        Call {moneyToCall}
                     </button>
                     <button className="action-button" onClick={clickFold}>
                         Fold
                     </button>
                 </span>;
-                break
+                break;
             default:
                 temp_buttons = <span className='action-container'></span>;
                 break;
         }
         setButtons(temp_buttons);
-      }, [buttonsState]);
+      }, [buttonsState, moneyToCall]);
     
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
@@ -131,15 +134,15 @@ const OurPlayer = (props) => {
         const card1 = GenericDeck.find(card => card.id === cards[0].id);
         const card2 = GenericDeck.find(card => card.id === cards[1].id);
         const generated = 
-                            <div className="RandomCard">
-                            {/* Render two random Card components */}
-                                <div className="right">
-                                    <Card pic={card1.pic} suit={card1.suit} value={card1.value} />
-                                </div>
-                                <div className="left">
-                                    <Card pic={card2.pic} suit={card2.suit} value={card2.value} />
-                                </div>
-                        </div>;
+            <div className="RandomCard">
+                {/* Render two random Card components */}
+                <div className="right">
+                    <Card pic={card1.pic} suit={card1.suit} value={card1.value} />
+                </div>
+                <div className="left">
+                    <Card pic={card2.pic} suit={card2.suit} value={card2.value} />
+                </div>
+            </div>;
         setGeneratedCard(generated);
     });
 
@@ -201,13 +204,14 @@ const OurPlayer = (props) => {
     return (
         <>
             <div className="our-player">
+                money {props.money} $ <br />
+                name {props.name}
                 <div className='our-cards'>{generatedCards}</div>
                 <span className='action-container'>
                     {buttons}
                 </span>
             </div>
         </>
-
     );
 };
 
