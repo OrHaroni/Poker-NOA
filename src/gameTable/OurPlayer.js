@@ -22,6 +22,8 @@ const OurPlayer = (props) => {
     // State to control AnimatedMessage visibility
     const [showMessage, setShowMessage] = useState(false);
 
+    const [moneyToCall, setMoneyToCall] = useState(0);
+
     // State to keep track of the range input value
     const [raiseAmount, setRaiseAmount] = useState(500);
 
@@ -63,7 +65,7 @@ const OurPlayer = (props) => {
                         <RangeInput
                             min={0}
                             max={1000}
-                            step={100}
+                            step={50}
                             initialValue={raiseAmount}
                             onValueChange={setRaiseAmount} /* Empty */
                         />
@@ -85,7 +87,7 @@ const OurPlayer = (props) => {
                         <RangeInput
                             min={0}
                             max={1000}
-                            step={100}
+                            step={50}
                             initialValue={raiseAmount}
                             onValueChange={setRaiseAmount}
                         />

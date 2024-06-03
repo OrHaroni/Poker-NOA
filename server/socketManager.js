@@ -83,6 +83,9 @@ async function runPlayersActions(tableName) {
       
   }
 }
+//reset money to call
+table.moneyToCall = 0;
+
 }
 
 sendTurnToAllPlayers = async (players, current_player) => {
@@ -156,8 +159,7 @@ function checkIfPlayersFolded(table) {
    if (table.playersWithCards.length === 1) {
     const lastPlayer = table.playersWithCards[0];
     console.log("The winner (The last player with cards) is:", lastPlayer.nickname);
-    table.endRound();
-    renderAll(table);
+    endRound(table);
     return true;
 }
 return false;
@@ -200,6 +202,42 @@ async function controlRound(tableName) {
 
   /* End of round */
   endRound(table);
+
+
+  // start second round :
+  table.startRound();
+  // Draw and send cards to all players
+  sendCardsToAllPlayers(table);
+  
+  // start a round of players actions
+  await runPlayersActions(tableName);
+  if (checkIfPlayersFolded(table)) return;
+
+
+  /* Flop */
+  table.drawFlop();
+  renderAll(table);
+  await runPlayersActions(tableName);
+  if (checkIfPlayersFolded(table)) return;
+
+
+  /* Turn */
+  table.drawTurn();
+  renderAll(table);
+  await runPlayersActions(tableName);
+  if (checkIfPlayersFolded(table)) return;
+
+
+  /* River */
+  table.drawRiver();
+  renderAll(table);  
+  await runPlayersActions(tableName);
+  if (checkIfPlayersFolded(table)) return;
+
+
+  /* End of round */
+  endRound(table);
+  
 }
 
 
@@ -298,7 +336,7 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
   // need to check if the game isnt running yet..
   if(local_table.players.length === 2) { // && game isnt running
     //call control round function
-    controlRound(tableName);
+     controlRound(tableName);
   }
 };
 
