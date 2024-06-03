@@ -22,9 +22,10 @@ const OurPlayer = (props) => {
     // State to control AnimatedMessage visibility
     const [showMessage, setShowMessage] = useState(false);
 
-    // State to store the money to call
-    const [moneyToCall, setMoneyToCall] = useState(0);
-    /* Socket that tells us it's our turn */
+    // State to keep track of the range input value
+    const [raiseAmount, setRaiseAmount] = useState(500);
+
+    /* Socket that tell us its our turn */
     props.socket.off('yourTurn').on('yourTurn', (moneyToCall) => {
         setMoneyToCall(moneyToCall);
         if (moneyToCall === 0) {
@@ -63,8 +64,8 @@ const OurPlayer = (props) => {
                             min={0}
                             max={1000}
                             step={100}
-                            initialValue={500}
-                            onValueChange={() => {}} /* Empty */
+                            initialValue={raiseAmount}
+                            onValueChange={setRaiseAmount} /* Empty */
                         />
                     </div>
                     <button className="action-button" onClick={clickFold}>
@@ -85,8 +86,8 @@ const OurPlayer = (props) => {
                             min={0}
                             max={1000}
                             step={100}
-                            initialValue={500}
-                            onValueChange={() => {}} /* Empty */
+                            initialValue={raiseAmount}
+                            onValueChange={setRaiseAmount}
                         />
                     </div>
                     <button className="action-button" onClick={clickCall}>
@@ -102,12 +103,14 @@ const OurPlayer = (props) => {
                 break;
         }
         setButtons(temp_buttons);
-      }, [buttonsState, moneyToCall]);
+      }, [buttonsState, moneyToCall, raiseAmount]);
     
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
         setShowTimer(false);
-        props.socket.emit('playerAction',"raise", 100);
+        setShowMessage(false);
+        console.log('Raise amount: ', raiseAmount);
+        props.socket.emit('playerAction',"raise", raiseAmount);
     };
     //clickCall function to send 'call' event to the server
     const clickCall = () => {

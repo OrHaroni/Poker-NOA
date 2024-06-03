@@ -7,10 +7,12 @@
   
   .range-input {
     width: 200px;
+    color: aliceblue;
   }
   
   .range-value {
     font-size: 1.2em;
     font-weight: bold;
+    color: aliceblue;
   }
   
