@@ -117,6 +117,16 @@ renderAll = async (table) => {
 }
 
 endRound = async (table) => {
+
+  const winner = table.pickWinner().nickname;
+  console.log("Winner is: ", winner);
+
+  /* Send to all users the winner */
+  for(const player of table.playersWithCards)
+  {
+    io.to(player.socket).emit('getWinner', winner);
+  }
+
   /* Clearing all parameter in table locally */
   table.endRound();
 
@@ -159,8 +169,6 @@ async function controlRound(tableName) {
   await runPlayersActions(tableName);
 
   /* End of round */
-  console.log("Winner is: ", table.pickWinner().nickname);
-
   endRound(table);
 }
 

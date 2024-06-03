@@ -4,11 +4,18 @@ import './table.css'; // Import the table CSS file
 import tableImg from '../assets/emptyTable.png'; // Import the image
 import dealer_img from '../assets/dealer.jpg';
 import CommunitiCards from './CommuinityCards.js';
+import AnimatedMessage from '../Animations/AnimatedMessage/AnimatedMessage.js';
 
 // this io is the io from the index.html file on the public folder
 <script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
 
 function Table(props) {
+    // State to control AnimatedMessage visibility
+    const [showMessage, setShowMessage] = useState(false);
+
+    /* The actual Animated Message */
+    const [Message, setMessage] = useState(<></>);
+
   // Fetch data to get the players on the table from the server (after a user joined the table or left the table).
   const fetchData = async (cards, players_with_money, size) => {
     if (cards) {
@@ -51,6 +58,13 @@ function Table(props) {
     };
   }, [props.socket, props.timers]);
 
+  /* Getting winner and print it on the screen */
+  props.socket.off('getWinner').on('getWinner', (winner) => {
+    const new_message = "The winner is: " + winner;
+    setMessage(new_message);
+    setShowMessage(true);
+  });
+
   return (
     <>
       <div className="table">
@@ -69,8 +83,10 @@ function Table(props) {
             </span>
           ))}
         </div>
-        <CommunitiCards cards={props.communityCards} />
-      </div>
+        {showMessage ? 
+        <AnimatedMessage message={Message}/> : null}
+        <CommunitiCards cards={props.communityCards}/>
+      </div>      
     </>
   );
 }
