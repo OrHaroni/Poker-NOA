@@ -98,11 +98,12 @@ sendCardsToAllPlayers = async (table) => {
 };
 
 renderAll = async (table) => {
-  let size_of_arr = table.players.length * 2;
+  let size_of_arr = table.players.length * 3;
   let players_and_money = [];
 
   for (const player of table.players) {
-    players_and_money.push(player.nickname, player.moneyOnTable);
+    const has_cards = player.cards == [] ? false : true;
+    players_and_money.push(player.nickname, player.moneyOnTable, has_cards);
   }
 
   for (const player of table.players) {
@@ -132,13 +133,14 @@ async function controlRound(tableName) {
   renderAll(table);
   await runPlayersActions(tableName);
   table.drawRiver();
-  renderAll(table);
+  renderAll(table);  
   // run algo to decide who is the winner and give him the money.
+
+  console.log("Winner is: ", table.pickWinner().nickname);
   
-  console.log("End of round!");
-  // clear the table
-  table.clearHandToAllPlayers();
-  table.resetCardsTable();
+  table.endRound();
+
+  renderAll(table);
 }
 
 

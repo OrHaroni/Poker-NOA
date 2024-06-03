@@ -16,15 +16,18 @@ function Table(props) {
     }
     let other_player = [];
     let player_money = [];
-    for (let i = 0; i < size; i += 2) {
+    let hasCards = [];
+    for (let i = 0; i < size; i += 3) {
       if (players_with_money[i] === props.user.nickname) {
         continue;
       }
       other_player.push(players_with_money[i]);
       player_money.push(players_with_money[i + 1]);
+      hasCards.push(players_with_money[i+2]);
     }
     props.setOtherPlayers(other_player);
     props.setPlayerMoney(player_money);
+    props.setPlayersCards(hasCards);
   };
 
   useEffect(() => {
@@ -54,8 +57,10 @@ function Table(props) {
         <img className='dealer-img' src={dealer_img} />
         <div className="players">
           {props.otherPlayers.map((player, index) => (
-            <span key={index}>
+            <span>
               <Player 
+                key={index}
+                cards={playersCards[index]}
                 name={player} 
                 money={props.playerMoney[index]} // Pass the money state to the Player component
                 className={`player player${index + 1}`} 

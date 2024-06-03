@@ -1,49 +1,71 @@
 const { Player } = require("./gameMng/PokerPlayers.js");
 const { ActiveTable } = require("./gameMng/PokerTable.js");
-const {raise,fold,call,check} = require("./socketManager.js");
+const { tablesList } = require("./localDB.js");
 
-console.log("This is a file to test data structures in this server");
+console.log("Test: Check Winner Functionality");
 
-// /*Make table and players */
-// const table = new ActiveTable(0, "test table", 4, 15, 5);
-// tablesList.push(table);
-// const player1 = new Player(1, "Player 1", 100);
-// const player2 = new Player(2, "Player 2", 150);
-// const player3 = new Player(3, "Player 3", 50);
-// const player4 = new Player(4, "Player 4", 560);
+/* Make table and players */
+const table = new ActiveTable(0, "test table", 4, 15, 5);
+tablesList.push(table);
+const player1 = new Player(1, "Player 1", 100);
+const player2 = new Player(2, "Player 2", 150);
+const player3 = new Player(3, "Player 3", 200);
 
-// /*add the players to the table */
-// table.addPlayer(player1);
-// table.addPlayer(player2);
-// table.addPlayer(player3);
-// table.addPlayer(player4);
-// table.playersWithCards.push(player1);
-// table.playersWithCards.push(player2);
-// table.playersWithCards.push(player3);
-// table.playersWithCards.push(player4);
-// /* draw cards */
-// table.drawCardsToAllPlayers();
+/* Add the players to the table */
+table.addPlayer(player1);
+table.addPlayer(player2);
+table.addPlayer(player3);
+table.playersWithCards.push(player1);
+table.playersWithCards.push(player2);
+table.playersWithCards.push(player3);
 
-// /* Draw the cards to the table */
-// table.drawFlop();
-// table.drawTurn();
-// table.drawRiver();
+/* Set predefined hands for players */
+// Player 1: 6 of hearts, Ace of hearts
+player1.hand = [
+    { suit: "clubs", value: "8" },
+    { suit: "clubs", value: "10" }
+];
 
-// /*Do some prints */
+// Player 2: 6 of hearts, 7 of diamonds
+player2.hand = [
+    { suit: "clubs", value: "8" },
+    { suit: "clubs", value: "8" }
+];
 
-// //test call, raise, fold and check
-// console.log("Test call, raise, fold and check");
-// console.log("Player 1 chips: " + player1.moneyOnTable);
-// console.log("Player 2 chips: " + player2.moneyOnTable);
-// console.log("Player 3 chips: " + player3.moneyOnTable);
-// console.log("Player 4 chips: " + player4.moneyOnTable);
-// //test call
-// console.log("Player 1 call");
-// table.moneyToCall = 10;
-// call("test table", "Player 1");
-// console.log("Player 1 chips: " + player1.moneyOnTable);
-//  //test raise
-// console.log("Player 2 raise");
-// raise("test table", "Player 2", 20);
-// console.log("Player 2 chips: " + player2.moneyOnTable);
-// console.log("now the min call is: " + table.moneyToCall);
+// Player 3: 8 of clubs, 9 of clubs
+player3.hand = [
+
+    { suit: "clubs", value: "Ace" },
+    { suit: "clubs", value: "3" }
+];
+
+/* Draw community cards to the table */
+table.cardsOnTable = [
+    { suit: "hearts", value: "10" },
+    { suit: "hearts", value: "King" },
+    { suit: "hearts", value: "Queen" },
+    { suit: "diamonds", value: "8" },
+    { suit: "clubs", value: "Jack" }
+];
+
+/* Print the hands and the community cards */
+console.log("Player 1 hand: ", player1.hand);
+console.log("Player 2 hand: ", player2.hand);
+console.log("Player 3 hand: ", player3.hand);
+console.log("Community cards: ", table.cardsOnTable);
+
+/* Determine the winner */
+console.log("Winner is: ", table.pickWinner());
+
+console.log(" Clearing all hands: ");
+table.endRound();
+
+console.log("Player 1 hand: ", player1.hand);
+console.log("Player 2 hand: ", player2.hand);
+console.log("Player 3 hand: ", player3.hand);
+
+console.log("Clearing Community cards: ");
+console.log("Community cards: ", table.cardsOnTable);
+
+
+
