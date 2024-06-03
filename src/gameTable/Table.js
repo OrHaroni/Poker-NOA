@@ -74,7 +74,7 @@ function Table(props) {
             <span>
               <Player 
                 key={index}
-                cards={playersCards[index]}
+                cards={props.playersCards[index]}
                 name={player} 
                 money={props.playerMoney[index]} // Pass the money state to the Player component
                 className={`player player${index + 1}`} 
