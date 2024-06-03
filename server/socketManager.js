@@ -288,7 +288,7 @@ leaveTable = async (tableName, username) => {
     renderAll(local_table);
 };
 
-standUp = async (tableName, username) => {
+standUp = async (tableName, nickname) => {
     // after stand up the username is a spectator so we need to change the database, add him to the spectators and remove him from the players on table.
     const table = await Table.findOne({ name: tableName });
     // remove the user from the players on table
@@ -297,9 +297,9 @@ standUp = async (tableName, username) => {
 
     /* Get the player out of the table list of players and make him spectator*/
     const local_table = tablesList.find(table => table.name === tableName);
-    const playerToRemove = local_table.players.find(player => player.nickname === username);
-    local_table.players = local_table.players.filter(player => player.nickname !== username);
-    local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== username);
+    const playerToRemove = local_table.players.find(player => player.nickname === nickname);
+    local_table.players = local_table.players.filter(player => player.nickname !== nickname);
+    local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== nickname);
     local_table.spectators.push(playerToRemove);
 
     // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
