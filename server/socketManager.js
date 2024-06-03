@@ -83,9 +83,6 @@ async function runPlayersActions(tableName) {
       
   }
 }
-//reset money to call
-table.moneyToCall = 0;
-
 }
 
 sendTurnToAllPlayers = async (players, current_player) => {
@@ -176,6 +173,7 @@ async function controlRound(tableName) {
   
   // start a round of players actions
   await runPlayersActions(tableName);
+  table.moneyToCall = 0;
   if (checkIfPlayersFolded(table)) return;
 
 
@@ -183,6 +181,7 @@ async function controlRound(tableName) {
   table.drawFlop();
   renderAll(table);
   await runPlayersActions(tableName);
+  table.moneyToCall = 0;
   if (checkIfPlayersFolded(table)) return;
 
 
@@ -190,6 +189,7 @@ async function controlRound(tableName) {
   table.drawTurn();
   renderAll(table);
   await runPlayersActions(tableName);
+  table.moneyToCall = 0;
   if (checkIfPlayersFolded(table)) return;
 
 
@@ -197,6 +197,7 @@ async function controlRound(tableName) {
   table.drawRiver();
   renderAll(table);  
   await runPlayersActions(tableName);
+  table.moneyToCall = 0;
   if (checkIfPlayersFolded(table)) return;
 
 
@@ -392,19 +393,10 @@ raise = async (tableName, nickname,amout) => {
     // get the player
     const player = table.playersWithCards.find(player => player.nickname === nickname);
     // get the player's chips
-    if(player.removeChips(amout)) {
-      //There is enaugh chips to raise
-        //check the min amount to call
-        if(table.moneyToCall > amout) {
-          //The player does not have enaugh chips to call
-          return false;
-        }
-        //cheange the min amount to call
-        table.moneyToCall = amout;
-      return;
-    }
+    player.removeChips(amout) ;
+    table.moneyToCall = amout;
+    return;
     //There is not enaugh chips to raise
-    return; 
 };
 
 fold = async (tableName, nickname) => {
