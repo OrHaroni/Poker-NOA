@@ -78,7 +78,8 @@ function GameTable(props) {
 
   const standUpHandler = () => {
     setSatDown(false);
-    props.socket.emit('standUp', props.table.name, props.user.username);
+    props.socket.emit('playerAction',"fold" , null);
+    props.socket.emit('standUp', props.table.name, props.user.nickname);
   };
 
   const ClickEnter = (event) => {

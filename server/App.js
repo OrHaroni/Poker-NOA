@@ -70,8 +70,8 @@ io.on('connection', async (socket) => {
     socketManager.leaveTable(tableName, username);
   });
    
-  socket.on('standUp', async (tableName, username) => {
-    socketManager.standUp(tableName, username);
+  socket.on('standUp', async (tableName, nickname) => {
+    socketManager.standUp(tableName, nickname);
   });
 
 
