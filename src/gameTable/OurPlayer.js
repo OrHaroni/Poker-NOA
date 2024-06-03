@@ -38,8 +38,8 @@ const OurPlayer = (props) => {
         }
         // Show Timer
         setShowTimer(true);
-
-        console.log('aaMyTurn');
+        setShowMessage(true);
+        
     }
 );
 
