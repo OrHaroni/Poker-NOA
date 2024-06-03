@@ -146,9 +146,11 @@ function GameTable(props) {
         </div>
       </Modal>
       <div className="upper-bg">
-        <button className="exit-button" onClick={ClickBack} id="buttonBack">
-          Back
-        </button>
+        {!satDown && (
+            <button className="exit-button" onClick={ClickBack} id="buttonBack">
+              Back
+            </button>
+          )}
         <button className="money-amount">
           money: {props.user.moneyAmount}
         </button>
