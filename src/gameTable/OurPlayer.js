@@ -131,6 +131,7 @@ const OurPlayer = (props) => {
 
     /* Get cards from the Server and make it into html */
     props.socket.off('getCards').on('getCards', (cards) => {
+        if(cards) {
         const card1 = GenericDeck.find(card => card.id === cards[0].id);
         const card2 = GenericDeck.find(card => card.id === cards[1].id);
         const generated = 
@@ -144,6 +145,15 @@ const OurPlayer = (props) => {
                 </div>
             </div>;
         setGeneratedCard(generated);
+        }
+        else {
+            /* if the server sent null, player dont have cards */
+            setGeneratedCard(<div className="RandomCard">
+                <div className="right"></div>
+                <div className="left"></div>
+            </div>);
+        }
+        
     });
 
     const GenericDeck = [

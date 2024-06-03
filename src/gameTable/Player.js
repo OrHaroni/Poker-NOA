@@ -10,11 +10,12 @@ const Player = (props) => {
         <div className={props.className}>
             {props.timer ? <Timer /> : null}
             <span className="player-name">{props.name}</span>
-            {props.cards ?
+            {props.cards == [] ?
+            null :
             <div className="player-cards">
                 money : {props.money} $
                     <img className="hidden-cards" src={cards} alt="Player Cards" />
-            </div> : null}
+            </div>}
         </div>
     );
 };
