@@ -22,42 +22,79 @@ function GameTable(props) {
   const [money, setMoney] = useState(0);
   const moneyRef = useRef(0);
   const [satDown, setSatDown] = useState(false);
+  const [otherPlayers, setOtherPlayers] = useState(props.table.Players);
+  const [playerMoney, setPlayerMoney] = useState([]); // State to store the money of other players
+  const [communityCards, setCommunityCards] = useState([]);
+  const [timers, setTimers] = useState([false, false, false, false]);
+  const [moneyAmount, setMoneyAmount] = useState(0); // Use state for moneyAmount
 
-  // game functionalities like raise, call, fold, check, etc.
-  // listen to yourTurn event to know when its your turn to play.
-  
+  const fetchData = async (cards, players_with_money, size) => {
+    if (cards) {
+      setCommunityCards(cards);
+    }
+    let other_player = [];
+    let player_money = [];
+    for (let i = 0; i < size; i += 2) {
+      if (players_with_money[i] === props.user.nickname) {
+        setMoneyAmount(players_with_money[i + 1]); // Update the state
+        continue;
+      }
+      other_player.push(players_with_money[i]);
+      player_money.push(players_with_money[i + 1]);
+    }
+    setOtherPlayers(other_player);
+    setPlayerMoney(player_money);
+  };
+
+  useEffect(() => {
+    const handleRender = (cards, players_with_money, size) => {
+      fetchData(cards, players_with_money, size);
+    };
+    props.socket.on('render', handleRender);
+    return () => {
+      props.socket.off('render', handleRender);
+    };
+  }, [props.socket]);
+
+  useEffect(() => {
+    const handleWhosTurn = (player_index) => {
+      const updatedTimers = timers.map((timer, i) => i === player_index);
+      setTimers(updatedTimers);
+    };
+    props.socket.on('WhosTurn', handleWhosTurn);
+    return () => {
+      props.socket.off('WhosTurn', handleWhosTurn);
+    };
+  }, [props.socket, timers]);
+
   const sitDownHandler = () => {
     setShowModal(true); // Open the modal when sitting down
   };
 
   const standUpHandler = () => {
     setSatDown(false);
-    // send to the server message that the user left the table and update him to a spectator and remove him from players on table
-    // using socket io to sever the server that the user stand up with the message standUp.
     props.socket.emit('standUp', props.table.name, props.user.username);
   };
 
   const ClickEnter = (event) => {
     if (event.key === 'Enter') {
-      event.preventDefault(); // Prevent default form submission
+      event.preventDefault();
       ClickEnterGame();
     }
   };
 
   const ClickEnterGame = async () => {
     const moneyToEnterWith = moneyRef.current.value;
-    console.log(moneyToEnterWith);
     const tableName = props.table.name;
     const username = props.user.username;
     const nickname = props.user.nickname;
-    
     const retStatus = await joinUserIntoTable(tableName, username, moneyToEnterWith);
     if (retStatus === 200) {
       props.socket.emit('joinTable', tableName, username, nickname, moneyToEnterWith);
       setShowModal(false);
       setSatDown(true);
     } else if (retStatus === 301) {
-      sendSwal("You dont have enough money!", "error");
+      sendSwal("You don't have enough money!", "error");
     } else if (retStatus === 302) {
       sendSwal("This table is full!", "error");
     } else {
@@ -114,8 +151,21 @@ function GameTable(props) {
       <Container className="container">
         <Row>
           <Col>
-            <Table table={props.table} user={props.user} players_num={4} socket={props.socket} />
-            {satDown && <OurPlayer name={props.user.nickname} className={"our-player"} socket={props.socket} tablename={props.table.name} />}
+            <Table 
+              table={props.table} 
+              user={props.user} 
+              players_num={4} 
+              socket={props.socket} 
+              otherPlayers={otherPlayers}
+              playerMoney={playerMoney}
+              setOtherPlayers={setOtherPlayers}
+              setPlayerMoney={setPlayerMoney}
+              communityCards={communityCards}
+              setCommunityCards={setCommunityCards}
+              timers={timers}
+              setTimers={setTimers}
+            />
+            {satDown && <OurPlayer name={props.user.nickname} money={moneyAmount} className={"our-player"} socket={props.socket} tablename={props.table.name} />}
             {!satDown && (
               <button className="exit-button" onClick={sitDownHandler} id="buttonBack">
                 Sit Down
