@@ -22,12 +22,15 @@ const OurPlayer = (props) => {
     // State to control AnimatedMessage visibility
     const [showMessage, setShowMessage] = useState(false);
 
-    // State to store the money to call
     const [moneyToCall, setMoneyToCall] = useState(0);
-    /* Socket that tells us it's our turn */
-    props.socket.off('yourTurn').on('yourTurn', (moneyToCall) => {
-        setMoneyToCall(moneyToCall);
-        if (moneyToCall === 0) {
+
+    // State to keep track of the range input value
+    const [raiseAmount, setRaiseAmount] = useState(0);
+
+    /* Socket that tell us its our turn */
+    props.socket.off('yourTurn').on('yourTurn', (moneyToCallArg) => {
+        setMoneyToCall(moneyToCallArg);
+        if (moneyToCallArg === 0) {
             console.log('Setting buttons to 1 (Can Check)');
             setButtonsState(1); 
         }
@@ -37,8 +40,8 @@ const OurPlayer = (props) => {
         }
         // Show Timer
         setShowTimer(true);
-
-        console.log('aaMyTurn');
+        setShowMessage(true);
+        
     }
 );
 
@@ -61,10 +64,10 @@ const OurPlayer = (props) => {
                         </button>
                         <RangeInput
                             min={0}
-                            max={1000}
-                            step={100}
-                            initialValue={500}
-                            onValueChange={() => {}} /* Empty */
+                            max={props.money}
+                            step={50}
+                            initialValue={raiseAmount}
+                            onValueChange={setRaiseAmount} /* Empty */
                         />
                     </div>
                     <button className="action-button" onClick={clickFold}>
@@ -83,10 +86,10 @@ const OurPlayer = (props) => {
                         </button>
                         <RangeInput
                             min={0}
-                            max={1000}
-                            step={100}
-                            initialValue={500}
-                            onValueChange={() => {}} /* Empty */
+                            max={props.money}
+                            step={50}
+                            initialValue={raiseAmount}
+                            onValueChange={setRaiseAmount}
                         />
                     </div>
                     <button className="action-button" onClick={clickCall}>
@@ -102,12 +105,14 @@ const OurPlayer = (props) => {
                 break;
         }
         setButtons(temp_buttons);
-      }, [buttonsState, moneyToCall]);
+      }, [buttonsState, moneyToCall, raiseAmount]);
     
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
         setShowTimer(false);
-        props.socket.emit('playerAction',"raise", 100);
+        setShowMessage(false);
+        console.log('Raise amount: ', raiseAmount);
+        props.socket.emit('playerAction',"raise", raiseAmount);
     };
     //clickCall function to send 'call' event to the server
     const clickCall = () => {
@@ -123,8 +128,22 @@ const OurPlayer = (props) => {
         props.socket.emit('playerAction',"fold",null);
     };
 
+    // initialize all state variables
+    const initializeStates = () => {
+        setGeneratedCard(null);
+        setButtonsState(0);
+        setButtons(<span className='action-container'></span>);
+        setShowTimer(false);
+        setShowMessage(false);
+        setMoneyToCall(0);
+        setRaiseAmount(0);
+        console.log('moneyToCall: ', moneyToCall);  
+    };
+  
+
     /* Get cards from the Server and make it into html */
     props.socket.off('getCards').on('getCards', (cards) => {
+        initializeStates() ;
         if(cards) {
         const card1 = GenericDeck.find(card => card.id === cards[0].id);
         const card2 = GenericDeck.find(card => card.id === cards[1].id);

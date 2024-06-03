@@ -29,14 +29,22 @@ async function runPlayersActions(tableName) {
           const turnTimeout = setTimeout(() => {
             console.log('Player did not respond in time.- fold the player.');
             fold(tableName, currentPlayer.nickname); // Fold the player (or take other action as needed)
-            reject(new Error('timeout')); // Reject on timeout
-          }, 20000); // 20 seconds
+            console.log('players left',table.playersWithCards.length);
+            // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
+            return resolve(null); // Resolve promise if only one player is left
+          }, 10000); // 10 seconds
           
           currentPlayer.fullSocket.on('playerAction', (action,RaiseAmount) => {
             clearTimeout(turnTimeout); // Clear the timeout if response is received
             resolve({ action, RaiseAmount }); // Resolve with player action and raise amount as an object
           });
         });
+        // if the playerAction is null, it means that the player didnt do any action, so we want to continue to the next player.
+        // but if we have only one player with cards, we dont want to continue to the next player because he is the winner.
+        if(playerAction == null) {
+          if (table.playersWithCards.length === 1) return;
+          continue;
+        }
         let action = playerAction.action;
         let raiseAmount = playerAction.RaiseAmount;
         //Add logic to handle the player's action here
@@ -45,7 +53,9 @@ async function runPlayersActions(tableName) {
             raise(tableName, currentPlayer.nickname, raiseAmount); // Raise the player
             break;
           case 'fold':
-            fold(tableName, currentPlayer.nickname); // Fold the player 
+            fold(tableName, currentPlayer.nickname); // Fold the player
+            // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
+            if (table.playersWithCards.length === 1) return;
             break;
           case 'call':
             call(tableName, currentPlayer.nickname); // Call the player
@@ -140,6 +150,17 @@ endRound = async (table) => {
   /* Render to make clear state in every player */
   renderAll(table);
 }
+// function to check if the round is over because there is only one player with cards.
+function checkIfPlayersFolded(table) {
+   // Check if only one player is left with cards, meaning he is the winner
+   if (table.playersWithCards.length === 1) {
+    const lastPlayer = table.playersWithCards[0];
+    console.log("The winner (The last player with cards) is:", lastPlayer.nickname);
+    endRound(table);
+    return true;
+}
+return false;
+}
 
 async function controlRound(tableName) {
   console.log("Control Round!");
@@ -152,24 +173,72 @@ async function controlRound(tableName) {
   
   // start a round of players actions
   await runPlayersActions(tableName);
+  table.moneyToCall = 0;
+  if (checkIfPlayersFolded(table)) return;
+
 
   /* Flop */
   table.drawFlop();
   renderAll(table);
   await runPlayersActions(tableName);
+  table.moneyToCall = 0;
+  if (checkIfPlayersFolded(table)) return;
+
 
   /* Turn */
   table.drawTurn();
   renderAll(table);
   await runPlayersActions(tableName);
+  table.moneyToCall = 0;
+  if (checkIfPlayersFolded(table)) return;
+
 
   /* River */
   table.drawRiver();
   renderAll(table);  
   await runPlayersActions(tableName);
+  table.moneyToCall = 0;
+  if (checkIfPlayersFolded(table)) return;
+
 
   /* End of round */
   endRound(table);
+
+
+  // start second round :
+  table.startRound();
+  // Draw and send cards to all players
+  sendCardsToAllPlayers(table);
+  
+  // start a round of players actions
+  await runPlayersActions(tableName);
+  if (checkIfPlayersFolded(table)) return;
+
+
+  /* Flop */
+  table.drawFlop();
+  renderAll(table);
+  await runPlayersActions(tableName);
+  if (checkIfPlayersFolded(table)) return;
+
+
+  /* Turn */
+  table.drawTurn();
+  renderAll(table);
+  await runPlayersActions(tableName);
+  if (checkIfPlayersFolded(table)) return;
+
+
+  /* River */
+  table.drawRiver();
+  renderAll(table);  
+  await runPlayersActions(tableName);
+  if (checkIfPlayersFolded(table)) return;
+
+
+  /* End of round */
+  endRound(table);
+  
 }
 
 
@@ -268,7 +337,7 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
   // need to check if the game isnt running yet..
   if(local_table.players.length === 2) { // && game isnt running
     //call control round function
-    controlRound(tableName);
+     controlRound(tableName);
   }
 };
 
@@ -324,19 +393,10 @@ raise = async (tableName, nickname,amout) => {
     // get the player
     const player = table.playersWithCards.find(player => player.nickname === nickname);
     // get the player's chips
-    if(player.removeChips(amout)) {
-      //There is enaugh chips to raise
-        //check the min amount to call
-        if(table.moneyToCall > amout) {
-          //The player does not have enaugh chips to call
-          return false;
-        }
-        //cheange the min amount to call
-        table.moneyToCall = amout;
-      return;
-    }
+    player.removeChips(amout) ;
+    table.moneyToCall = amout;
+    return;
     //There is not enaugh chips to raise
-    return; 
 };
 
 fold = async (tableName, nickname) => {
