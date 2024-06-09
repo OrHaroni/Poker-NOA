@@ -1,5 +1,6 @@
 const PokerTable = require("./PokerTable");
 const User = require("../models/users.js");
+const {ai_play} = require("../ai.js");
 
 class Player {
   constructor(nickname,socket ,socketId) {
@@ -8,13 +9,22 @@ class Player {
     this.hand = []; // The player's hand of cards
     this.socket = socketId; // So we can comunicate with this user
     this.fullSocket = socket;
+    this.isAi = false;
   }
 
   // Method to add chips to the player's stack
   addChips(amount) {
     this.moneyOnTable += amount;
   }
-
+  //this player is AI
+  setAi(){
+    this.isAi = true;
+  }
+  Ai_action(table){
+    if(this.isAi){
+      ai_play(this.hand, table.cardsOnTable, this.moneyOnTable, table.moneyOnTable, table.moneyToCall);
+    }
+  }
   // Method to remove chips from the player's stack
   removeChips(amount) {
     if (this.moneyOnTable >= amount) {
