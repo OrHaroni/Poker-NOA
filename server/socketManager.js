@@ -32,7 +32,7 @@ async function runPlayersActions(tableName) {
             console.log('players left',table.playersWithCards.length);
             // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
             return resolve(null); // Resolve promise if only one player is left
-          }, 10000); // 10 seconds
+          }, 20000); // 20 seconds
           
           currentPlayer.fullSocket.on('playerAction', (action,RaiseAmount) => {
             clearTimeout(turnTimeout); // Clear the timeout if response is received
@@ -125,13 +125,21 @@ renderAll = async (table) => {
 
 endRound = async (table) => {
 
-  const winner = table.pickWinner().nickname;
+  const winner = table.pickWinner();
   console.log("Winner is: ", winner);
+  if(!winner) {
+    console.log("no winner");
+    return;
+  }
+  /* give the money to the winner */
+  const winnerPlayer = table.playersWithCards.find(player => player.nickname === winner.nickname);
+  winnerPlayer.addChips(Number(table.moneyOnTable));
+
 
   /* Send to all users the winner */
   for(const player of table.playersWithCards)
   {
-    io.to(player.socket).emit('getWinner', winner);
+    io.to(player.socket).emit('getWinner', winner.nickname);
   }
 
   /* Clearing all parameter in table locally */
@@ -150,9 +158,7 @@ endRound = async (table) => {
 // function to check if the round is over because there is only one player with cards.
 function checkIfPlayersFolded(table) {
    // Check if only one player is left with cards, meaning he is the winner
-   if (table.playersWithCards.length === 1) {
-    const lastPlayer = table.playersWithCards[0];
-    console.log("The winner (The last player with cards) is:", lastPlayer.nickname);
+   if (table.playersWithCards.length === 1 || table.playersWithCards.length === 0) {
     endRound(table);
     return true;
 }
@@ -160,7 +166,6 @@ return false;
 }
 
 async function controlRound(tableName) {
-  console.log("Control Round!");
   // get the table
   const table = tablesList.find(table => table.name === tableName);
   // change all the players to players with cards to be able to play. 
@@ -195,41 +200,6 @@ async function controlRound(tableName) {
   renderAll(table);  
   await runPlayersActions(tableName);
   table.moneyToCall = 0;
-  if (checkIfPlayersFolded(table)) return;
-
-
-  /* End of round */
-  endRound(table);
-
-
-  // start second round :
-  table.startRound();
-  // Draw and send cards to all players
-  sendCardsToAllPlayers(table);
-  
-  // start a round of players actions
-  await runPlayersActions(tableName);
-  if (checkIfPlayersFolded(table)) return;
-
-
-  /* Flop */
-  table.drawFlop();
-  renderAll(table);
-  await runPlayersActions(tableName);
-  if (checkIfPlayersFolded(table)) return;
-
-
-  /* Turn */
-  table.drawTurn();
-  renderAll(table);
-  await runPlayersActions(tableName);
-  if (checkIfPlayersFolded(table)) return;
-
-
-  /* River */
-  table.drawRiver();
-  renderAll(table);  
-  await runPlayersActions(tableName);
   if (checkIfPlayersFolded(table)) return;
 
 
@@ -332,9 +302,9 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
 
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
-  if(local_table.players.length === 2) { // && game isnt running
+  while (local_table.players.length >= 2) { // && game isnt running
     //call control round function
-     controlRound(tableName);
+     await controlRound(tableName);
   }
 };
 
@@ -364,6 +334,11 @@ standUp = async (tableName, nickname) => {
     /* Get the player out of the table list of players and make him spectator*/
     const local_table = tablesList.find(table => table.name === tableName);
     const playerToRemove = local_table.players.find(player => player.nickname === nickname);
+    // add the moneyOnTable of the player to his money in mongo
+    const user = await allUsers.findOne({ nickname});
+    user.moneyAmount = Number(user.moneyAmount) + Number(playerToRemove.moneyOnTable);
+    await user.save();
+
     local_table.players = local_table.players.filter(player => player.nickname !== nickname);
     local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== nickname);
     local_table.spectators.push(playerToRemove);
@@ -392,6 +367,7 @@ raise = async (tableName, nickname,amout) => {
     // get the player's chips
     player.removeChips(amout) ;
     table.moneyToCall = amout;
+    table.moneyOnTable = Number(table.moneyOnTable) + Number(amout);
     return;
     //There is not enaugh chips to raise
 };
@@ -403,6 +379,9 @@ fold = async (tableName, nickname) => {
       return false;
     }
     const player = table.playersWithCards.find(player => player.nickname === nickname);
+    if(player == null) {
+      return false;
+    }
     // remove the player from the players with cards
     table.playersWithCards = table.playersWithCards.filter(player => player.nickname !== nickname);
     player.clearHand();
@@ -427,6 +406,7 @@ call = async (tableName, nickname) => {
     const player = table.playersWithCards.find(player => player.nickname === nickname);
     // get the player's chips
     if(player.removeChips(table.moneyToCall)) {
+      table.moneyOnTable = Number(table.moneyToCall) + Number(table.moneyOnTable);
       return;
     }
 };

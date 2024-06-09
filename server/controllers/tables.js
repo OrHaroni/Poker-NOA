@@ -63,6 +63,9 @@ const joinUserIntoTable = async (req, res) => {
         else if (status === 1) {
             res.status(301).json({}); // not enough money!
         }
+        else if(status === 3) {
+            res.status(303).json({}); // not enough money to play, must enter with 50 times the big blind at least
+        }
         else {
         //not found (incorrect username or password)
         res.status(404).json({});

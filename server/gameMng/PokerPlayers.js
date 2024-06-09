@@ -14,7 +14,7 @@ class Player {
 
   // Method to add chips to the player's stack
   addChips(amount) {
-    this.moneyOnTable += amount;
+    this.moneyOnTable = Number(this.moneyOnTable) + Number(amount);
   }
   //this player is AI
   setAi(){

@@ -27,6 +27,9 @@ const OurPlayer = (props) => {
     // State to keep track of the range input value
     const [raiseAmount, setRaiseAmount] = useState(0);
 
+    // State to keep track of our money
+    const [ourPlayerMoney, setOurPlayerMoney] = useState(props.money);
+
     /* Socket that tell us its our turn */
     props.socket.off('yourTurn').on('yourTurn', (moneyToCallArg) => {
         setMoneyToCall(moneyToCallArg);
@@ -44,6 +47,11 @@ const OurPlayer = (props) => {
         
     }
 );
+
+    /* Update our money */
+        useEffect(() => {
+            setOurPlayerMoney(props.money);
+        }, [props.money]);
 
     /* Changing the buttons layout */
     useEffect(() => {
@@ -64,7 +72,7 @@ const OurPlayer = (props) => {
                         </button>
                         <RangeInput
                             min={0}
-                            max={props.money}
+                            max={ourPlayerMoney}
                             step={50}
                             initialValue={raiseAmount}
                             onValueChange={setRaiseAmount} /* Empty */
@@ -86,7 +94,7 @@ const OurPlayer = (props) => {
                         </button>
                         <RangeInput
                             min={0}
-                            max={props.money}
+                            max={ourPlayerMoney}
                             step={50}
                             initialValue={raiseAmount}
                             onValueChange={setRaiseAmount}
@@ -110,6 +118,10 @@ const OurPlayer = (props) => {
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
         setButtonsState(0); 
+        setOurPlayerMoney(Number(ourPlayerMoney )- Number(raiseAmount));
+        console.log('ourPlayerMoney: ', ourPlayerMoney);
+        // cover the option that user raises and our player need to call and choose to raise
+        setMoneyToCall(0);
         setShowTimer(false);
         setShowMessage(false);
         console.log('Raise amount: ', raiseAmount);
@@ -118,6 +130,9 @@ const OurPlayer = (props) => {
     //clickCall function to send 'call' event to the server
     const clickCall = () => {
         setButtonsState(0); 
+        setOurPlayerMoney(Number(ourPlayerMoney) - Number(moneyToCall));
+        console.log('ourPlayerMoney: ', ourPlayerMoney);
+        setMoneyToCall(0);
         setShowTimer(false);
         props.socket.emit('playerAction',"call",null);
     };
@@ -141,7 +156,6 @@ const OurPlayer = (props) => {
         setShowMessage(false);
         setMoneyToCall(0);
         setRaiseAmount(0);
-        console.log('moneyToCall: ', moneyToCall);  
     };
   
 
@@ -151,6 +165,7 @@ const OurPlayer = (props) => {
         if(cards) {
         const card1 = GenericDeck.find(card => card.id === cards[0].id);
         const card2 = GenericDeck.find(card => card.id === cards[1].id);
+        props.setOurPlayerCards([card1, card2]);
         const generated = 
             <div className="RandomCard">
                 {/* Render two random Card components */}
@@ -164,6 +179,7 @@ const OurPlayer = (props) => {
         setGeneratedCard(generated);
         }
         else {
+            props.setOurPlayerCards(null);
             /* if the server sent null, player dont have cards */
             setGeneratedCard(<div className="RandomCard">
                 <div className="right"></div>
@@ -231,7 +247,7 @@ const OurPlayer = (props) => {
     return (
         <>
             <div className="our-player">
-                money {props.money} $ <br />
+                money {ourPlayerMoney} $ <br />
                 name {props.name}
                 <div className='our-cards'>{generatedCards}</div>
                 <span className='action-container'>
