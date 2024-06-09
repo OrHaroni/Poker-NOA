@@ -63,7 +63,9 @@ function GameTable(props) {
 
   useEffect(() => {
     const handleWhosTurn = (player_index) => {
+      /* Get player username that its turn, and update in timers that this is its turn */
       const updatedTimers = timers.map((timer, i) => i === player_index);
+      console.log("This is the updated timer list: ", updatedTimers);
       setTimers(updatedTimers);
     };
     props.socket.on('WhosTurn', handleWhosTurn);
@@ -175,7 +177,13 @@ function GameTable(props) {
               playersCards={playersCards}
               setPlayersCards={setPlayersCards}
             />
-            {satDown && <OurPlayer name={props.user.nickname} money={moneyAmount} className={"our-player"} socket={props.socket} tablename={props.table.name} />}
+            {satDown && <OurPlayer
+            name={props.user.nickname}
+            money={moneyAmount}
+            className={"our-player"}
+            socket={props.socket}
+            tablename={props.table.name}
+             />}
             {!satDown && (
               <button className="exit-button" onClick={sitDownHandler} id="buttonBack">
                 Sit Down

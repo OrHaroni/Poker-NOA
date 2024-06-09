@@ -47,17 +47,6 @@ function Table(props) {
     };
   }, [props.socket]);
 
-  useEffect(() => {
-    const handleWhosTurn = (player_index) => {
-      const updatedTimers = props.timers.map((timer, i) => i === player_index);
-      props.setTimers(updatedTimers);
-    };
-    props.socket.on('WhosTurn', handleWhosTurn);
-    return () => {
-      props.socket.off('WhosTurn', handleWhosTurn);
-    };
-  }, [props.socket, props.timers]);
-
   /* Getting winner and print it on the screen */
   props.socket.off('getWinner').on('getWinner', (winner) => {
     const new_message = "The winner is: " + winner;
