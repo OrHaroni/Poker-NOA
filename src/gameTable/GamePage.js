@@ -62,10 +62,10 @@ function GameTable(props) {
   }, [props.socket]);
 
   useEffect(() => {
-    const handleWhosTurn = (player_index) => {
-      /* Get player username that its turn, and update in timers that this is its turn */
-      const updatedTimers = timers.map((timer, i) => i === player_index);
-      console.log("This is the updated timer list: ", updatedTimers);
+    const handleWhosTurn = (current_player_nickname) => {
+      /* Updating the timers from the ohter players that its his turn*/
+      const updatedTimers = otherPlayers.map(player =>
+      player === current_player_nickname);
       setTimers(updatedTimers);
     };
     props.socket.on('WhosTurn', handleWhosTurn);
