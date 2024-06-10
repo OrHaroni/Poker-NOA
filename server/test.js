@@ -2,27 +2,58 @@ const { Player } = require("./gameMng/PokerPlayers.js");
 const { ActiveTable } = require("./gameMng/PokerTable.js");
 const { tablesList } = require("./localDB.js");
 
+async function  main() {
 
-const cards = [
-    { suit: "hearts", value: "2" },
-    { suit: "hearts", value: "3" },
-    { suit: "hearts", value: "4" },
-    { suit: "hearts", value: "5" },
-    { suit: "hearts", value: "6" },
-];
-const table = new ActiveTable("test table", 10, 10);
-table.cardsOnTable = cards;
-table.moneyOnTable = 1000;
-table.moneyToCall = 100;
+    const table = new ActiveTable("test table", 10, 10);
+    tablesList.push(table);
+    table.moneyToCall = 20;
+    //Add ai player
+    const aiPlayer1 = new Player("ai1", "ai", "ai");
+    const aiPlayer2 = new Player("ai2", "ai", "ai");
 
-//Add ai player
-const aiPlayer = new Player("ai", "ai", "ai");
-aiPlayer.setAi();
-aiPlayer.moneyOnTable = 1000;
-//give ai player two cards
-aiPlayer.hand = [ { suit: "hearts", value: "7" }, { suit: "hearts", value: "8" } ];
-// Generate cards for testing
-aiPlayer.Ai_action(table);
+    aiPlayer1.setAi();
+    aiPlayer2.setAi();
+    table.addPlayer(aiPlayer1);
+    table.addPlayer(aiPlayer2);
+    aiPlayer1.moneyOnTable = 500;
+    table.playersWithCards.push(aiPlayer1);
+    table.playersWithCards.push(aiPlayer2);
+    table.cardsOnTable = [
+        { suit: "hearts", value: "10" },
+        { suit: "hearts", value: "King" },
+        { suit: "diamond", value: "Queen" },
+    ];
+    aiPlayer1.hand = [
+        { suit: "hearts", value: "8" },
+        { suit: "diamond", value: "7" }
+    ];
+    console.log("Test: AI player hand", aiPlayer1.hand);
+    // console.log("Test: AI player hand", aiPlayer1.hand);
+    // console.log("table cards", table.cardsOnTable);
+
+    let a = await aiPlayer1.Ai_action(table);
+    let actionAndMoney = a.split(' ');
+    let action = actionAndMoney[0];
+    let money = actionAndMoney[1];
+    console.log("AI action is: ", action);
+    console.log("AI money is: ", money);
+}
+main();
+// console.log("action and money: ", actionAndMoney);
+
+// action = actionAndMoney[0];
+// money = actionAndMoney[1];
+
+// console.log("AI action is: ", action);
+// console.log("AI money is: ", money);
+
+// console.log("AI action is: ", action);
+
+// console.log("Test: AI player action", aiPlayer1.Ai_action);
+// console.log("Test: AI player hand", aiPlayer2.hand);  
+// console.log("Test: AI player action", aiPlayer2.Ai_action);
+
+
 
 
 

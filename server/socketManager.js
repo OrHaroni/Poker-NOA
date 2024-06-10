@@ -17,6 +17,17 @@ async function runPlayersActions(tableName) {
     return false;
   }
   for (const currentPlayer of table.playersWithCards) {
+
+    if(currentPlayer.isAi){
+      actionAndMoney = currentPlayer.Ai_action(table);
+      console.log("AI action is: ", action);
+      action = actionAndMoney.splite(" ");
+      money = actionAndMoney.splite(" ");
+      console.log("AI action is: ", action);
+      console.log("AI money is: ", money);
+      continue;
+    }
+    console.log("current player is: ", currentPlayer.nickname);
     if (currentPlayer.socket) {
       //Notify the current player that it's their turn
       io.to(currentPlayer.socket).emit('yourTurn', table.moneyToCall);
