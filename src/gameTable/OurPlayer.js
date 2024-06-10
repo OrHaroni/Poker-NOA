@@ -47,7 +47,7 @@ const OurPlayer = (props) => {
 
     /* Changing the buttons layout */
     useEffect(() => {
-        console.log('In use effect with: ', buttonsState);
+        console.log('Updating buttons with: ', buttonsState);
         let temp_buttons;
         switch (buttonsState) {
             case 1:
@@ -109,6 +109,7 @@ const OurPlayer = (props) => {
     
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
+        setButtonsState(0); 
         setShowTimer(false);
         setShowMessage(false);
         console.log('Raise amount: ', raiseAmount);
@@ -116,14 +117,17 @@ const OurPlayer = (props) => {
     };
     //clickCall function to send 'call' event to the server
     const clickCall = () => {
+        setButtonsState(0); 
         setShowTimer(false);
         props.socket.emit('playerAction',"call",null);
     };
     const clickCheck = () => {
+        setButtonsState(0); 
         setShowTimer(false);
         props.socket.emit('playerAction',"check",null);
     };
     const clickFold = () => {
+        setButtonsState(0); 
         setShowTimer(false);
         props.socket.emit('playerAction',"fold",null);
     };
