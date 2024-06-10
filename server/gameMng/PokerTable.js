@@ -97,6 +97,15 @@ class ActiveTable {
     }
     // Method to pick the winner of the round
 pickWinner() {
+    /* Check that there are players on the table */
+    if (this.playersWithCards.length === 0) {
+      console.log("no players");
+      return;
+    }
+    // if there is only one player with cards, he is the winner
+    if (this.playersWithCards.length === 1) {
+        return this.playersWithCards[0];
+    }
     const hands = this.playersWithCards.map(player => {
         const handRank = this.evaluateHand(player.hand, this.cardsOnTable);
         return { player, handRank };
@@ -185,6 +194,8 @@ pickWinner() {
     }
 
     endRound() {
+        /* Reset the money on the table */
+        this.moneyOnTable = 0;
         /* Clear hands to all the players */
         this.clearHandToAllPlayers();
 

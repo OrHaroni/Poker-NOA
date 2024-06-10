@@ -28,6 +28,8 @@ function GameTable(props) {
   const [timers, setTimers] = useState([false, false, false, false]);
   const [moneyAmount, setMoneyAmount] = useState(0); // Use state for moneyAmount
   const [playersCards, setPlayersCards] = useState([]);
+  const [mongoMoney, setMongoMoney] = useState(props.user.moneyAmount); // my money from mongo, meaning all my money in my user (not on table)
+  const [ourPlayerCards, setOurPlayerCards] = useState(null);
 
 
   const fetchData = async (cards, players_with_money, size) => {
@@ -79,9 +81,17 @@ function GameTable(props) {
   };
 
   const standUpHandler = () => {
-    setSatDown(false);
-    props.socket.emit('playerAction',"fold" , null);
-    props.socket.emit('standUp', props.table.name, props.user.nickname);
+    if(ourPlayerCards){
+      sendSwal("Cant stand up with cards, fold please", "warning");
+    }
+    else{
+      setSatDown(false);
+      props.socket.emit('playerAction',"fold" , null);
+      // add the money on the table to the user
+      setMongoMoney(Number(mongoMoney) + Number(moneyAmount));
+      props.user.moneyAmount = Number(mongoMoney) + Number(moneyAmount);
+      props.socket.emit('standUp', props.table.name, props.user.nickname);
+    }
   };
 
   const ClickEnter = (event) => {
@@ -101,10 +111,15 @@ function GameTable(props) {
       props.socket.emit('joinTable', tableName, username, nickname, moneyToEnterWith);
       setShowModal(false);
       setSatDown(true);
+      setMongoMoney(mongoMoney - moneyToEnterWith);
+      props.user.moneyAmount = mongoMoney - moneyToEnterWith;
+      setMoneyAmount(moneyToEnterWith); // Update the state
     } else if (retStatus === 301) {
       sendSwal("You don't have enough money!", "error");
     } else if (retStatus === 302) {
       sendSwal("This table is full!", "error");
+    } else if (retStatus === 303) {
+      sendSwal("You must enter with 50 times the big blind at least! 100 is the minimum entrance", "error");
     } else {
       sendSwal("Unknown problem, 404", "error");
     }
@@ -155,7 +170,7 @@ function GameTable(props) {
             </button>
           )}
         <button className="money-amount">
-          money: {props.user.moneyAmount}
+          money: {mongoMoney}
         </button>
       </div>
       <Container className="container">
@@ -183,6 +198,8 @@ function GameTable(props) {
             className={"our-player"}
             socket={props.socket}
             tablename={props.table.name}
+            ourPlayerCards={ourPlayerCards}
+            setOurPlayerCards={setOurPlayerCards}
              />}
             {!satDown && (
               <button className="exit-button" onClick={sitDownHandler} id="buttonBack">

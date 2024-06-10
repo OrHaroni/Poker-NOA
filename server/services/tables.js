@@ -59,6 +59,10 @@ const joinUserIntoTable = async (tableName, username, moneyToEnterWith) => {
         return 1; //no enough money.
       }
       else {
+        // limit the user to enter with 50 times the big blind
+        if(moneyToEnterWith < 50*table.bigBlind) {
+          return 3; //not enough money to play
+        }
         //Decrease the money for this user
         user.moneyAmount -= moneyToEnterWith;
         await user.save();
@@ -86,8 +90,8 @@ const addTable = async (table, userCreated) => {
     //Now we know its valid
     table.players_num = 0;
     table.moneyAmountOnTable = 0;
-    table.bigBlind = 10;
-    table.smallBlind = 5;
+    table.bigBlind = 2;
+    table.smallBlind = 1;
     table.cardOnTable = [];
     table.playersOnTable = [];
     table.createdBy = userCreated;

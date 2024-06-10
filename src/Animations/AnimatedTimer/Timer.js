@@ -1,8 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import './Timer.css'; // Ensure you have the CSS for styling
-
+import './Timer.css'; 
 const Timer = () => {
-  const [seconds, setSeconds] = useState(10);
+  const [seconds, setSeconds] = useState(20);
 
   useEffect(() => {
     // Only set up the interval if seconds > 0
