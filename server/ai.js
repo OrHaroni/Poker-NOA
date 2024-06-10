@@ -16,19 +16,26 @@ async function ai_play(hand, cardsOnTable, myMoney, moneyOnTable, moneyToCall) {
         What do you think we need to play? 
         Answer with actions
         (check (only if moneyToCall is 0),
-        call,
-        fold,
-        raise,
+        call if you have ok cards,
+        fold if you have bad cards,
+        raise if you have good cards like flash or pair,
         or check (only if moneyToCall is 0))
         please only answer with one of the actions
         above is a way of
         "action money" if fold money is zero
-        its importent to answer like - action money`;
-        console.log(prompt);
+        its importent to answer like - action money if its check say check 0
+        if raise so raise money
+        if call so call money
+        if fold so fold 0
+        if check so check 0
+        please take risk and raise if you have good cards
+        `;
+        console.log("prompt" , prompt);
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();
-        console.log(text);
+        console.log("in function" , text);
+        return text;
 }
 
 module.exports = {
