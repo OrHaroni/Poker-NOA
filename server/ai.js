@@ -30,7 +30,6 @@ async function ai_play(hand, cardsOnTable, myMoney, moneyOnTable, moneyToCall) {
         if check so check 0
         please take risk and raise if you have good cards
         `;
-        console.log("prompt" , prompt);
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();

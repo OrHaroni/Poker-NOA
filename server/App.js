@@ -64,6 +64,10 @@ io.on('connection', async (socket) => {
   socket.on('joinTable', async (tableName, username, nickname, moneyToEnterWith) => {
     socketManager.joinTable(tableName, username, nickname, moneyToEnterWith);
   });
+  // if we get joinTable event, we will want to send all the players on table with the given name, to render the table.
+  socket.on('addBot', async (tableName) => {
+    socketManager.addBot(tableName);
+  });
 
   // if we get leaveTable event, we will want to send all the players on table with the given name, to render the table.
   socket.on('leaveTable', async (tableName, username) => {
