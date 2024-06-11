@@ -175,6 +175,26 @@
 .exit-button:hover {
     background-color: #cc4738;
 }
+.bot-button {
+    position: relative;
+    top:5%;
+    margin-left: 1%;
+    margin-top: 1%;
+    margin-bottom:1%;
+    background-color: #5c9627; /* Red color for the button */
+    color: #000000; /* White text color */
+    border: none;
+    padding: 10px 20px; /* Adjust padding as needed */
+    font-size: 16px;
+    border-radius: 4px;
+    cursor: pointer;
+    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    font-weight: bolder;
+  }
+  .bot-button:hover {
+    background-color: #17833b; /* Darker red color on hover */
+  
+  }
 .dealer-img {
     border-radius: 50%;
     position: absolute;

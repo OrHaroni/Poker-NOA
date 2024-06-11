@@ -8,7 +8,8 @@ const { set } = require("mongoose");
 const { tab } = require("@testing-library/user-event/dist/tab.js");
 
 let io;
-
+//i want a name for the bot that changes each time a new bot is added to the table.
+let curr_bot_name = 0;
 // function that run 1 round of the game of players actions. (like before the flop, after the flop, after the turn, after the river)
 
 async function runPlayersActions(tableName) {
@@ -18,12 +19,47 @@ async function runPlayersActions(tableName) {
   }
   for (const currentPlayer of table.playersWithCards) {
     if(currentPlayer.isAi){
-      actionAndMoney = currentPlayer.Ai_action(table);
-      console.log("AI action is: ", action);
-      action = actionAndMoney.splite(" ");
-      money = actionAndMoney.splite(" ");
-      console.log("AI action is: ", action);
-      console.log("AI money is: ", money);
+      let a = await currentPlayer.Ai_action(table);
+      let actionAndMoney = a.split(' ');
+      let action = actionAndMoney[0];
+      let money = actionAndMoney[1];
+      if (action === 'fold' && table.moneyToCall === 0) {
+        action = 'check';
+      }
+      if(action === 'raise' && money < table.moneyToCall) {
+        action = 'call';
+        money = table.moneyToCall;
+      }
+      if(action === 'raise' && money === table.moneyToCall) {
+        action = 'call';
+      }
+      if(action === 'raise' && money > currentPlayer.moneyToCall) {
+        action = 'call';
+        money = currentPlayer.moneyToCall;
+      }
+      if(action === 'call' && money < currentPlayer.moneyToCall) {
+        action = 'fold';
+      }
+      switch (action) {
+        case 'raise':
+          raise(tableName, currentPlayer.nickname, money); // Raise the player
+          break;
+        case 'fold':
+          fold(tableName, currentPlayer.nickname); // Fold the player
+          // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
+          if (table.playersWithCards.length === 1) return;
+          break;
+        case 'call':
+          call(tableName, currentPlayer.nickname); // Call the player
+          break;
+        case 'check':
+          check(tableName, currentPlayer.nickname); // Check the player
+          break;
+        default:
+          // Handle invalid action
+          console.error('Invalid player action:', playerAction);
+          break;
+      }
       continue;
     }
     console.log("current player is: ", currentPlayer.nickname);
@@ -97,6 +133,7 @@ async function runPlayersActions(tableName) {
 sendTurnToAllPlayers = async (players, current_player) => {
   /* Emit to all players, who's turn is it */
   for(const player of players) {
+    if(player.isAi) continue;
     console.log("Emitting to Player ", player.nickname, " That turn is for: ", current_player.nickname);
     io.to(player.socket).emit('WhosTurn', current_player.nickname);
   }
@@ -124,10 +161,12 @@ renderAll = async (table) => {
   }
 
   for (const player of table.players) {
-         io.to(player.socket).emit('render', table.cardsOnTable,players_and_money, size_of_arr);
+        if(player.isAi) continue;
+        io.to(player.socket).emit('render', table.cardsOnTable,players_and_money, size_of_arr);
   }
   // now want to send the spectators the render event.
   for (const spectator of table.spectators) {
+    if(player.isAi) continue;
     io.to(spectator.socket).emit('render', table.cardsOnTable, players_and_money,size_of_arr);
     }
 }
@@ -135,7 +174,6 @@ renderAll = async (table) => {
 endRound = async (table) => {
 
   const winner = table.pickWinner();
-  console.log("Winner is: ", winner);
   if(!winner) {
     console.log("no winner");
     return;
@@ -313,7 +351,41 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
   // need to check if the game isnt running yet..
   while (local_table.players.length >= 2) { // && game isnt running
     //call control round function
+
      await controlRound(tableName);
+  }
+};
+
+addBot = async (tableName) => {
+  console.log("add bot to table!");
+//   /* Find the table in the DB */
+  const table = await Table.findOne({ name: tableName });
+
+  const username = "bot" + curr_bot_name;
+  curr_bot_name += 1;
+  console.log("bot name is: ", username);
+  /* Add one to the number of players on the table */
+  table.numOfPlayers += 1;
+  await table.save();
+
+  /* Add the bot into the local DB for this table */
+  const local_table = tablesList.find(table => table.name === tableName);
+
+  const playerToJoin = new Player(username, null, null, true);
+  playerToJoin.moneyOnTable = 1000;
+  playerToJoin.isAi = true;
+  
+  /* add him to the players on table list */
+  local_table.players.push(playerToJoin);
+
+  renderAll(local_table);
+  // if its the first player on the table, we dont want to send him the render event because he is the one that joined the table.
+
+  // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
+  // need to check if the game isnt running yet..
+  while (local_table.players.length >= 2) { // && game isnt running
+    //call control round function
+    await controlRound(tableName);
   }
 };
 
@@ -433,5 +505,6 @@ module.exports = {
   leaveTable,
   standUp,
   exit,
-  close
+  close,
+  addBot
 };
