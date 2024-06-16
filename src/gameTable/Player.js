@@ -8,7 +8,7 @@ const Player = (props) => {
     
     return (
         <div className={props.className}>
-            {props.timer ? <Timer /> : null}
+            {props.timer ? <Timer time={20}/> : null}
             <span className="player-name">{props.name}</span>
             {props.cards == [] ?
             null :

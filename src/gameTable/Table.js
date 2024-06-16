@@ -5,6 +5,7 @@ import tableImg from '../assets/emptyTable.png'; // Import the image
 import dealer_img from '../assets/dealer.jpg';
 import CommunitiCards from './CommuinityCards.js';
 import AnimatedMessage from '../Animations/AnimatedMessage/AnimatedMessage.js';
+import Timer from '../Animations/AnimatedTimer/Timer.js';
 
 // this io is the io from the index.html file on the public folder
 <script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
@@ -48,13 +49,18 @@ function Table(props) {
   }, [props.socket]);
 
   /* Getting winner and print it on the screen */
-  props.socket.off('getWinner').on('getWinner', (winner) => {
+  props.socket.off('getWinner').on('getWinner', async (winner) => {
     const new_message = "The winner is: " + winner;
     /* Make all timers go off */
     const updatedTimers = props.otherPlayers.map(player => false);
     props.setTimers(updatedTimers);
     setMessage(new_message);
     setShowMessage(true);
+    /* Wait 5 seconds to let also the timer to run till next round */
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
+    setShowMessage(false);
+
   });
 
   return (
@@ -76,7 +82,10 @@ function Table(props) {
           ))}
         </div>
         {showMessage ? 
-        <AnimatedMessage message={Message}/> : null}
+        <>
+          <Timer time={5}/>
+          <AnimatedMessage message={Message}/>
+        </> : null}
         <CommunitiCards cards={props.communityCards}/>
       </div>      
     </>

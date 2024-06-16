@@ -62,7 +62,7 @@ const OurPlayer = (props) => {
                 /* Case where we can check */
                 temp_buttons =
                 <span className='action-container'>
-                    <Timer/>
+                    <Timer time={20}/>
                     <button className="action-button" onClick={clickCheck}>
                         Check
                     </button>
@@ -87,7 +87,7 @@ const OurPlayer = (props) => {
                 /* Case where we can't check */
                 temp_buttons =
                 <span className='action-container'>
-                    <Timer/>
+                    <Timer time={20}/>
                     <div className='raise-with-range'>
                         <button className="action-button" onClick={clickRaise}>
                             Raise
