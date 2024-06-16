@@ -17,10 +17,8 @@ async function runPlayersActions(tableName) {
     return false;
   }
   for (const currentPlayer of table.playersWithCards) {
-    console.log("current player is: ", currentPlayer.nickname);
     if (currentPlayer.socket) {
       //Notify the current player that it's their turn
-      console.log('money to call is: ', table.moneyToCall); 
       io.to(currentPlayer.socket).emit('yourTurn', table.moneyToCall);
       sendTurnToAllPlayers(table.playersWithCards, currentPlayer);
       try {
@@ -88,7 +86,6 @@ async function runPlayersActions(tableName) {
 sendTurnToAllPlayers = async (players, current_player) => {
   /* Emit to all players, who's turn is it */
   for(const player of players) {
-    console.log("Emitting to Player ", player.nickname, " That turn is for: ", current_player.nickname);
     io.to(player.socket).emit('WhosTurn', current_player.nickname);
   }
 }
@@ -126,7 +123,6 @@ renderAll = async (table) => {
 endRound = async (table) => {
 
   const winner = table.pickWinner();
-  console.log("Winner is: ", winner);
   if(!winner) {
     console.log("no winner");
     return;
@@ -154,6 +150,10 @@ endRound = async (table) => {
 
   /* Render to make clear state in every player */
   renderAll(table);
+
+  /* Wait 5 seconds to start the next round */
+  await new Promise(resolve => setTimeout(resolve, 5000));
+  
 }
 // function to check if the round is over because there is only one player with cards.
 function checkIfPlayersFolded(table) {
@@ -204,7 +204,7 @@ async function controlRound(tableName) {
 
 
   /* End of round */
-  endRound(table);
+  await endRound(table);
   
 }
 
@@ -255,7 +255,6 @@ close = async() => {
           *                       */
 
 joinScreenTable = async (socket,tableName, username, nickname) => {
-  console.log("Join Screen Table!");
   /* Get the connected user from the DB for its socket */
   const tempConnectedUser = await connectedUsers.findOne({ username: username });
   const newPlayer = new Player(nickname, socket, tempConnectedUser.socketId);
@@ -272,7 +271,6 @@ joinScreenTable = async (socket,tableName, username, nickname) => {
 };
 
 joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
-    console.log("Join Table!");
     /* Find the table in the DB */
     const table = await Table.findOne({ name: tableName });
 
@@ -356,7 +354,6 @@ standUp = async (tableName, nickname) => {
           *                       * 
           *                       */
 raise = async (tableName, nickname,amout) => {
-    console.log("Do raise!");
     // get the table
     const table = tablesList.find(table => table.name === tableName);
     if(table == null) {
@@ -373,7 +370,6 @@ raise = async (tableName, nickname,amout) => {
 };
 
 fold = async (tableName, nickname) => {
-    console.log("Do fold!");
     const table = tablesList.find(table => table.name === tableName);
     if(table == null) {
       return false;
@@ -388,7 +384,6 @@ fold = async (tableName, nickname) => {
 };
 
 check = async (tableName, username) => {
-    console.log("Do check!");
     // const table = tablesList.find(table => table.name === tableName);
     // if(table == null) {
     //   return false;
@@ -396,7 +391,6 @@ check = async (tableName, username) => {
 };
 
 call = async (tableName, nickname) => {
-    console.log("Do call!");
     // get the table
     const table = tablesList.find(table => table.name === tableName);
     if(table == null) {
