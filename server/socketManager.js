@@ -183,16 +183,22 @@ endRound = async (table) => {
 
 
   /* Send to all users the winner */
-  for(const player of table.playersWithCards)
-  {
-    io.to(player.socket).emit('getWinner', winner.nickname);
-  }
+  for(const player of table.players)
+    {
+      io.to(player.socket).emit('getWinner', winner.nickname);
+    }
+
+  /* Send to all users the winner */
+  for(const spectator of table.spectators)
+    {
+      io.to(spectator.socket).emit('getWinner', winner.nickname);
+    }
 
   /* Clearing all parameter in table locally */
   table.endRound();
 
   /* Send all players null (empty hand) */
-  for(const player of table.playersWithCards)
+  for(const player of table.players)
   {
     /* Send them to trash the hand */
     io.to(player.socket).emit('getCards', null);
@@ -206,10 +212,10 @@ endRound = async (table) => {
   
 }
 // function to check if the round is over because there is only one player with cards.
-function checkIfPlayersFolded(table) {
+async function checkIfPlayersFolded(table) {
    // Check if only one player is left with cards, meaning he is the winner
    if (table.playersWithCards.length === 1 || table.playersWithCards.length === 0) {
-    endRound(table);
+    await endRound(table);
     return true;
 }
 return false;
@@ -226,7 +232,7 @@ async function controlRound(tableName) {
   // start a round of players actions
   await runPlayersActions(tableName);
   table.moneyToCall = 0;
-  if (checkIfPlayersFolded(table)) return;
+  if (await checkIfPlayersFolded(table)) return;
 
 
   /* Flop */
@@ -234,7 +240,7 @@ async function controlRound(tableName) {
   renderAll(table);
   await runPlayersActions(tableName);
   table.moneyToCall = 0;
-  if (checkIfPlayersFolded(table)) return;
+  if (await checkIfPlayersFolded(table)) return;
 
 
   /* Turn */
@@ -242,7 +248,7 @@ async function controlRound(tableName) {
   renderAll(table);
   await runPlayersActions(tableName);
   table.moneyToCall = 0;
-  if (checkIfPlayersFolded(table)) return;
+  if (await checkIfPlayersFolded(table)) return;
 
 
   /* River */
@@ -250,7 +256,7 @@ async function controlRound(tableName) {
   renderAll(table);  
   await runPlayersActions(tableName);
   table.moneyToCall = 0;
-  if (checkIfPlayersFolded(table)) return;
+  if (await checkIfPlayersFolded(table)) return;
 
 
   /* End of round */
