@@ -281,3 +281,9 @@
     width: 20px; /* Width of the logo */
     height: 20px; /* Height of the logo */
   }
+
+  .profile-pic {
+    margin-bottom: 2px; /* Space between the logo and the money text */
+    width: 50px; /* Width of the logo */
+    height: 50px; /* Height of the logo */
+  }
