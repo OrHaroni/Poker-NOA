@@ -462,8 +462,17 @@ standUp = async (tableName, nickname) => {
   local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== nickname);
   local_table.spectators.push(playerToRemove);
 
-  // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
-  renderAll(local_table);
+    if (local_table.players.length === 1 && local_table.players[0].isAi) {
+      const botPlayer = local_table.players[0]
+      local_table.players = local_table.players.filter(player => player.nickname !== botPlayer.nickname);
+      local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== botPlayer.nickname);
+
+      table.numOfPlayers -= 1;
+      await table.save();
+    }
+
+    // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
+    renderAll(local_table);
 };
 
 
