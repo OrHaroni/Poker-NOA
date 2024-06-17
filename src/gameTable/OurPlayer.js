@@ -1,10 +1,9 @@
 import React, { useState, useEffect } from 'react';
-import RandomTwoCards from './RandomCard';
 import './table.css';
-import cards from '../assets/cards.png';
 import Card from './Card';
 import Timer from '../Animations/AnimatedTimer/Timer';
 import RangeInput from '../RangeInput/RangeInput';
+import logo from '../assets/logopng.png'
 
 const OurPlayer = (props) => {
     // State to store the generated card
@@ -247,8 +246,9 @@ const OurPlayer = (props) => {
     return (
         <>
             <div className="our-player">
-                money {ourPlayerMoney} $ <br />
-                name {props.name}
+                {props.name}<br/>
+            <img src={logo} alt="Logo" className="money-logo" />
+                {ourPlayerMoney}$
                 <div className='our-cards'>{generatedCards}</div>
                 <span className='action-container'>
                     {buttons}

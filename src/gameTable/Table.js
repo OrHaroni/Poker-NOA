@@ -1,7 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import Player from './Player';
 import './table.css'; // Import the table CSS file
-import tableImg from '../assets/emptyTable.png'; // Import the image
 import dealer_img from '../assets/dealer.jpg';
 import CommunitiCards from './CommuinityCards.js';
 import AnimatedMessage from '../Animations/AnimatedMessage/AnimatedMessage.js';
