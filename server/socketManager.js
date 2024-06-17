@@ -6,6 +6,7 @@ const {tablesList} = require("./localDB");
 const { Player } = require("./gameMng/PokerPlayers.js");
 const { set } = require("mongoose");
 const { tab } = require("@testing-library/user-event/dist/tab.js");
+const { render } = require("@testing-library/react");
 
 let io;
 //i want a name for the bot that changes each time a new bot is added to the table.
@@ -231,14 +232,15 @@ async function controlRound(tableName) {
   
   // start a round of players actions
   await runPlayersActions(tableName);
+  renderAll(table);
   table.moneyToCall = 0;
   if (await checkIfPlayersFolded(table)) return;
-
 
   /* Flop */
   table.drawFlop();
   renderAll(table);
   await runPlayersActions(tableName);
+  renderAll(table);
   table.moneyToCall = 0;
   if (await checkIfPlayersFolded(table)) return;
 
@@ -247,6 +249,7 @@ async function controlRound(tableName) {
   table.drawTurn();
   renderAll(table);
   await runPlayersActions(tableName);
+  renderAll(table);
   table.moneyToCall = 0;
   if (await checkIfPlayersFolded(table)) return;
 
@@ -255,6 +258,8 @@ async function controlRound(tableName) {
   table.drawRiver();
   renderAll(table);  
   await runPlayersActions(tableName);
+  renderAll(table);
+
   table.moneyToCall = 0;
   if (await checkIfPlayersFolded(table)) return;
 
@@ -456,7 +461,6 @@ raise = async (tableName, nickname,amout) => {
     table.moneyToCall = amout;
     table.moneyOnTable = Number(table.moneyOnTable) + Number(amout);
     return;
-    //There is not enaugh chips to raise
 };
 
 fold = async (tableName, nickname) => {

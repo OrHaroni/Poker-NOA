@@ -27,17 +27,16 @@ const OurPlayer = (props) => {
     const [raiseAmount, setRaiseAmount] = useState(0);
 
     // State to keep track of our money
-    const [ourPlayerMoney, setOurPlayerMoney] = useState(props.money);
+    const [ourPlayerMoney, setOurPlayerMoney] = useState(Number(props.money));
+    
 
     /* Socket that tell us its our turn */
     props.socket.off('yourTurn').on('yourTurn', (moneyToCallArg) => {
         setMoneyToCall(moneyToCallArg);
         if (moneyToCallArg === 0) {
-            console.log('Setting buttons to 1 (Can Check)');
             setButtonsState(1); 
         }
         else {
-            console.log('Setting buttons to 2 (Cant Check)');
             setButtonsState(2);
         }
         // Show Timer
@@ -46,15 +45,13 @@ const OurPlayer = (props) => {
         
     }
 );
-
     /* Update our money */
-        useEffect(() => {
-            setOurPlayerMoney(props.money);
-        }, [props.money]);
+useEffect(() => {
+    setOurPlayerMoney(Number(props.money));
+}, [props.money]);
 
     /* Changing the buttons layout */
     useEffect(() => {
-        console.log('Updating buttons with: ', buttonsState);
         let temp_buttons;
         switch (buttonsState) {
             case 1:
@@ -118,19 +115,16 @@ const OurPlayer = (props) => {
     const clickRaise = () => {
         setButtonsState(0); 
         setOurPlayerMoney(Number(ourPlayerMoney )- Number(raiseAmount));
-        console.log('ourPlayerMoney: ', ourPlayerMoney);
         // cover the option that user raises and our player need to call and choose to raise
         setMoneyToCall(0);
         setShowTimer(false);
         setShowMessage(false);
-        console.log('Raise amount: ', raiseAmount);
         props.socket.emit('playerAction',"raise", raiseAmount);
     };
     //clickCall function to send 'call' event to the server
     const clickCall = () => {
         setButtonsState(0); 
         setOurPlayerMoney(Number(ourPlayerMoney) - Number(moneyToCall));
-        console.log('ourPlayerMoney: ', ourPlayerMoney);
         setMoneyToCall(0);
         setShowTimer(false);
         props.socket.emit('playerAction',"call",null);
