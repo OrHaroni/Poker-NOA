@@ -18,7 +18,6 @@ async function runPlayersActions(tableName) {
     return false;
   }
   for (const currentPlayer of table.playersWithCards) {
-
     if(currentPlayer.isAi){
       let a = await currentPlayer.Ai_action(table);
       let actionAndMoney = a.split(' ');
@@ -167,7 +166,8 @@ renderAll = async (table) => {
   // now want to send the spectators the render event.
   for (const spectator of table.spectators) {
     io.to(spectator.socket).emit('render', table.cardsOnTable, players_and_money,size_of_arr, table.moneyOnTable);
-    }
+  }
+  // now want to send the spectators the render event.
 }
 
 endRound = async (table) => {

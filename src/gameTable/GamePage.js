@@ -218,7 +218,6 @@ function GameTable(props) {
                 Add bot
               </button>
             )}
-
           </Col>
         </Row>
       </Container>
