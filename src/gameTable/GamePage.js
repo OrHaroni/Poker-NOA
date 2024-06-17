@@ -54,7 +54,7 @@ function GameTable(props) {
   };
 
   useEffect(() => {
-    const handleRender = (cards, players_with_money, size) => {
+    const handleRender = (cards, players_with_money, size, money_on_table) => {
       fetchData(cards, players_with_money, size);
     };
     props.socket.on('render', handleRender);

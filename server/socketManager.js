@@ -112,11 +112,11 @@ renderAll = async (table) => {
   }
 
   for (const player of table.players) {
-         io.to(player.socket).emit('render', table.cardsOnTable,players_and_money, size_of_arr);
+         io.to(player.socket).emit('render', table.cardsOnTable,players_and_money, size_of_arr, table.moneyOnTable);
   }
   // now want to send the spectators the render event.
   for (const spectator of table.spectators) {
-    io.to(spectator.socket).emit('render', table.cardsOnTable, players_and_money,size_of_arr);
+    io.to(spectator.socket).emit('render', table.cardsOnTable, players_and_money,size_of_arr, table.moneyOnTable);
     }
 }
 

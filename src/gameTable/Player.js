@@ -4,11 +4,11 @@ import cards from '../assets/cards.png';
 import Timer from '../Animations/AnimatedTimer/Timer';
 import logo from '../assets/logopng.png'
 import genericPic from '../assets/generic_profile_pic.jpg'
-import aiPic from '../assets/gemini_profile_pic.jpeg'
+import aiPic from '../assets/chatGptIcon.webp'
 
 const Player = (props) => {
 
-    const profilePic = props.ai ? aiPic : genericPic
+    const profilePic = props.isAi ? aiPic : genericPic
     
     return (
         <div className={props.className}>

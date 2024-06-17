@@ -287,3 +287,9 @@
     width: 50px; /* Width of the logo */
     height: 50px; /* Height of the logo */
   }
+
+  .table-money {
+    position : relative;
+    left: 45%;
+    top : 25%;
+  }
