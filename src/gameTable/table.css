@@ -270,3 +270,26 @@
     margin-bottom: 1%;
     border-radius: 4%;
   }
+
+  .player-info {
+    display: flex;
+    align-items: center; /* Align items vertically centered */
+  }
+  
+  .money-logo {
+    margin-right: 2px; /* Space between the logo and the money text */
+    width: 20px; /* Width of the logo */
+    height: 20px; /* Height of the logo */
+  }
+
+  .profile-pic {
+    margin-bottom: 2px; /* Space between the logo and the money text */
+    width: 50px; /* Width of the logo */
+    height: 50px; /* Height of the logo */
+  }
+
+  .table-money {
+    position : relative;
+    left: 45%;
+    top : 25%;
+  }

@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import Player from './Player';
 import './table.css'; // Import the table CSS file
-import tableImg from '../assets/emptyTable.png'; // Import the image
 import dealer_img from '../assets/dealer.jpg';
 import CommunitiCards from './CommuinityCards.js';
 import AnimatedMessage from '../Animations/AnimatedMessage/AnimatedMessage.js';
 import Timer from '../Animations/AnimatedTimer/Timer.js';
+import logo from '../assets/logopng.png'
 
 // this io is the io from the index.html file on the public folder
 <script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
@@ -17,8 +17,10 @@ function Table(props) {
     /* The actual Animated Message */
     const [Message, setMessage] = useState(<></>);
 
+    const moneyOnTable = useRef(0);
+
   // Fetch data to get the players on the table from the server (after a user joined the table or left the table).
-  const fetchData = async (cards, players_with_money, size) => {
+  const fetchData = async (cards, players_with_money, size, money_on_table) => {
     if (cards) {
       props.setCommunityCards(cards);
     }
@@ -36,11 +38,12 @@ function Table(props) {
     props.setOtherPlayers(other_player);
     props.setPlayerMoney(player_money);
     props.setPlayersCards(hasCards);
+    moneyOnTable.current = money_on_table;
   };
 
   useEffect(() => {
-    const handleRender = (cards, players_with_money, size) => {
-      fetchData(cards, players_with_money, size);
+    const handleRender = (cards, players_with_money, size, money_on_table) => {
+      fetchData(cards, players_with_money, size, money_on_table);
     };
     props.socket.on('render', handleRender);
     return () => {
@@ -67,6 +70,9 @@ function Table(props) {
     <>
       <div className="table">
         <img className='dealer-img' src={dealer_img} />
+        <span className='table-money'>
+          <img src={logo} alt="Logo" className="money-logo" />money: {moneyOnTable.current}
+        </span>
         <div className="players">
           {props.otherPlayers.map((player, index) => (
             <span>
@@ -76,7 +82,8 @@ function Table(props) {
                 name={player} 
                 money={props.playerMoney[index]} // Pass the money state to the Player component
                 className={`player player${index + 1}`} 
-                timer={props.timers[index]} 
+                timer={props.timers[index]}
+                isAi={false} 
               />
             </span>
           ))}
