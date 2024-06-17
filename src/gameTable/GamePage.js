@@ -138,7 +138,9 @@ function GameTable(props) {
       console.log("Error leaving table");
     }
   };
-
+  const addBot = async () => {
+    props.socket.emit('addBot', props.table.name);
+  };
   return (
     <>
       <Modal isOpen={showModal} className="form form-container p-4 rounded modal-center">
@@ -209,6 +211,11 @@ function GameTable(props) {
             {satDown && (
               <button className="exit-button" onClick={standUpHandler} id="buttonBack">
                 Stand up
+              </button>
+            )}
+          {satDown && (
+                <button className="bot-button" onClick={addBot} id="buttonBack">
+                Add bot
               </button>
             )}
           </Col>

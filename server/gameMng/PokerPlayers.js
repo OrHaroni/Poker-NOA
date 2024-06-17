@@ -20,11 +20,12 @@ class Player {
   setAi(){
     this.isAi = true;
   }
-  Ai_action(table){
-    if(this.isAi){
-      ai_play(this.hand, table.cardsOnTable, this.moneyOnTable, table.moneyOnTable, table.moneyToCall);
+  async Ai_action(table) {
+    if (this.isAi) {
+      return await ai_play(this.hand, table.cardsOnTable, this.moneyOnTable, table.moneyOnTable, table.moneyToCall);
     }
   }
+
   // Method to remove chips from the player's stack
   removeChips(amount) {
     if (this.moneyOnTable >= amount) {
