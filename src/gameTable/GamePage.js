@@ -213,9 +213,12 @@ function GameTable(props) {
                 Stand up
               </button>
             )}
-            <button className="bot-button" onClick={addBot} id="buttonBack">
+          {satDown && (
+                <button className="bot-button" onClick={addBot} id="buttonBack">
                 Add bot
               </button>
+            )}
+
           </Col>
         </Row>
       </Container>
