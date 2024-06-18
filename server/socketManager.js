@@ -18,8 +18,13 @@ async function runPlayersActions(tableName) {
   if (table == null) {
     return false;
   }
-  for (const currentPlayer of table.playersWithCards) {
-    if(currentPlayer.isAi){
+  // index for the current player
+  let currentPlayerIndex = 0;
+  // index for the last player to act init to the last player in the list.
+  let lastPlayerToActIndex = table.playersWithCards.length - 1;
+      while (true) {
+      const currentPlayer = table.playersWithCards[currentPlayerIndex];
+      if(currentPlayer.isAi){
       let a = await currentPlayer.Ai_action(table);
       let actionAndMoney = a.split(' ');
       let action = actionAndMoney[0];
@@ -44,6 +49,9 @@ async function runPlayersActions(tableName) {
       switch (action) {
         case 'raise':
           raise(tableName, currentPlayer.nickname, money); // Raise the player
+          // Update the last player to act index because the player raised and we want to give the all the other players the option to act.
+          // The last player to act is the player before the current player.
+          lastPlayerToActIndex = (currentPlayerIndex - 1 + table.playersWithCards.length) % table.playersWithCards.length;
           break;
         case 'fold':
           fold(tableName, currentPlayer.nickname); // Fold the player
@@ -61,8 +69,15 @@ async function runPlayersActions(tableName) {
           console.error('Invalid player action:', playerAction);
           break;
       }
-      continue;
+      // if the player that just acted (currectPlayerIndex) is the last player to act, break the loop.
+      if(currentPlayerIndex === lastPlayerToActIndex) {
+        console.log("all players acted");
+        break;
+      }
+      // Move to the next player in a round robin way.
+      currentPlayerIndex = (currentPlayerIndex + 1) % table.playersWithCards.length;
     }
+    else {
     console.log("current player is: ", currentPlayer.nickname);
     if (currentPlayer.socket) {
       //Notify the current player that it's their turn
@@ -74,7 +89,7 @@ async function runPlayersActions(tableName) {
           const turnTimeout = setTimeout(() => {
             console.log('Player did not respond in time.- fold the player.');
             fold(tableName, currentPlayer.nickname); // Fold the player (or take other action as needed)
-            console.log('players left',table.playersWithCards.length);
+            // console.log('players left',table.playersWithCards.length);
             // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
             return resolve(null); // Resolve promise if only one player is left
           }, 20000); // 20 seconds
@@ -96,6 +111,9 @@ async function runPlayersActions(tableName) {
         switch (action) {
           case 'raise':
             raise(tableName, currentPlayer.nickname, raiseAmount); // Raise the player
+            // Update the last player to act index because the player raised and we want to give the all the other players the option to act.
+            // The last player to act is the player before the current player.
+            lastPlayerToActIndex = (currentPlayerIndex - 1 + table.playersWithCards.length) % table.playersWithCards.length;
             break;
           case 'fold':
             fold(tableName, currentPlayer.nickname); // Fold the player
@@ -113,8 +131,13 @@ async function runPlayersActions(tableName) {
             console.error('Invalid player action:', playerAction);
             break;
         }
-
-        
+      // if the player that just acted (currectPlayerIndex) is the last player to act, break the loop.
+      if(currentPlayerIndex === lastPlayerToActIndex) {
+        console.log("all players acted");
+        break;
+      }
+      // Move to the next player in a round robin way.
+      currentPlayerIndex = (currentPlayerIndex + 1) % table.playersWithCards.length;    
 
       } catch (err) {
         if (err.message === 'timeout') {
@@ -129,12 +152,13 @@ async function runPlayersActions(tableName) {
   }
 }
 }
+}
 
 sendTurnToAllPlayers = async (players, current_player) => {
   /* Emit to all players, who's turn is it */
   for(const player of players) {
     if(player.isAi) continue;
-    console.log("Emitting to Player ", player.nickname, " That turn is for: ", current_player.nickname);
+    // console.log("Emitting to Player ", player.nickname, " That turn is for: ", current_player.nickname);
     io.to(player.socket).emit('WhosTurn', current_player.nickname);
   }
 }
