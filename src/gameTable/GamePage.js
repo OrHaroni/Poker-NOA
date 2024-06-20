@@ -214,6 +214,9 @@ function GameTable(props) {
             ourPlayerCards={ourPlayerCards}
             setOurPlayerCards={setOurPlayerCards}
             setGameRunning={setGameRunning}
+            playerMoney={playerMoney}
+            setPlayerMoney={setPlayerMoney}
+
              />}
             {!satDown && (
               <button className="exit-button" onClick={sitDownHandler} id="buttonBack">

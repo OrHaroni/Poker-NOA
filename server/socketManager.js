@@ -32,6 +32,13 @@ async function runPlayersActions(tableName) {
       let actionAndMoney = a.split(' ');
       let action = actionAndMoney[0];
       let money = actionAndMoney[1];
+      if(action === 'raise') {
+        let minPlayerMoney = Math.min(...table.playersWithCards.map(player => player.moneyOnTable));
+        if(money > minPlayerMoney) {
+          action = 'raise';
+          money = minPlayerMoney;
+        }
+      }
       if (action === 'fold' && table.moneyToCall === 0) {
         action = 'check';
       }
