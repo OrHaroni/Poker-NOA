@@ -97,6 +97,22 @@ const addMoney = async (username, moneyAmountToAdd) => {
       }
 }
 
+const getStat = async (username) => {
+  try {
+    const user = await userSchema.findOne({ "username": username});
+    
+    const userStat = {"gamePlayed" : user.gamesPlayed, "numOfWins" : user.numberOfWins,
+                      "highestWin" : user.highestMoneyWon, "allTimeMoneyWon": user.allTimeMoneyWon,
+                      "moneyAmout" : user.moneyAmount, "dateCreated" : user.dateCreated};
+    
+    return userStat;
+  } catch (error) {
+    console.error('Couldnt find this user:', error);
+    throw error;
+  }
+
+}
+
 module.exports = {
-    getAllUsers, validateUser, addUser, addMoney
+    getAllUsers, validateUser, addUser, addMoney, getStat
   }

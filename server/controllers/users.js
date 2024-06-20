@@ -27,6 +27,7 @@ const validateUser = async (req, res) => {
 
 const addUser = async (req, res) => {
     const new_user = req.body;
+    new_user.dateCreated = new Date();
 
     let status = await userServices.addUser(new_user);
     //user taken
@@ -63,6 +64,19 @@ const addMoney = async (req, res) => {
     }
 }
 
+const getStat = async (req, res) => {
+    let username = req.params.username;
+
+    let userStat = await userServices.getStat(username);
+    if(userStat) {
+        res.status(200).json(userStat);
+    }
+    else {
+        res.status(404).json({});
+    }
+
+}
+
 module.exports = {
-    getAllUsers, validateUser, addUser, addMoney
+    getAllUsers, validateUser, addUser, addMoney, getStat
 }

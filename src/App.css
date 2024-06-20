@@ -220,6 +220,26 @@ body {
   background-color: #570e3b; /* Darker blue color on hover */
 }
 
+.statistics-btn {
+  margin-left: 0%;
+  margin-top: 0%;
+  margin-bottom: 0%;
+  margin-right: 0%;
+  background-color: #ff5733; /* Orange color for the button */
+  color: #ffffff; /* White text color */
+  border: none;
+  padding: 10px 20px; /* Adjust padding as needed */
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  font-weight: bolder;
+}
+.statistics-btn:hover {
+  background-color: #c0392b; /* Darker orange color on hover */
+}
+
+
 .exit-button:hover {
   background-color: #cc4738; /* Darker red color on hover */
 
