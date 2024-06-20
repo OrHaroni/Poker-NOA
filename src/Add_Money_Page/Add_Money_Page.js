@@ -3,6 +3,7 @@ import '../App.css';
 import Lobby, { sendSwal } from '../lobby/lobby.js';
 import { root } from '../index.js';
 import { addMoney } from '../serverCalls/Add_Money_page.js';
+import logo from '../assets/logo.png'
 
 function Add_Money_Page(props) {
 
@@ -56,6 +57,9 @@ function Add_Money_Page(props) {
           <button className="add-money" onClick={handleAddMoney}>
             Add Money
           </button>
+        </div>
+        <div className="image-container">
+            <img src={logo} alt="Dealer" className="logo-image" />
         </div>
       </div>
     </>

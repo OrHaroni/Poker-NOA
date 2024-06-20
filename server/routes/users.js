@@ -14,6 +14,9 @@ router.route('/register').post(userControllers.addUser);
 //Add money
 router.route('/addMoney').post(userControllers.addMoney);
 
+//Get the user's Statistics
+router.route('/getStat/:username').get(userControllers.getStat);
+
 
 
 module.exports = router;

@@ -9,7 +9,7 @@ import Add_Money_Page from '../Add_Money_Page/Add_Money_Page.js';
 import { GetAllTables } from '../serverCalls/lobby.js';
 import { enterTable } from '../serverCalls/lobby.js';
 import Add_Table_Page from '../Add_Table_Page/Add_Table_Page.js'
-import Player from '../gameTable/Player.js';
+import Statistics from '../Statistics/Statistics.js';
 <script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
 
 export function sendSwal(message, icon) {
@@ -93,6 +93,10 @@ function Lobby(props) {
     root.render(<Add_Table_Page user={props.user} socket={props.socket} />);
   }
 
+  const goToStat = () => {
+    root.render(<Statistics user={props.user} socket={props.socket} />);
+  }
+
   return (
     <>
       <div className="upper-bg">
@@ -111,6 +115,7 @@ function Lobby(props) {
             <button className="refresh-button" onClick={refresh}>Refresh</button>
             <button className="add-money" onClick={addMoney} id="addMoneyButtonHeader">Add Money</button>
             <button className="add-table-btn" onClick={addTable} id="addTableButton">Add Table</button>
+            <button className="statistics-btn" onClick={goToStat} id="addTableButton">Statistics</button>
           </header>
           <div className="lobby-table">
             <table>
@@ -119,7 +124,6 @@ function Lobby(props) {
                   <th>Table name</th>
                   <th>Created by</th>
                   <th>Number of players</th>
-                  <th>Money on the table</th>
                   <th>Small/Big blind</th>
                   <th>Join</th>
                   <th>Password</th>

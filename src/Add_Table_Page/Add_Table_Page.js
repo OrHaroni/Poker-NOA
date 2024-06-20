@@ -3,6 +3,7 @@ import '../App.css';
 import Lobby, { sendSwal } from '../lobby/lobby.js';
 import { root } from '../index.js';
 import { addTable } from '../serverCalls/Add_Table_Page.js';
+import logo from '../assets/logo.png';
 
 
 function Add_Money_Page(props) {
@@ -63,6 +64,9 @@ function Add_Money_Page(props) {
             </button>
           </div>
 
+        </div>
+        <div className="image-container">
+            <img src={logo} alt="Dealer" className="logo-image" />
         </div>
       </div>
     </>

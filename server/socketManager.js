@@ -227,6 +227,7 @@ endRound = async (table) => {
   /* Sending the winner to all players and spectators */
   sendWinner(table, winner);
 
+  updateStatisticsEndGame(table, winner);
 
   /* Wait 5 seconds for showing cards */
   await new Promise(resolve => setTimeout(resolve, 5000));
@@ -264,6 +265,8 @@ async function controlRound(tableName) {
   table.startRound();
   // Draw and send cards to all players
   sendCardsToAllPlayers(table);
+
+  updateStatisticsBeginGame(table);
 
   // start a round of players actions
   await runPlayersActions(tableName);
@@ -593,6 +596,38 @@ function sendCardsInEndOfGame(table) {
     {
       io.to(spectator.socket).emit('getAllPlayersCards', allPlayersCards);
     }
+}
+
+async function updateStatisticsEndGame(table, winner) {
+    const player = table.playersWithCards.find(player => player.nickname == winner.nickname);
+    if(!player.isAi) {
+      const nickname = winner.nickname;
+      const user = await allUsers.findOne({ nickname });
+      /* Add 1 win */
+      user.numberOfWins += 1;
+
+      /* Add money to the all winnings */
+      user.allTimeMoneyWon += table.moneyOnTable
+
+      /* Check if its the highest win, and if do, change it */
+      if (user.highestMoneyWon < table.moneyOnTable) {
+        user.highestMoneyWon = table.moneyOnTable;
+      }
+
+      user.save();
+    }
+}
+
+async function updateStatisticsBeginGame(table) {
+  for(const player of table.playersWithCards) {
+    if(!player.isAi) {
+      const nickname = player.nickname;
+      const user = await allUsers.findOne({ nickname });
+      /* Add 1 game that he played */
+      user.gamesPlayed += 1;
+      user.save();
+    }
+  }
 }
 
 module.exports = {

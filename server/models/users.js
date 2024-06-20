@@ -26,7 +26,7 @@ const userSchema = new mongoose.Schema({
     type: Number,
     default: 0
   },
-  lastTimeAddedMoney: Date, // Optional field
+  dateCreated: Date,
   biggestWin: {
     type: Number,
     default: 0
@@ -36,6 +36,14 @@ const userSchema = new mongoose.Schema({
     default: 0
   },
   gamesPlayed: {
+    type: Number,
+    default: 0
+  },
+  highestMoneyWon: {
+    type: Number,
+    default: 0
+  },
+  allTimeMoneyWon: {
     type: Number,
     default: 0
   }
