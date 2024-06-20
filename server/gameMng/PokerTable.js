@@ -81,15 +81,12 @@ class ActiveTable {
       /* Add player with 0 money to spectators */
       for(const player of this.players) {
         if((!player.isAi) && player.moneyOnTable <= 0) {
-          console.log("Add to spectators! player: ", player.nickname);
           this.spectators.push(player);
         }
       }
       /* Exclude all players with 0 money off the players */
       this.players.filter(player => player.moneyOnTable > 0);
       this.playersWithCards.filter(player => player.moneyOnTable > 0);
-      console.log("This is players: ", this.players);
-      console.log("This is players: ", this.playersWithCards);
     }
 
     /* Draws the flop 3 cards */

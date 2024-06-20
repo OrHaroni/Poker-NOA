@@ -4,6 +4,7 @@ import Card from './Card';
 import Timer from '../Animations/AnimatedTimer/Timer';
 import RangeInput from '../RangeInput/RangeInput';
 import logo from '../assets/logopng.png'
+import { sendSwal } from '../lobby/lobby';
 
 const OurPlayer = (props) => {
     // State to store the generated card
@@ -32,11 +33,15 @@ const OurPlayer = (props) => {
 
     /* Socket that tell us its our turn */
     props.socket.off('yourTurn').on('yourTurn', (moneyToCallArg) => {
+        setRaiseAmount(0);
         /* If its our turn then the game in running */
         props.setGameRunning(true)
         setMoneyToCall(moneyToCallArg);
         if (moneyToCallArg === 0) {
             setButtonsState(1); 
+        }
+        else if (moneyToCallArg === ourPlayerMoney) {
+            setButtonsState(3); 
         }
         else {
             setButtonsState(2);
@@ -106,6 +111,19 @@ useEffect(() => {
                     </button>
                 </span>;
                 break;
+                case 3:
+                /* In all-in */
+                temp_buttons =
+                <span className='action-container'>
+                    <Timer time={20}/>
+                    <button className="action-button" onClick={clickCall}>
+                        All-In {moneyToCall}
+                    </button>
+                    <button className="action-button" onClick={clickFold}>
+                        Fold
+                    </button>
+                </span>;
+                break;
             default:
                 temp_buttons = <span className='action-container'></span>;
                 break;
@@ -115,10 +133,17 @@ useEffect(() => {
     
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
+        if (Number(ourPlayerMoney) <= 0) {
+            sendSwal("Cant raise, dont have money", 'warning');
+            return;
+        }
+        if(Number(raiseAmount) === 0) {
+            sendSwal("Cant raise, 0", 'warning');
+            return;
+        }
         setButtonsState(0); 
         setOurPlayerMoney(Number(ourPlayerMoney) - Number(raiseAmount));
         // cover the option that user raises and our player need to call and choose to raise
-        //setMoneyToCall(0);
         setShowTimer(false);
         setShowMessage(false);
         props.socket.emit('playerAction',"raise", raiseAmount);
