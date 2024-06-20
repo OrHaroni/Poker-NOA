@@ -32,6 +32,8 @@ const OurPlayer = (props) => {
 
     /* Socket that tell us its our turn */
     props.socket.off('yourTurn').on('yourTurn', (moneyToCallArg) => {
+        /* If its our turn then the game in running */
+        props.setGameRunning(true)
         setMoneyToCall(moneyToCallArg);
         if (moneyToCallArg === 0) {
             setButtonsState(1); 

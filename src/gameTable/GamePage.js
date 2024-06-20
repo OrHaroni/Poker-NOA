@@ -31,6 +31,7 @@ function GameTable(props) {
   const [playersAi, setPlayersAi] = useState([]);
   const [mongoMoney, setMongoMoney] = useState(props.user.moneyAmount); // my money from mongo, meaning all my money in my user (not on table)
   const [ourPlayerCards, setOurPlayerCards] = useState(null);
+  const [gameRunning, setGameRunning] = useState(false);
 
 
 
@@ -70,6 +71,8 @@ function GameTable(props) {
 
   useEffect(() => {
     const handleWhosTurn = (current_player_nickname) => {
+      /* If we got turn then game is running */
+      setGameRunning(true);
       /* Updating the timers from the ohter players that its his turn*/
       const updatedTimers = otherPlayers.map(player =>
       player === current_player_nickname);
@@ -200,6 +203,7 @@ function GameTable(props) {
               setPlayersCards={setPlayersCards}
               playersAi={playersAi}
               setPlayersAi={setPlayersAi}
+              setGameRunning={setGameRunning}
             />
             {satDown && <OurPlayer
             name={props.user.nickname}
@@ -209,18 +213,19 @@ function GameTable(props) {
             tablename={props.table.name}
             ourPlayerCards={ourPlayerCards}
             setOurPlayerCards={setOurPlayerCards}
+            setGameRunning={setGameRunning}
              />}
             {!satDown && (
               <button className="exit-button" onClick={sitDownHandler} id="buttonBack">
                 Sit Down
               </button>
             )}
-            {satDown && (
+            {satDown && !gameRunning && (
               <button className="exit-button" onClick={standUpHandler} id="buttonBack">
                 Stand up
               </button>
             )}
-          {satDown && (
+          {satDown && !gameRunning && (
                 <button className="bot-button" onClick={addBot} id="buttonBack">
                 Add bot
               </button>

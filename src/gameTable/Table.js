@@ -71,6 +71,7 @@ function Table(props) {
     /* wait 5 seconds with all cards open */
     await new Promise(resolve => setTimeout(resolve, 5000));
 
+    props.setGameRunning(false)
     setOtherPlayersCards(<></>);
     setPlayersCardsList([[], [], [], []]);
 
