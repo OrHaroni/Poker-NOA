@@ -17,6 +17,12 @@ function Table(props) {
     /* The actual Animated Message */
     const [Message, setMessage] = useState(<></>);
 
+    /* State of all players cards */
+    const [playersCardsList, setPlayersCardsList] = useState([[], [], [], []])
+
+    /* State for specific player cards */
+    const [otherPlayersCards, setOtherPlayersCards] = useState(<></>);
+
     const moneyOnTable = useRef(0);
 
   // Fetch data to get the players on the table from the server (after a user joined the table or left the table).
@@ -62,12 +68,24 @@ function Table(props) {
     props.setTimers(updatedTimers);
     setMessage(new_message);
     setShowMessage(true);
+    /* wait 5 seconds with all cards open */
+    await new Promise(resolve => setTimeout(resolve, 5000));
+
+    props.setGameRunning(false)
+    setOtherPlayersCards(<></>);
+    setPlayersCardsList([[], [], [], []]);
+
     /* Wait 5 seconds to let also the timer to run till next round */
     await new Promise(resolve => setTimeout(resolve, 5000));
 
     setShowMessage(false);
 
   });
+
+    /* In the end of a round, getting all the cards */
+    props.socket.off('getAllPlayersCards').on('getAllPlayersCards', async (CardsList) => {
+      setPlayersCardsList(CardsList);
+    });
 
   return (
     <>
@@ -81,19 +99,23 @@ function Table(props) {
             <span>
               <Player 
                 key={index}
-                cards={props.playersCards[index]}
+                hasCards={props.playersCards[index]}
+                playerCards={playersCardsList[index + 1]}
                 name={player} 
                 money={props.playerMoney[index]} // Pass the money state to the Player component
                 className={`player player${index + 1}`} 
                 timer={props.timers[index]}
                 isAi={props.playersAi[index]} 
+                otherPlayersCards={otherPlayersCards}
+                setOtherPlayersCards={setOtherPlayersCards}
+                playersCardsList={playersCardsList}
               />
             </span>
           ))}
         </div>
         {showMessage ? 
         <>
-          <Timer time={5}/>
+          <Timer time={10}/>
           <AnimatedMessage message={Message}/>
         </> : null}
         <CommunitiCards cards={props.communityCards}/>

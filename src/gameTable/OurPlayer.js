@@ -32,6 +32,8 @@ const OurPlayer = (props) => {
 
     /* Socket that tell us its our turn */
     props.socket.off('yourTurn').on('yourTurn', (moneyToCallArg) => {
+        /* If its our turn then the game in running */
+        props.setGameRunning(true)
         setMoneyToCall(moneyToCallArg);
         if (moneyToCallArg === 0) {
             setButtonsState(1); 
@@ -154,14 +156,13 @@ useEffect(() => {
 
     /* Get cards from the Server and make it into html */
     props.socket.off('getCards').on('getCards', (cards) => {
-        initializeStates() ;
+        initializeStates();
         if(cards) {
         const card1 = GenericDeck.find(card => card.id === cards[0].id);
         const card2 = GenericDeck.find(card => card.id === cards[1].id);
         props.setOurPlayerCards([card1, card2]);
         const generated = 
             <div className="RandomCard">
-                {/* Render two random Card components */}
                 <div className="right">
                     <Card pic={card1.pic} suit={card1.suit} value={card1.value} />
                 </div>

@@ -126,13 +126,9 @@ mongoose.connect("mongodb://127.0.0.1:27017/poker-noa")
   .then(() => console.log('poker-noa server is connected to MongoDB'))
   .catch((e) => console.log(e));
 
-// app.use(express.static('../public'));
 
 
 app.use('/users', userRoutes);
 app.use('/tables', tableRoutes);
-// app.use('/api/Chats', chatRoutes);
-
-app.listen(process.env.PORT);
 
 server.listen(8080);

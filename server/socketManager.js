@@ -42,11 +42,14 @@ async function runPlayersActions(tableName) {
       if (action === 'raise' && money === table.moneyToCall) {
         action = 'call';
       }
-      if (action === 'raise' && money > currentPlayer.moneyToCall) {
+      if(action === 'raise' && money > currentPlayer.moneyOnTable) {
         action = 'call';
         money = currentPlayer.moneyToCall;
       }
-      if (action === 'call' && money < currentPlayer.moneyToCall) {
+      if(action === 'call' && money > currentPlayer.moneyOnTable) {
+        action = 'fold';
+      }
+      if(action === 'call' && money < table.moneyToCall) {
         action = 'fold';
       }
       switch (action) {
@@ -209,26 +212,25 @@ endRound = async (table) => {
   /* give the money to the winner */
   const winnerPlayer = table.playersWithCards.find(player => player.nickname === winner.nickname);
   winnerPlayer.addChips(Number(table.moneyOnTable));
+  
+  /* Send all the cards to all players and spectators to show them for 5 seconds */
+  sendCardsInEndOfGame(table);
+  
+  /* Sending the winner to all players and spectators */
+  sendWinner(table, winner);
 
 
-  /* Send to all users the winner */
-  for (const player of table.players) {
-    io.to(player.socket).emit('getWinner', winner.nickname);
-  }
-
-  /* Send to all users the winner */
-  for (const spectator of table.spectators) {
-    io.to(spectator.socket).emit('getWinner', winner.nickname);
-  }
-
-  /* Clearing all parameter in table locally */
-  table.endRound();
+  /* Wait 5 seconds for showing cards */
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
   /* Send all players null (empty hand) */
   for (const player of table.players) {
     /* Send them to trash the hand */
     io.to(player.socket).emit('getCards', null);
   }
+
+  /* Clearing all parameter in table locally */
+  table.endRound();
 
   /* Render to make clear state in every player */
   renderAll(table);
@@ -399,7 +401,7 @@ addBot = async (tableName) => {
   //   /* Find the table in the DB */
   const table = await Table.findOne({ name: tableName });
 
-  const username = "bot" + curr_bot_name;
+  const username = "Gemini" + curr_bot_name;
   curr_bot_name += 1;
   console.log("bot name is: ", username);
   /* Add one to the number of players on the table */
@@ -409,7 +411,7 @@ addBot = async (tableName) => {
   /* Add the bot into the local DB for this table */
   const local_table = tablesList.find(table => table.name === tableName);
 
-  const playerToJoin = new Player(username, null, null, true);
+  const playerToJoin = new Player(username, null, null);
   playerToJoin.moneyOnTable = 1000;
   playerToJoin.isAi = true;
 
@@ -462,8 +464,18 @@ standUp = async (tableName, nickname) => {
   local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== nickname);
   local_table.spectators.push(playerToRemove);
 
-  // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
-  renderAll(local_table);
+    /* If the last player is bot so delete it also */
+    if (local_table.players.length === 1 && local_table.players[0].isAi) {
+      const botPlayer = local_table.players[0]
+      local_table.players = local_table.players.filter(player => player.nickname !== botPlayer.nickname);
+      local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== botPlayer.nickname);
+
+      table.numOfPlayers -= 1;
+      await table.save();
+    }
+
+    // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
+    renderAll(local_table);
 };
 
 
@@ -529,6 +541,46 @@ call = async (tableName, nickname) => {
     return;
   }
 };
+
+function sendWinner(table, winner) {
+/* Send to all users the winner */
+for(const player of table.players)
+  {
+    io.to(player.socket).emit('getWinner', winner.nickname);
+  }
+
+/* Send to all users the winner */
+for(const spectator of table.spectators)
+  {
+    io.to(spectator.socket).emit('getWinner', winner.nickname);
+  }
+};
+
+function sendCardsInEndOfGame(table) {
+  /* null for each players so that if he folded, wont send cards */
+  let allPlayersCards= [];
+
+  for(const player of table.players) {
+    /* Checking if the player has cards in the end of the game */
+    if(player.hand != []) {
+      allPlayersCards.push(player.hand)
+    }
+    else {
+      allPlayersCards.push([]);
+    }
+  }
+
+  console.log("Going to send this list to all: ", allPlayersCards);
+  for(const player of table.players)
+    {
+      io.to(player.socket).emit('getAllPlayersCards', allPlayersCards);
+    }
+
+  for(const spectator of table.spectators)
+    {
+      io.to(spectator.socket).emit('getAllPlayersCards', allPlayersCards);
+    }
+}
 
 module.exports = {
   initialize,
