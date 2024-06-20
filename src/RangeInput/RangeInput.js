@@ -1,5 +1,5 @@
 // RangeInput.js
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import './RangeInput.css';
 
 const RangeInput = ({ min, max, step, initialValue, onValueChange }) => {
@@ -13,12 +13,13 @@ const RangeInput = ({ min, max, step, initialValue, onValueChange }) => {
     }
   };
 
+
   return (
     <span className="range-input-container">
       <input
         type="range"
         className="range-input"
-        min={min}
+        min={min+step}
         max={max}
         step={step}
         value={value}

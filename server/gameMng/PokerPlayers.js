@@ -10,6 +10,7 @@ class Player {
     this.socket = socketId; // So we can comunicate with this user
     this.fullSocket = socket;
     this.isAi = false;
+    this.RoundMoney = 0;
   }
 
   // Method to add chips to the player's stack
@@ -28,8 +29,8 @@ class Player {
 
   // Method to remove chips from the player's stack
   removeChips(amount) {
-    if (this.moneyOnTable >= amount) {
-      this.moneyOnTable -= amount;
+    if (Number(this.moneyOnTable) - Number(this.RoundMoney)>= Number(amount)) {
+      this.moneyOnTable =Number(this.moneyOnTable) - Number(amount);
       return true; // Chips removed successfully
     } else {
       return false; // Insufficient chips
