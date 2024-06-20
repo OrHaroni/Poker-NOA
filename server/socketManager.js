@@ -84,25 +84,20 @@ async function runPlayersActions(tableName) {
       }
       // if the player that just acted (currectPlayerIndex) is the last player to act, break the loop.
       if (currentPlayerIndex === lastPlayerToActIndex) {
-        console.log("all players acted");
         break;
       }
       // Move to the next player in a round robin way.
       currentPlayerIndex = (currentPlayerIndex + 1) % table.playersWithCards.length;
     }
     else {
-      console.log("current player is: ", currentPlayer.nickname);
       if (currentPlayer.socket) {
         //Notify the current player that it's their turn
-        console.log("Emitting to Player ", currentPlayer.nickname, "table.moneyToCall is" , table.moneyToCall,"currentPlayer.RoundMoney is", currentPlayer.RoundMoney );
-        console.log("Server send to client in yourturn: ", table.moneyToCall - currentPlayer.RoundMoney);
         io.to(currentPlayer.socket).emit('yourTurn', table.moneyToCall - currentPlayer.RoundMoney);
         sendTurnToAllPlayers(table.playersWithCards, currentPlayer);
         try {
           // Await the player's action or timeout
           const playerAction = await new Promise((resolve, reject) => {
             const turnTimeout = setTimeout(() => {
-              console.log('Player did not respond in time.- fold the player.');
               fold(tableName, currentPlayer.nickname); // Fold the player (or take other action as needed)
               // console.log('players left',table.playersWithCards.length);
               // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
@@ -148,7 +143,6 @@ async function runPlayersActions(tableName) {
           }
           // if the player that just acted (currectPlayerIndex) is the last player to act, break the loop.
           if (currentPlayerIndex === lastPlayerToActIndex) {
-            console.log("all players acted");
             break;
           }
           // Move to the next player in a round robin way.
@@ -157,7 +151,6 @@ async function runPlayersActions(tableName) {
         } catch (err) {
           if (err.message === 'timeout') {
             // Handle the timeout scenario (e.g., skip turn, default action, etc.)
-            console.log('Handling player timeout...');
           } else {
             // Handle other potential errors
             console.error('An error occurred:', err);
@@ -512,7 +505,6 @@ raise = async (tableName, nickname, amout) => {
   /* updating table, both all money and the money to call */
   table.moneyToCall = player.RoundMoney
   table.moneyOnTable = Number(table.moneyOnTable) + Number(amout);
-  console.log("In the end of raise, player: ", nickname, "has money: ", player.moneyOnTable);
   return;
 };
 
@@ -551,7 +543,6 @@ call = async (tableName, nickname) => {
   if (player.removeChips(sub)) {
     table.moneyOnTable += sub
     player.RoundMoney += sub;
-    console.log("In the end of call, player: ", nickname, "has money: ", player.moneyOnTable);
     return;
   }
 };

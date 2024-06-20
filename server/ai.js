@@ -33,7 +33,6 @@ async function ai_play(hand, cardsOnTable, myMoney, moneyOnTable, moneyToCall) {
         const result = await model.generateContent(prompt);
         const response = await result.response;
         const text = response.text();
-        console.log("in function" , text);
         return text;
 }
 
