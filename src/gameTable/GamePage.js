@@ -70,6 +70,16 @@ function GameTable(props) {
   }, [props.socket]);
 
   useEffect(() => {
+    const handleRender = () => {
+      setSatDown(false);
+    };
+    props.socket.on('standUp', handleRender);
+    return () => {
+      props.socket.off('standUp', handleRender);
+    };
+  }, [props.socket]);
+
+  useEffect(() => {
     const handleWhosTurn = (current_player_nickname) => {
       /* If we got turn then game is running */
       setGameRunning(true);

@@ -80,13 +80,20 @@ class ActiveTable {
     kickPlayersWithoutMoney() {
       /* Add player with 0 money to spectators */
       for(const player of this.players) {
+        if(player.moneyOnTable <= 0) {
+          player.fullSocket.emit('standUp');
+        }
+      }
+      
+      for(const player of this.players) {
         if((!player.isAi) && player.moneyOnTable <= 0) {
           this.spectators.push(player);
         }
       }
       /* Exclude all players with 0 money off the players */
-      this.players.filter(player => player.moneyOnTable > 0);
-      this.playersWithCards.filter(player => player.moneyOnTable > 0);
+      this.players = this.players.filter(player => player.moneyOnTable > 0);
+      this.playersWithCards = this.playersWithCards.filter(player => player.moneyOnTable > 0);
+  
     }
 
     /* Draws the flop 3 cards */
