@@ -212,17 +212,16 @@ endRound = async (table) => {
   /* give the money to the winner */
   const winnerPlayer = table.playersWithCards.find(player => player.nickname === winner.nickname);
   winnerPlayer.addChips(Number(table.moneyOnTable));
+  
+  /* Send all the cards to all players and spectators to show them for 5 seconds */
+  sendCardsInEndOfGame(table);
+  
+  /* Sending the winner to all players and spectators */
+  sendWinner(table, winner);
 
 
-  /* Send to all users the winner */
-  for (const player of table.players) {
-    io.to(player.socket).emit('getWinner', winner.nickname);
-  }
-
-  /* Send to all users the winner */
-  for (const spectator of table.spectators) {
-    io.to(spectator.socket).emit('getWinner', winner.nickname);
-  }
+  /* Wait 5 seconds for showing cards */
+  await new Promise(resolve => setTimeout(resolve, 5000));
 
   /* Clearing all parameter in table locally */
   table.endRound();
@@ -544,6 +543,46 @@ call = async (tableName, nickname) => {
     return;
   }
 };
+
+function sendWinner(table, winner) {
+/* Send to all users the winner */
+for(const player of table.players)
+  {
+    io.to(player.socket).emit('getWinner', winner.nickname);
+  }
+
+/* Send to all users the winner */
+for(const spectator of table.spectators)
+  {
+    io.to(spectator.socket).emit('getWinner', winner.nickname);
+  }
+};
+
+function sendCardsInEndOfGame(table) {
+  /* null for each players so that if he folded, wont send cards */
+  let allPlayersCards= [];
+
+  for(const player of table.players) {
+    /* Checking if the player has cards in the end of the game */
+    if(player.hand != []) {
+      allPlayersCards.push(player.hand)
+    }
+    else {
+      allPlayersCards.push([]);
+    }
+  }
+
+  console.log("Going to send this list to all: ", allPlayersCards);
+  for(const player of table.players)
+    {
+      io.to(player.socket).emit('getAllPlayersCards', allPlayersCards);
+    }
+
+  for(const spectator of table.spectators)
+    {
+      io.to(spectator.socket).emit('getAllPlayersCards', allPlayersCards);
+    }
+}
 
 module.exports = {
   initialize,
