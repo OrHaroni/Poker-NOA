@@ -88,6 +88,7 @@ async function runPlayersActions(tableName) {
       if (currentPlayer.socket) {
         //Notify the current player that it's their turn
         console.log("Emitting to Player ", currentPlayer.nickname, "table.moneyToCall is" , table.moneyToCall,"currentPlayer.RoundMoney is", currentPlayer.RoundMoney );
+        console.log("Server send to client in yourturn: ", table.moneyToCall - currentPlayer.RoundMoney);
         io.to(currentPlayer.socket).emit('yourTurn', table.moneyToCall - currentPlayer.RoundMoney);
         sendTurnToAllPlayers(table.playersWithCards, currentPlayer);
         try {
@@ -494,12 +495,17 @@ raise = async (tableName, nickname, amout) => {
   }
   // get the player
   const player = table.playersWithCards.find(player => player.nickname === nickname);
-  player.RoundMoney += amout;
-  console.log("player is", nickname , "player round money is " , player.RoundMoney)
-  // get the player's chips
+
+  /* Removing players chips*/
   player.removeChips(amout);
-  table.moneyToCall = Number(amout);
+
+  /* Updating the number of money on this round for this player */
+  player.RoundMoney += Number(amout);
+
+  /* updating table, both all money and the money to call */
+  table.moneyToCall = player.RoundMoney
   table.moneyOnTable = Number(table.moneyOnTable) + Number(amout);
+  console.log("In the end of raise, player: ", nickname, "has money: ", player.moneyOnTable);
   return;
 };
 
@@ -532,12 +538,13 @@ call = async (tableName, nickname) => {
   }
   // get the player
   const player = table.playersWithCards.find(player => player.nickname === nickname);
+  
   // get the player's chips
-  console.log("plyer is " , player.nickname , "money to call is " , table.moneyToCall , "player round money is " , player.RoundMoney)
-  if (player.removeChips(table.moneyToCall - player.RoundMoney)) {
-    table.moneyOnTable = Number(table.moneyToCall) + Number(table.moneyOnTable) - Number(player.RoundMoney);
-    player.RoundMoney += table.moneyToCall + player.RoundMoney;
-    console.log("player is", nickname , "player round money is " , player.RoundMoney)
+  sub = Number(table.moneyToCall) - Number(player.RoundMoney);
+  if (player.removeChips(sub)) {
+    table.moneyOnTable += sub
+    player.RoundMoney += sub;
+    console.log("In the end of call, player: ", nickname, "has money: ", player.moneyOnTable);
     return;
   }
 };
@@ -570,7 +577,6 @@ function sendCardsInEndOfGame(table) {
     }
   }
 
-  console.log("Going to send this list to all: ", allPlayersCards);
   for(const player of table.players)
     {
       io.to(player.socket).emit('getAllPlayersCards', allPlayersCards);

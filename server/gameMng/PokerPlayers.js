@@ -29,12 +29,8 @@ class Player {
 
   // Method to remove chips from the player's stack
   removeChips(amount) {
-    if (Number(this.moneyOnTable) - Number(this.RoundMoney)>= Number(amount)) {
-      this.moneyOnTable =Number(this.moneyOnTable) - Number(amount);
+      this.moneyOnTable = Number(this.moneyOnTable) - Number(amount);
       return true; // Chips removed successfully
-    } else {
-      return false; // Insufficient chips
-    }
   }
 
   // Method to receive cards into the player's hand
