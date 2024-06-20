@@ -223,16 +223,14 @@ endRound = async (table) => {
   /* Wait 5 seconds for showing cards */
   await new Promise(resolve => setTimeout(resolve, 5000));
 
-  /* Clearing all parameter in table locally */
-  table.endRound();
-
   /* Send all players null (empty hand) */
   for (const player of table.players) {
     /* Send them to trash the hand */
     io.to(player.socket).emit('getCards', null);
   }
 
-  /* If there is bot player and his money is 0, kick him */
+  /* Clearing all parameter in table locally */
+  table.endRound();
 
   /* Render to make clear state in every player */
   renderAll(table);
