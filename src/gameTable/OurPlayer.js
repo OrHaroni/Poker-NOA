@@ -29,7 +29,15 @@ const OurPlayer = (props) => {
 
     // State to keep track of our money
     const [ourPlayerMoney, setOurPlayerMoney] = useState(Number(props.money));
-    
+
+    // State to keep track of the minimum player money
+    const [minPlayerMoney, setMinPlayerMoney] = useState(Math.min(...props.playerMoney));
+
+    useEffect(() => {
+        // Update minPlayerMoney whenever props.playerMoney changes
+        setMinPlayerMoney(Math.min(...props.playerMoney));
+    }, [props.playerMoney]);
+
 
     /* Socket that tell us its our turn */
     props.socket.off('yourTurn').on('yourTurn', (moneyToCallArg) => {
@@ -75,7 +83,7 @@ useEffect(() => {
                         </button>
                         <RangeInput
                             min={moneyToCall}
-                            max={ourPlayerMoney}
+                            max={Math.min(ourPlayerMoney, minPlayerMoney)}
                             step={50}
                             initialValue={raiseAmount}
                             onValueChange={setRaiseAmount} /* Empty */
@@ -97,7 +105,7 @@ useEffect(() => {
                         </button>
                         <RangeInput
                             min={moneyToCall}
-                            max={ourPlayerMoney}
+                            max={Math.min(ourPlayerMoney, minPlayerMoney)}
                             step={50}
                             initialValue={raiseAmount}
                             onValueChange={setRaiseAmount}
@@ -129,7 +137,7 @@ useEffect(() => {
                 break;
         }
         setButtons(temp_buttons);
-      }, [buttonsState, moneyToCall, raiseAmount]);
+      }, [buttonsState, moneyToCall, raiseAmount,minPlayerMoney]);
     
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
