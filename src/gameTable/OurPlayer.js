@@ -67,7 +67,7 @@ useEffect(() => {
                             Raise
                         </button>
                         <RangeInput
-                            min={0}
+                            min={moneyToCall}
                             max={ourPlayerMoney}
                             step={50}
                             initialValue={raiseAmount}
@@ -89,7 +89,7 @@ useEffect(() => {
                             Raise
                         </button>
                         <RangeInput
-                            min={0}
+                            min={moneyToCall}
                             max={ourPlayerMoney}
                             step={50}
                             initialValue={raiseAmount}
@@ -114,9 +114,9 @@ useEffect(() => {
     //clickRaise function to send 'raise' event to the server
     const clickRaise = () => {
         setButtonsState(0); 
-        setOurPlayerMoney(Number(ourPlayerMoney )- Number(raiseAmount));
+        setOurPlayerMoney(Number(ourPlayerMoney) - Number(raiseAmount));
         // cover the option that user raises and our player need to call and choose to raise
-        setMoneyToCall(0);
+        //setMoneyToCall(0);
         setShowTimer(false);
         setShowMessage(false);
         props.socket.emit('playerAction',"raise", raiseAmount);
@@ -242,7 +242,7 @@ useEffect(() => {
             <div className="our-player">
                 {props.name}<br/>
             <img src={logo} alt="Logo" className="money-logo" />
-                {ourPlayerMoney}$
+                {Number(ourPlayerMoney)}$
                 <div className='our-cards'>{generatedCards}</div>
                 <span className='action-container'>
                     {buttons}
