@@ -3,6 +3,7 @@ import '../App.css';
 import Lobby, { sendSwal } from '../lobby/lobby.js';
 import { root } from '../index.js';
 import { getStat } from '../serverCalls/Statistics.js';
+import logo from '../assets/logo.png';
 
 function Statistics(props) {
 
@@ -56,7 +57,7 @@ function Statistics(props) {
             <div className="mb-5">
               <div className="form-group">
                 <label htmlFor="tableName" className="form-label">
-                  Games Played: {statistics.gamePlayed}
+                  Rounds Played: {statistics.gamePlayed}
                 </label>
             </div>
             <br></br>
@@ -89,8 +90,17 @@ function Statistics(props) {
                   Date Created: {statistics.dateCreated}
                 </label>
             </div>
+            <br></br>
+            <div className="form-group">
+                <label htmlFor="tableName" className="form-label">
+                  Win/Lose Ratio: {(statistics.numOfWins/statistics.gamePlayed)*100}%
+                </label>
+            </div>
             </div>
           </div>
+          <div className="image-container">
+            <img src={logo} alt="Dealer" className="logo-image" />
+        </div>
         </div>
       </>
     );

@@ -124,7 +124,6 @@ function Lobby(props) {
                   <th>Table name</th>
                   <th>Created by</th>
                   <th>Number of players</th>
-                  <th>Money on the table</th>
                   <th>Small/Big blind</th>
                   <th>Join</th>
                   <th>Password</th>
