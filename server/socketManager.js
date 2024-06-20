@@ -151,12 +151,12 @@ sendCardsToAllPlayers = async (table) => {
 };
 
 renderAll = async (table) => {
-  let size_of_arr = table.players.length * 3;
+  let size_of_arr = table.players.length * 4;
   let players_and_money = [];
 
   for (const player of table.players) {
     const has_cards = player.hand.length > 0;
-    players_and_money.push(player.nickname, player.moneyOnTable, has_cards);
+    players_and_money.push(player.nickname, player.moneyOnTable, has_cards, player.isAi);
   }
 
   for (const player of table.players) {

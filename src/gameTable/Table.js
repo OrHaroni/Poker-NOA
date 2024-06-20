@@ -27,17 +27,20 @@ function Table(props) {
     let other_player = [];
     let player_money = [];
     let hasCards = [];
-    for (let i = 0; i < size; i += 3) {
+    let isAi = [];
+    for (let i = 0; i < size; i += 4) {
       if (players_with_money[i] === props.user.nickname) {
         continue;
       }
       other_player.push(players_with_money[i]);
       player_money.push(players_with_money[i + 1]);
       hasCards.push(players_with_money[i+2]);
+      isAi.push(players_with_money[i+3]);
     }
     props.setOtherPlayers(other_player);
     props.setPlayerMoney(player_money);
     props.setPlayersCards(hasCards);
+    props.setPlayersAi(isAi);
     moneyOnTable.current = money_on_table;
   };
 
@@ -83,7 +86,7 @@ function Table(props) {
                 money={props.playerMoney[index]} // Pass the money state to the Player component
                 className={`player player${index + 1}`} 
                 timer={props.timers[index]}
-                isAi={false} 
+                isAi={props.playersAi[index]} 
               />
             </span>
           ))}

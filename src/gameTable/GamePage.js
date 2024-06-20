@@ -28,8 +28,10 @@ function GameTable(props) {
   const [timers, setTimers] = useState([false, false, false, false]);
   const [moneyAmount, setMoneyAmount] = useState(0); // Use state for moneyAmount
   const [playersCards, setPlayersCards] = useState([]);
+  const [playersAi, setPlayersAi] = useState([]);
   const [mongoMoney, setMongoMoney] = useState(props.user.moneyAmount); // my money from mongo, meaning all my money in my user (not on table)
   const [ourPlayerCards, setOurPlayerCards] = useState(null);
+
 
 
   const fetchData = async (cards, players_with_money, size) => {
@@ -39,7 +41,8 @@ function GameTable(props) {
     let other_player = [];
     let player_money = [];
     let hasCards = [];
-    for (let i = 0; i < size; i += 3) {
+    let isAi = [];
+    for (let i = 0; i < size; i += 4) {
       if (players_with_money[i] === props.user.nickname) {
         setMoneyAmount(players_with_money[i + 1]); // Update the state
         continue;
@@ -47,10 +50,12 @@ function GameTable(props) {
       other_player.push(players_with_money[i]);
       player_money.push(players_with_money[i + 1]);
       hasCards.push(players_with_money[i+2]);
+      isAi.push(players_with_money[i+3]);
     }
     setOtherPlayers(other_player);
     setPlayerMoney(player_money);
     setPlayersCards(hasCards);
+    setPlayersAi(isAi);
   };
 
   useEffect(() => {
@@ -193,6 +198,8 @@ function GameTable(props) {
               setTimers={setTimers}
               playersCards={playersCards}
               setPlayersCards={setPlayersCards}
+              playersAi={playersAi}
+              setPlayersAi={setPlayersAi}
             />
             {satDown && <OurPlayer
             name={props.user.nickname}
