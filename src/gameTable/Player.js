@@ -3,7 +3,7 @@ import './table.css';
 import cards from '../assets/cards.png';
 import Timer from '../Animations/AnimatedTimer/Timer';
 import logo from '../assets/logopng.png'
-import genericPic from '../assets/generic_profile_pic.jpg'
+import genericPic from '../assets/generic_profile_pic.png'
 import aiPic from '../assets/chatGptIcon.webp'
 import Card from '../gameTable/Card.js'
 
