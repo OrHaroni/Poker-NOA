@@ -5,6 +5,7 @@ import Timer from '../Animations/AnimatedTimer/Timer';
 import RangeInput from '../RangeInput/RangeInput';
 import logo from '../assets/logopng.png'
 import { sendSwal } from '../lobby/lobby';
+import generic_pic from '../assets/generic_profile_pic.png'
 
 const OurPlayer = (props) => {
     // State to store the generated card
@@ -274,6 +275,7 @@ useEffect(() => {
     return (
         <>
             <div className="our-player">
+            <img className='profile-pic' src={generic_pic}/>
                 {props.name}<br/>
             <img src={logo} alt="Logo" className="money-logo" />
                 {Number(ourPlayerMoney)}$
