@@ -88,10 +88,17 @@ const Player = (props) => {
 
     return (
         <div className={props.className}>
-            <img className='profile-pic' src={profilePic}/>
             {props.timer ? <Timer time={20}/> : null}
-            <span className="player-name">{props.name}</span><br/>
-            <img src={logo} alt="Logo" className="money-logo" />{props.money}$
+            <div className='profile-container'>
+                <img className='profile-pic' src={profilePic} alt='Profile Pic'/>
+                <div>
+                    {props.name}
+                    <br/>
+                    <img src={logo} alt="Logo" className="money-logo" />
+                    { props.money ?
+                    Number(props.money) : null}$
+                </div>
+            </div>
             {(!props.hasCards) ?
                 null :
                 props.playerCards.length === 0 ?

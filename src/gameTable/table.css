@@ -51,24 +51,32 @@
     position: absolute;
     left: 13%;
     top: 12%;
+    color: azure;
+    font-weight: bold;
 }
 
 .player2 {
     position: absolute;
     left: 77%;
-    top: 12%
+    top: 12%;
+    color: azure;
+    font-weight: bold;
 }
 
 .player3 {
     position: absolute;
     left: 77%;
     top: 53%;
+    color: azure;
+    font-weight: bold;
 }
 
 .player4 {
     position: absolute;
     top:53%;
     left: 13%;
+    color: azure;
+    font-weight: bold;
 }
 
 .our-player {
@@ -309,6 +317,7 @@
     margin-bottom: 2px; /* Space between the logo and the money text */
     width: 50px; /* Width of the logo */
     height: 50px; /* Height of the logo */
+    margin-right: 5px; /* Adds some space between the image and the text */
   }
 
   .table-money {
@@ -325,3 +334,8 @@
     width: 60px; /* Width of the logo */
     height: 60px; /* Height of the logo */
   }
+
+  .profile-container {
+    display: flex;
+    align-items: center; /* Aligns items vertically in the center */
+}
