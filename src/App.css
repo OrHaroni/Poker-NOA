@@ -24,6 +24,7 @@ body {
   height: calc(100vh - 100px);
 
 }
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 .form-container {
   display: flex;
@@ -31,13 +32,19 @@ body {
   align-items: center;
   justify-content: center;
   width: 50%; /* Adjusted width to take up half of the container */
-  height: 55%;
+  height: 70%;
   background-color: #126936; /* Green color */
   background: linear-gradient(to right, #126936, #154113); /* Gradient from Darker green to Green */
-  height: 70%;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 50px 20px; /* Adjusted margin to add space */
+  font-family: 'Roboto', sans-serif;
+  color: white; /* Added white text color */
+}
+
+.form-container-lobby {
+  padding-top: 1%;
+  justify-content:start;
 }
 
 .form-container-extention {
@@ -48,13 +55,13 @@ body {
 .reg-head {
   font-size: 44px;
   position: relative;
-  color: #000; /* Black text color */
+  color: white; /* Changed text color to white */
 }
 
 .form-label {
   font-weight: bold;
   margin-bottom: 0.5rem;
-  color: #000; /* Black text color */
+  color: white; /* Changed text color to white */
 }
 
 .form-control {
