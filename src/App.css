@@ -24,6 +24,7 @@ body {
   height: calc(100vh - 100px);
 
 }
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
 
 .form-container {
   display: flex;
@@ -31,13 +32,19 @@ body {
   align-items: center;
   justify-content: center;
   width: 50%; /* Adjusted width to take up half of the container */
-  height: 55%;
+  height: 70%;
   background-color: #126936; /* Green color */
   background: linear-gradient(to right, #126936, #154113); /* Gradient from Darker green to Green */
-  height: 70%;
   border-radius: 8px;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
   margin: 50px 20px; /* Adjusted margin to add space */
+  font-family: 'Roboto', sans-serif;
+  color: white; /* Added white text color */
+}
+
+.form-container-lobby {
+  padding-top: 1%;
+  justify-content:start;
 }
 
 .form-container-extention {
@@ -48,13 +55,13 @@ body {
 .reg-head {
   font-size: 44px;
   position: relative;
-  color: #000; /* Black text color */
+  color: white; /* Changed text color to white */
 }
 
 .form-label {
   font-weight: bold;
   margin-bottom: 0.5rem;
-  color: #000; /* Black text color */
+  color: white; /* Changed text color to white */
 }
 
 .form-control {
@@ -73,18 +80,23 @@ body {
 
 
 .our-btn {
-  background-color: #a81a18; /* Dark green button color */
-  color: #000; /* Black text color */
-  padding: 10px 15px;
+  margin-left: 1%;
+  margin-top: 1%;
+  margin-bottom:1%;
+  background-color: #ff6347; /* Red color for the button */
+  color: #000000; /* White text color */
   border: none;
+  padding: 10px 20px; /* Adjust padding as needed */
+  font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
-  font-size: 16px;
-  margin-bottom: 0.5rem;
+  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  font-weight: bolder;
 }
 
 .our-btn:hover {
-  background-color: #138a6e; /* Slightly darker green on hover */
+  background-color: #cc4738; /* Darker red color on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .text-secondary {
@@ -102,6 +114,7 @@ body {
 
 .btn-link:hover {
   color: #14232b; /* Slightly darker blue on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .image-container {
@@ -174,12 +187,13 @@ body {
   font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
   font-weight: bolder;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */ 
 }
 .money-amount:hover {
   background-color: #3555b8; /* Darker blue color on hover */
-
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .add-money {
@@ -194,11 +208,13 @@ body {
   font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
   font-weight: bolder;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */
 }
 .add-money:hover {
   background-color: #3555b8; /* Darker blue color on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .refresh-button {
@@ -213,11 +229,13 @@ body {
   font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
   font-weight: bolder;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */
 }
 .refresh-button:hover {
   background-color: #570e3b; /* Darker blue color on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .statistics-btn {
@@ -232,17 +250,19 @@ body {
   font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
   font-weight: bolder;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */
 }
 .statistics-btn:hover {
   background-color: #c0392b; /* Darker orange color on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 
 .exit-button:hover {
   background-color: #cc4738; /* Darker red color on hover */
-
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .add-table-btn {
@@ -253,12 +273,14 @@ body {
   border-radius: 5px; /* Add rounded corners */
   font-size: 16px; /* Adjust font size */
   cursor: pointer; /* Show pointer cursor on hover */
-  transition: background-color 0.3s ease; /* Smooth background color transition */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
   font-weight: bolder;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */
 }
 
 .add-table-btn:hover {
   background-color: #A0522D; /* Slight change in brown on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .required {
@@ -282,10 +304,15 @@ body {
 
 .tr-button:hover {
   background-color: #0056b3;
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .tr-button:focus {
   outline: none;
+}
+
+.login-buttons {
+  width: 31%;
 }
 
 .login-btn {
@@ -300,12 +327,33 @@ body {
   font-size: 16px;
   border-radius: 4px;
   cursor: pointer;
-  transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
   font-weight: bolder;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */
 }
 
 .login-btn:hover {
   background-color: #3555b8; /* Darker blue color on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
+
+.leaderboard-btn {
+  margin: 0; /* Simplified margin setting */
+  background-color: #FFD700; /* Gold color for the button */
+  color: #ffffff; /* White text color */
+  border: none;
+  padding: 10px 20px; /* Adjust padding as needed */
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
+  font-weight: bolder;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */
+}
+
+.leaderboard-btn:hover {
+  background-color: #FFC700; /* Slightly lighter gold color on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 .number-btn{
   position: relative;

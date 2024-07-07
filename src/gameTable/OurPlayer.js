@@ -275,10 +275,15 @@ useEffect(() => {
     return (
         <>
             <div className="our-player">
-            <img className='profile-pic' src={generic_pic}/>
-                {props.name}<br/>
-            <img src={logo} alt="Logo" className="money-logo" />
-                {Number(ourPlayerMoney)}$
+            <div className='profile-container'>
+                <img className='profile-pic' src={generic_pic} alt='Profile Pic'/>
+                <div>
+                    {props.name}
+                    <br/>
+                    <img src={logo} alt="Logo" className="money-logo" />
+                    {Number(ourPlayerMoney)}$
+                </div>
+            </div>
                 <div className='our-cards'>{generatedCards}</div>
                 <span className='action-container'>
                     {buttons}

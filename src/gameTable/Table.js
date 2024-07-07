@@ -84,7 +84,12 @@ function Table(props) {
 
     /* In the end of a round, getting all the cards */
     props.socket.off('getAllPlayersCards').on('getAllPlayersCards', async (CardsList) => {
-      setPlayersCardsList(CardsList);
+      /* Getting all the cards, exluding ours and updating */
+      const ourCard0 = props.ourPlayerCards[0];
+      const ourCard1 = props.ourPlayerCards[1];
+      const cards_list_without_our_player = CardsList.filter(pair => pair[0].id != ourCard0.id && pair[1].id != ourCard1.id);
+      console.log("new list without our cards: ", cards_list_without_our_player);
+      setPlayersCardsList(cards_list_without_our_player);
     });
 
   return (
@@ -92,7 +97,7 @@ function Table(props) {
       <div className="table">
         <img className='dealer-img' src={dealer_img} />
         <span className='table-money'>
-          <img src={logo} alt="Logo" className="money-logo" />money: {moneyOnTable.current}
+          <img src={logo} alt="Logo" className="table-chips" />money: {moneyOnTable.current}
         </span>
         <div className="players">
           {props.otherPlayers.map((player, index) => (
@@ -100,7 +105,7 @@ function Table(props) {
               <Player 
                 key={index}
                 hasCards={props.playersCards[index]}
-                playerCards={playersCardsList[index + 1]}
+                playerCards={playersCardsList[index]}
                 name={player} 
                 money={props.playerMoney[index]} // Pass the money state to the Player component
                 className={`player player${index + 1}`} 

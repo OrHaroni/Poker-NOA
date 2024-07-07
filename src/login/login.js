@@ -8,6 +8,8 @@ import Lobby from '../lobby/lobby.js';
 import { sendSwal } from '../lobby/lobby.js';
 import { userExistsWithPassword } from '../serverCalls/login.js'
 import { io } from 'socket.io-client';
+import Leaderboard from '../Leaderboard/Leaderboard.js';
+
 // Initialize the socket connection
 // this io is the io from the index.html file on the public folder
 <script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
@@ -47,6 +49,10 @@ function Login() {
   const ClickRegister = () => {
     root.render(<Register />);
   };
+
+  const ClickLeaderboard = () => {
+    root.render(<Leaderboard />);
+  };
   const ClickExit = () => {
     //Exit the window
   };
@@ -85,14 +91,23 @@ function Login() {
               ref={password}
             />
           </div>
-          <button
-            onClick={ClickLogin}
-            id="buttonLogin"
-            type="submit"
-            className="login-btn"
-          >
-            Login
-          </button>
+          <span className='login-buttons'>
+              <button
+                onClick={ClickLogin}
+                id="buttonLogin"
+                type="submit"
+                className="login-btn"
+              >
+                Login
+              </button>
+              <button
+                onClick={ClickLeaderboard}
+                id="buttonLeaderboard"
+                className="leaderboard-btn"
+              >
+                Hall Of Fame
+              </button>
+          </span>
           <button
             onClick={ClickRegister}
             id="not-reg"

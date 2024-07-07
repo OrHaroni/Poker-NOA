@@ -36,7 +36,7 @@ const isTableNameTaken = async (name) => {
 const validateTable = async (tableName, password, username) => {
     try {
       // finding the table by the name and password, and adding the username to the spectators list 
-      let table = await tableSchema.findOne({ "tableName": tableName, "password": password });
+      let table = await tableSchema.findOne({ "name": tableName, "password": password });
       return table;
       } catch (error) {
         console.error('Error validation table:', error);

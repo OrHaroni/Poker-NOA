@@ -70,7 +70,6 @@ function Lobby(props) {
       <td>{table.name}</td>
       <td>{table.createdBy}</td>
       <td>{table.numOfPlayers}/{5}</td>
-      <td>{table.moneyAmountOnTable}</td>
       <td>{table.smallBlind}/{table.bigBlind}</td>
       <td>
         <button className="tr-button" onClick={(event) => GenericClickTable(table.name, event)}>Join table</button>
@@ -108,7 +107,7 @@ function Lobby(props) {
         </button>
       </div>
       <div className="background d-flex justify-content-center align-items-center">
-        <div className="form-container form-container-extention p-4 rounded in-Login">
+        <div className="form-container form-container-extention p-4 rounded in-Login form-container-lobby">
           <header className="reg-head text-center mb-4">
             Tables lobby
             <br></br>
