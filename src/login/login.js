@@ -91,22 +91,22 @@ function Login() {
               ref={password}
             />
           </div>
-          <span>
-            <button
-              onClick={ClickLogin}
-              id="buttonLogin"
-              type="submit"
-              className="login-btn"
-            >
-              Login
-            </button>
-            <button
-              onClick={ClickLeaderboard}
-              id="buttonLeaderboard"
-              className="leaderboard-btn"
-            >
-              Hall Of Fame
-            </button>
+          <span className='login-buttons'>
+              <button
+                onClick={ClickLogin}
+                id="buttonLogin"
+                type="submit"
+                className="login-btn"
+              >
+                Login
+              </button>
+              <button
+                onClick={ClickLeaderboard}
+                id="buttonLeaderboard"
+                className="leaderboard-btn"
+              >
+                Hall Of Fame
+              </button>
           </span>
           <button
             onClick={ClickRegister}

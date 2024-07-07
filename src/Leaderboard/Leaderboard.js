@@ -15,7 +15,8 @@ function Leaderboard(props) {
   const fetchUsers = async () => {
     try {
       const usersData = await GetAllUser();
-      console.log(usersData);
+      // Sort acsending due to all time money won
+      usersData.sort((p1, p2) => p2.allTimeMoneyWon - p1.allTimeMoneyWon);
       setUsers(usersData);
     } catch (error) {
       console.error('Error fetching users:', error);
@@ -31,9 +32,8 @@ function Leaderboard(props) {
       <div className="upper-bg">
         <button className='exit-button' onClick={ClickBack}>Back</button>
       </div>
-      
       <div className="background">
-        <div className="form-container">
+        <div className="form-container form-container-lobby">
           <h2 className="reg-head">Leaderboard</h2>
           <table className="lobby-table">
             <thead>
