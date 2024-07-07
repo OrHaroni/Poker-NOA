@@ -214,6 +214,7 @@ function GameTable(props) {
               playersAi={playersAi}
               setPlayersAi={setPlayersAi}
               setGameRunning={setGameRunning}
+              ourPlayerCards={ourPlayerCards}
             />
             {satDown && <OurPlayer
             name={props.user.nickname}
