@@ -14,7 +14,7 @@ export async function userExistsWithPassword(username, password) {
 }
 
 export async function GetAllUser(){
-    const res = await fetch('http://localhost:8080/users', {
+    const res = await fetch('http://localhost:8080/users/getall', {
         'method' : 'get',
         "headers" : {
           'Content-Type': 'application/json',

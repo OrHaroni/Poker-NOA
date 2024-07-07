@@ -314,6 +314,25 @@ body {
 .login-btn:hover {
   background-color: #3555b8; /* Darker blue color on hover */
 }
+
+.leaderboard-btn {
+  margin: 0; /* Simplified margin setting */
+  background-color: #FFD700; /* Gold color for the button */
+  color: #ffffff; /* White text color */
+  border: none;
+  padding: 10px 20px; /* Adjust padding as needed */
+  font-size: 16px;
+  border-radius: 4px;
+  cursor: pointer;
+  transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
+  font-weight: bolder;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */
+}
+
+.leaderboard-btn:hover {
+  background-color: #FFC700; /* Slightly lighter gold color on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
+}
 .number-btn{
   position: relative;
   width: 108%;
