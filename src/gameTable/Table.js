@@ -87,7 +87,12 @@ function Table(props) {
       /* Getting all the cards, exluding ours and updating */
       const ourCard0 = props.ourPlayerCards[0];
       const ourCard1 = props.ourPlayerCards[1];
-      const cards_list_without_our_player = CardsList.filter(pair => pair[0].id != ourCard0.id && pair[1].id != ourCard1.id);
+      const cards_list_without_our_player = CardsList.filter(pair => {
+        if (pair.length > 0) {
+            return pair[0].id !== ourCard0.id && pair[1].id !== ourCard1.id;
+        }
+        return true; // Include pairs with length 0
+    });
       console.log("new list without our cards: ", cards_list_without_our_player);
       setPlayersCardsList(cards_list_without_our_player);
     });
