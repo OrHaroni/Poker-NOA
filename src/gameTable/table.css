@@ -188,12 +188,13 @@
     font-size: 16px;
     border-radius: 4px;
     cursor: pointer;
-    transition: background-color 0.3s ease; /* Smooth transition for hover effect */
+    transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
     font-weight: bolder;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */
   }
   .bot-button:hover {
     background-color: #17833b; /* Darker red color on hover */
-  
+    transform: scale(1.05); /* Slight zoom effect on hover */
   }
 .dealer-img {
     border-radius: 50%;
