@@ -69,7 +69,7 @@ const Player = (props) => {
         useEffect(() => {
             console.log("this is props.playerCards: ", props.playerCards);
             const temp_var = props.playerCards;
-            if(temp_var.length > 0) {
+            if (temp_var && temp_var.length > 0) {
                 console.log("In the if!");
                 const card1 = GenericDeck.find(card => card.id === temp_var[0].id);
                 const card2 = GenericDeck.find(card => card.id === temp_var[1].id);
@@ -84,7 +84,8 @@ const Player = (props) => {
                 </>;
                 props.setOtherPlayersCards(generatedCards)
             }
-        }, [props.playersCardsList])
+        }, [props.playersCardsList]);
+        
 
     return (
         <div className={props.className}>
