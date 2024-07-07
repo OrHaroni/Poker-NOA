@@ -65,10 +65,13 @@ async function runPlayersActions(tableName) {
           // Update the last player to act index because the player raised and we want to give the all the other players the option to act.
           // The last player to act is the player before the current player.
           lastPlayerToActIndex = (currentPlayerIndex - 1 + table.playersWithCards.length) % table.playersWithCards.length;
+          // print the next player to act :
+          console.log('next player to act:', table.playersWithCards[(currentPlayerIndex + 1) % table.playersWithCards.length].nickname);
           break;
         case 'fold':
           fold(tableName, currentPlayer.nickname); // Fold the player
           // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
+          console.log('players left',table.playersWithCards.length);
           if (table.playersWithCards.length === 1) return;
           break;
         case 'call':
@@ -239,6 +242,7 @@ endRound = async (table) => {
 
   /* Wait 5 seconds to start the next round */
   await new Promise(resolve => setTimeout(resolve, 5000));
+  table.tableIsRunning = false;
 
 }
 // function to check if the round is over because there is only one player with cards.
@@ -255,7 +259,10 @@ async function controlRound(tableName) {
   // get the table
   const table = tablesList.find(table => table.name === tableName);
   // change all the players to players with cards to be able to play. 
+  table.tableIsRunning = true;
   table.startRound();
+  // print the length of playersOnTable
+
   // Draw and send cards to all players
   sendCardsToAllPlayers(table);
 
@@ -393,9 +400,7 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
 
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
-  while (local_table.players.length >= 2) { // && game isnt running
-    //call control round function
-
+  while (local_table.players.length >= 2 && !local_table.tableIsRunning) { // && game isnt running
     await controlRound(tableName);
   }
 };
@@ -427,8 +432,7 @@ addBot = async (tableName) => {
 
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
-  while (local_table.players.length >= 2) { // && game isnt running
-    //call control round function
+  while (local_table.players.length >= 2 && !local_table.tableIsRunning) { // && game isnt running
     await controlRound(tableName);
   }
 };
