@@ -97,7 +97,7 @@ function Table(props) {
       <div className="table">
         <img className='dealer-img' src={dealer_img} />
         <span className='table-money'>
-          <img src={logo} alt="Logo" className="money-logo" />money: {moneyOnTable.current}
+          <img src={logo} alt="Logo" className="table-chips" />money: {moneyOnTable.current}
         </span>
         <div className="players">
           {props.otherPlayers.map((player, index) => (

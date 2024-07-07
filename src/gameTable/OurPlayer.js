@@ -277,7 +277,7 @@ useEffect(() => {
             <div className="our-player">
             <img className='profile-pic' src={generic_pic}/>
                 {props.name}<br/>
-            <img src={logo} alt="Logo" className="money-logo" />
+                <img src={logo} alt="Logo" className="money-logo" />
                 {Number(ourPlayerMoney)}$
                 <div className='our-cards'>{generatedCards}</div>
                 <span className='action-container'>
