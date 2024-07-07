@@ -84,18 +84,24 @@ function Table(props) {
 
     /* In the end of a round, getting all the cards */
     props.socket.off('getAllPlayersCards').on('getAllPlayersCards', async (CardsList) => {
+      console.log("in the getAllPlayerCards1!");
       /* Getting all the cards, exluding ours and updating */
-      const ourCard0 = props.ourPlayerCards[0];
-      const ourCard1 = props.ourPlayerCards[1];
-      const cards_list_without_our_player = CardsList.filter(pair => {
-        if (pair.length > 0) {
-            return pair[0].id !== ourCard0.id && pair[1].id !== ourCard1.id;
-        }
-        return true; // Include pairs with length 0
-    });
-      console.log("new list without our cards: ", cards_list_without_our_player);
-      setPlayersCardsList(cards_list_without_our_player);
-    });
+      console.log(props.ourPlayerCards);
+      if (props.ourPlayerCards != null) {
+        const ourCard0 = props.ourPlayerCards[0];
+        const ourCard1 = props.ourPlayerCards[1];
+        console.log("in the getAllPlayerCards1!");
+        const cards_list_without_our_player = CardsList.filter(pair => {
+          if (pair.length > 0) {
+              return pair[0].id !== ourCard0.id && pair[1].id !== ourCard1.id;
+          }
+          return true; // Include pairs with length 0
+      });
+      console.log("in the getAllPlayerCards1!");
+        console.log("new list without our cards: ", cards_list_without_our_player);
+        setPlayersCardsList(cards_list_without_our_player);
+      }
+});
 
   return (
     <>
