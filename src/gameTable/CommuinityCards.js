@@ -63,15 +63,21 @@ function CommunitiCards({cards}){
     return(
         <>
        <div className="cards-on-table">
+            {console.log(cards)}
+            {console.log(cards.length)}
             {[...Array(5)].map((_, index) => (
+                cards && cards.length !== 0 && cards[index] ? (
                 <div key={index} className={`card-slot card-slot${index + 1}`} id={`slot${index + 1}`}>
-                    {cards && cards.length !== 0 && cards[index] ? (
-                        <Card pic={GenericDeck[cards[index].id - 1].pic}
-                              suit={GenericDeck[cards[index].id - 1].suit}
-                              value={GenericDeck[cards[index].id - 1].value} />
-                    ) : <div className="empty-card-slot"></div>}
-                </div>
-            ))}
+                <Card
+                    pic={GenericDeck[cards[index].id - 1].pic}
+                    suit={GenericDeck[cards[index].id - 1].suit}
+                    value={GenericDeck[cards[index].id - 1].value}
+                />
+            </div>
+            ) : (
+            <div className="empty-card-slot"></div>
+            )
+))}
         </div>
         </>
     );
