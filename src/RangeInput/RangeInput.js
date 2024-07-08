@@ -19,7 +19,7 @@ const RangeInput = ({ min, max, step, initialValue, onValueChange }) => {
       <input
         type="range"
         className="range-input"
-        min={min+step}
+        min={min}
         max={max}
         step={step}
         value={value}
