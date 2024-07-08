@@ -1,4 +1,5 @@
 const userServices = require('../services/users.js');
+const connectedUsers = require('../models/connectedUsers.js');
 
 const getAllUsers = async (req, res) => {
     const users = await userServices.getAllUsers();
@@ -13,7 +14,12 @@ const getAllUsers = async (req, res) => {
 const validateUser = async (req, res) => {
     const username = req.body.username;
     const password = req.body.password
-
+    // Check if the user is connectedUser with his username
+    const connectedUser = await connectedUsers.findOne({ username: username });
+    if (connectedUser) {
+        res.status(405).json({});
+        return;
+    }
     const user = await userServices.validateUser(username, password);
     //if we have user and password
     if(user) {
