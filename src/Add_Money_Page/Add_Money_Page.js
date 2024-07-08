@@ -39,10 +39,10 @@ function Add_Money_Page(props) {
       </div>
       <div className="background d-flex justify-content-center align-items-center">
         <div className="form-container form-container-extention p-4 rounded">
-        <header className="reg-head text-center mb-4">This is your current amount of money: {props.user.moneyAmount}</header>
-          <header className="reg-head text-center mb-4">Add Money</header>
+        <header className="reg-head text-center mb-4">This is your current money amount: {props.user.moneyAmount}$</header> <br/>
+          <header className="reg-head text-center mb-4">Please Choose The Amount You Want To Add </header><br/>
           <div className="form-group">
-            <label htmlFor="moneyAmount" className="form-label">
+            <label htmlFor="moneyAmount" className="form-label amm">
               Amount:
             </label>
             <select className="form-control" id="moneyAmount" ref={moneyAmountRef}>

@@ -96,8 +96,8 @@ const Player = (props) => {
                     {props.name}
                     <br/>
                     <img src={logo} alt="Logo" className="money-logo" />
-                    { props.money ?
-                    Number(props.money) : null}$
+                    { props.money !== null && props.money !== undefined ?
+                    Number(props.money) : null }$
                 </div>
             </div>
             {(!props.hasCards) ?

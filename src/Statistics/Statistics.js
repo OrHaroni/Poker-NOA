@@ -49,8 +49,8 @@ function Statistics(props) {
           <button className='exit-button' onClick={ClickBack}>Back</button>
         </div>
         <div className="background d-flex justify-content-center align-items-center">
-          <div className="form-container form-container-extention p-4 rounded">
-            <header className="reg-head text-center mb-4">{props.user.nickname}'s Statistics</header>
+          <div className="form-container form-container-extention p-4 rounded stat-text">
+            <header className="reg-head text-center mb-4 stat-head">{props.user.nickname}'s Statistics</header>
             <br></br>
             <br></br>
             <br></br>
@@ -93,7 +93,7 @@ function Statistics(props) {
             <br></br>
             <div className="form-group">
                 <label htmlFor="tableName" className="form-label">
-                  Win/Lose Ratio: {(statistics.numOfWins/statistics.gamePlayed)*100}%
+                Win/Lose Ratio: {(statistics.numOfWins / statistics.gamePlayed * 100).toFixed(2)}%
                 </label>
             </div>
             </div>

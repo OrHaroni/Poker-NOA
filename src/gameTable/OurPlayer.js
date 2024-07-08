@@ -293,7 +293,7 @@ useEffect(() => {
             <div className="our-player">
             <div className='profile-container'>
                 <img className='profile-pic' src={generic_pic} alt='Profile Pic'/>
-                <div>
+                <div className='out-text'>
                     {props.name}
                     <br/>
                     <img src={logo} alt="Logo" className="money-logo" />
