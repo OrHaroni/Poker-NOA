@@ -5,6 +5,7 @@
 This project is a multiplayer online poker game implemented in JavaScript, utilizing Node.js, Express.js, socket.io for real-time communication, and a client-side interface built with React.
 Also, players can add an AI bot connected to Gemini API to play against.
 
+
 ## Features
 
 - **Login and Registration:** Users can create accounts and log into the system.
@@ -16,6 +17,7 @@ Also, players can add an AI bot connected to Gemini API to play against.
 - **Spectator Mode:** Allows users to watch ongoing games without participating.
 - **Add Bot Player**: Human players can add an AI bot player to a table.
   The AI bot player interacts with the server as normal player, using the API
+
 
 ## Bot Player Integration
 
@@ -29,12 +31,14 @@ allowing human players to play against intelligent AI opponents.
 
 The project is structured with a client-server architecture:
 
+
 ## Server
 
 Located in the `server` folder, it uses Express.js with two main routes:
 - `/users`: Handles user authentication and registration.
 - `/table`: Manages table operations such as creating, joining, and spectating games.
 Real-time communication (during an active game) with clients is managed through socket.io in the server. 
+
 
 ## Client
 
@@ -46,6 +50,7 @@ Includes various pages:
 - **Add Table:** Allows users to create new tables for gameplay.
 - **Statistics:** Provides the connected player's statistics.
 - **GamePage:** Implements the Texas Hold'em game interface, this is where the game is played.
+
 
 ## Libraries to Install
 
@@ -83,6 +88,7 @@ To run the client:
 4. Start the client application: `npm start`.
 
 Ensure both server and client are running concurrently for full functionality.
+
 
 ## Technologies Used
 
