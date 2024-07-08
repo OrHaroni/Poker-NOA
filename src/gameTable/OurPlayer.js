@@ -46,7 +46,10 @@ const OurPlayer = (props) => {
         /* If its our turn then the game in running */
         props.setGameRunning(true)
         setMoneyToCall(moneyToCallArg);
-        if (moneyToCallArg === 0) {
+        if (ourPlayerMoney === 0) {
+            setButtonsState(4); /* Only check and fold */
+        }
+        else if (moneyToCallArg === 0) {
             setButtonsState(1); 
         }
         else if (moneyToCallArg === ourPlayerMoney) {
@@ -132,6 +135,19 @@ useEffect(() => {
                         Fold
                     </button>
                 </span>;
+                break;
+                case 4:
+                /* Only check and fold */
+                temp_buttons =
+                    <span className='action-container'>
+                        <Timer time={20}/>
+                        <button className="action-button" onClick={clickCheck}>
+                            Check
+                        </button>
+                        <button className="action-button" onClick={clickFold}>
+                            Fold
+                        </button>
+                    </span>;
                 break;
             default:
                 temp_buttons = <span className='action-container'></span>;

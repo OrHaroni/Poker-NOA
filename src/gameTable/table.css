@@ -115,8 +115,6 @@
 /* Action Button Styles */
 .action-button {
     position: relative;
-    top: 5%;
-    margin-left: 1%;
     margin-top: 1%;
     margin-bottom: 1%;
     background-color: #ff6347;
@@ -128,6 +126,12 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     font-weight: bolder;
+    text-align: center;
+    white-space: nowrap;
+    width: 58%;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
 }
 
 .exit-button:hover {
@@ -296,7 +300,6 @@
 .raise-with-range {
     display: flex;
     gap: 5px; /* Adjust the gap between items as needed */
-    margin-left: 1%;
     margin-top: 1%;
     margin-bottom: 1%;
     border-radius: 4%;
