@@ -234,8 +234,8 @@ endRound = async (table) => {
 
   updateStatisticsEndGame(table, winner);
 
-  /* Wait 5 seconds for showing cards */
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  /* Wait 3 seconds for showing cards */
+  await new Promise(resolve => setTimeout(resolve, 3000));
 
   /* Send all players null (empty hand) */
   for (const player of table.players) {
@@ -259,8 +259,8 @@ endRound = async (table) => {
   /* Render to make clear state in every player */
   renderAll(table);
 
-  /* Wait 5 seconds to start the next round */
-  await new Promise(resolve => setTimeout(resolve, 5000));
+  /* Wait 3 seconds to start the next round */
+  await new Promise(resolve => setTimeout(resolve, 3000));
   table.tableIsRunning = false;
 
 }
