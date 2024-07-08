@@ -15,27 +15,28 @@ Also, players can add an AI bot connected to Gemini API to play against.
 - **Gameplay:** Implements classic Texas Hold'em rules for gameplay.
 - **Spectator Mode:** Allows users to watch ongoing games without participating.
 - **Add Bot Player**: Human players can add an AI bot player to a table.
-  - The AI bot player interacts with the server as normal player, using the API
+  The AI bot player interacts with the server as normal player, using the API
 
 ## Bot Player Integration
 
 ### Gemini API Integration
 
-The poker game features an AI bot player connected to the Gemini API, allowing human players to play against intelligent AI opponents.
+The poker game features an AI bot player connected to the Gemini API,
+allowing human players to play against intelligent AI opponents.
 
 
 ## Project Structure
 
 The project is structured with a client-server architecture:
 
-### Server
+## Server
 
 Located in the `server` folder, it uses Express.js with two main routes:
 - `/users`: Handles user authentication and registration.
 - `/table`: Manages table operations such as creating, joining, and spectating games.
 Real-time communication (during an active game) with clients is managed through socket.io in the server. 
 
-### Client
+## Client
 
 Includes various pages:
 - **Login:** Allows users to log into their accounts.
@@ -46,7 +47,7 @@ Includes various pages:
 - **Statistics:** Provides the connected player's statistics.
 - **GamePage:** Implements the Texas Hold'em game interface, this is where the game is played.
 
-- ### Libraries to Install
+## Libraries to Install
 
 1. **Express.js**: Fast, unopinionated, minimalist web framework for Node.js.
    - Install: `npm install express`
