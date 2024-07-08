@@ -104,6 +104,11 @@ function Table(props) {
 
   return (
     <>
+        {showMessage ? 
+        <>
+          <Timer time={10}/>
+          <AnimatedMessage message={Message}/>
+        </> : null}
       <div className="table">
         <img className='dealer-img' src={dealer_img} />
         <span className='table-money'>
@@ -128,11 +133,6 @@ function Table(props) {
             </span>
           ))}
         </div>
-        {showMessage ? 
-        <>
-          <Timer time={10}/>
-          <AnimatedMessage message={Message}/>
-        </> : null}
         <CommunitiCards cards={props.communityCards}/>
       </div>      
     </>

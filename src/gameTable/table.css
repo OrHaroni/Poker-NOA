@@ -115,8 +115,6 @@
 /* Action Button Styles */
 .action-button {
     position: relative;
-    top: 5%;
-    margin-left: 1%;
     margin-top: 1%;
     margin-bottom: 1%;
     background-color: #ff6347;
@@ -128,6 +126,12 @@
     cursor: pointer;
     transition: background-color 0.3s ease;
     font-weight: bolder;
+    text-align: center;
+    white-space: nowrap;
+    width: 58%;
+    display: flex;
+    justify-content: center; 
+    align-items: center; 
 }
 
 .exit-button:hover {
@@ -210,9 +214,9 @@
     border-radius: 50%;
     position: absolute;
     left: 42%;
-    height: 30%;
+    height: 28%;
     width: 13%;
-    top: -10%;
+    top: -5%;
     border: 2px solid black; /* Add a 2px black border */
     /* Add any additional styling as needed */
 }
@@ -283,9 +287,7 @@
 }
 
 .empty-card-slot {
-    width: 69px;
-    height: 100px;
-    background-color: rgba(93,183,121,255);
+    display: none;
 }
 
 .player-name {
@@ -296,7 +298,6 @@
 .raise-with-range {
     display: flex;
     gap: 5px; /* Adjust the gap between items as needed */
-    margin-left: 1%;
     margin-top: 1%;
     margin-bottom: 1%;
     border-radius: 4%;
