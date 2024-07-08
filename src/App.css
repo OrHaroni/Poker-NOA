@@ -64,13 +64,6 @@ body {
   color: white; /* Changed text color to white */
 }
 
-.form-control {
-  width: 80%;
-  padding: 8px;
-  margin-bottom: 1rem;
-  border: 1px solid #63b8a7; /* Dark green border color */
-  border-radius: 4px;
-}
 .confirm-password-container {
   position: relative;
   width: 28%; /* Adjusted width for confirm password container */
@@ -142,7 +135,7 @@ body {
 }
 .lobby-table {
   width: 100%;
-  font-size: 150%;
+  font-size: 110%;
   margin: 0 auto; /* Center the container horizontally */
 }
 
@@ -361,14 +354,14 @@ body {
   width: 108%;
 }
 .stat-text {
-  font-size: 160%;
+  font-size: 120%;
   font-weight:normal;
   text-align: center;
   font-family: 'Arial', sans-serif; /* You can change this to any font you prefer */
 }
 
 .stat-head {
-  font-size: 210%;
+  font-size: 180%;
   font-family: 'Georgia', serif; /* You can change this to any font you prefer */
   text-decoration: underline;
   font-weight: bold;
@@ -376,7 +369,7 @@ body {
 }
 .not-reg{
   position: relative;
-  font-size: 130%;
+  font-size: 110%;
   top:1%;
   color: rgb(154, 125, 189);
   font-family: 'Georgia', serif; /* You can change this to any font you prefer */
