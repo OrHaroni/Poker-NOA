@@ -103,7 +103,7 @@ function Lobby(props) {
           Back
         </button>
         <button className="money-amount">
-          Current money: {props.user.moneyAmount}
+          Current money: {props.user.moneyAmount}$
         </button>
       </div>
       <div className="background d-flex justify-content-center align-items-center">

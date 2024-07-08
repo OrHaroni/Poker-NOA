@@ -142,6 +142,7 @@ body {
 }
 .lobby-table {
   width: 100%;
+  font-size: 150%;
   margin: 0 auto; /* Center the container horizontally */
 }
 
@@ -358,4 +359,39 @@ body {
 .number-btn{
   position: relative;
   width: 108%;
+}
+.stat-text {
+  font-size: 160%;
+  font-weight:normal;
+  text-align: center;
+  font-family: 'Arial', sans-serif; /* You can change this to any font you prefer */
+}
+
+.stat-head {
+  font-size: 210%;
+  font-family: 'Georgia', serif; /* You can change this to any font you prefer */
+  text-decoration: underline;
+  font-weight: bold;
+  text-align: center;
+}
+.not-reg{
+  position: relative;
+  font-size: 130%;
+  top:1%;
+  color: rgb(154, 125, 189);
+  font-family: 'Georgia', serif; /* You can change this to any font you prefer */
+  text-decoration: underline;
+  font-weight:normal;
+  text-align: center;
+}
+.amm{
+  font-size: 30px;
+}
+.form-control {
+  font-size: 140%; /* Increase font size */
+  color: #000000;
+  padding: 10px; /* Increase padding */
+  width: 100%; /* Optional: Make the width 100% of the container */
+  max-width: 400px; /* Optional: Set a max-width */
+  box-sizing: border-box; /* Include padding in the element's total width and height */
 }

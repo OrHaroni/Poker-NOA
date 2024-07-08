@@ -115,7 +115,7 @@ function Login() {
             onClick={ClickRegister}
             id="not-reg"
             type="submit"
-            className="btn btn-link btn-block text-secondary"
+            className="btn btn-link btn-block text-secondary not-reg"
           >
             Not registered? Click here to sign up
           </button>
