@@ -22,11 +22,17 @@ async function runPlayersActions(tableName) {
   let currentPlayerIndex = 0;
   // index for the last player to act init to the last player in the list.
   let lastPlayerToActIndex = table.playersWithCards.length - 1;
+  let lastPlayerToActNickname = table.playersWithCards[lastPlayerToActIndex].nickname;
   for (let i = 0; i < table.playersWithCards.length; i++) {
     table.playersWithCards[i].RoundMoney = 0;
   }
   while (true) {
+    // print the playerswithcards array with the nicknames of the players and the order of the players.
     const currentPlayer = table.playersWithCards[currentPlayerIndex];
+    /* Saving the next player nickname to act , the array of playersWithCards may change because of fold! (and so the Indices ) */
+    /*  Move to the next player in a round robin way. */
+    let nextPlayerIndexToAct = (currentPlayerIndex + 1) % table.playersWithCards.length;
+    let nextPlayerNickname = table.playersWithCards[nextPlayerIndexToAct].nickname;
     if (currentPlayer.isAi) {
       let a = await currentPlayer.Ai_action(table);
       let actionAndMoney = a.split(' ');
@@ -65,6 +71,9 @@ async function runPlayersActions(tableName) {
           // Update the last player to act index because the player raised and we want to give the all the other players the option to act.
           // The last player to act is the player before the current player.
           lastPlayerToActIndex = (currentPlayerIndex - 1 + table.playersWithCards.length) % table.playersWithCards.length;
+          /* Saving the last player to act nickname , the array of players with cards may change because of fold ! (and so the the indices) */
+          lastPlayerToActNickname = table.playersWithCards[lastPlayerToActIndex].nickname;
+          // print the next player to act :
           break;
         case 'fold':
           fold(tableName, currentPlayer.nickname); // Fold the player
@@ -83,17 +92,20 @@ async function runPlayersActions(tableName) {
           break;
       }
       // if the player that just acted (currectPlayerIndex) is the last player to act, break the loop.
-      if (currentPlayerIndex === lastPlayerToActIndex) {
+      if (currentPlayer.nickname === lastPlayerToActNickname) {
         break;
       }
       // Move to the next player in a round robin way.
-      currentPlayerIndex = (currentPlayerIndex + 1) % table.playersWithCards.length;
+      currentPlayerIndex = table.playersWithCards.findIndex(player => player.nickname === nextPlayerNickname);
     }
     else {
       if (currentPlayer.socket) {
+        /* Clear all listeners from the player */
+        currentPlayer.fullSocket.removeAllListeners('playerAction');
         //Notify the current player that it's their turn
         io.to(currentPlayer.socket).emit('yourTurn', table.moneyToCall - currentPlayer.RoundMoney);
         sendTurnToAllPlayers(table.playersWithCards, currentPlayer);
+        renderAll(table);
         try {
           // Await the player's action or timeout
           const playerAction = await new Promise((resolve, reject) => {
@@ -124,8 +136,10 @@ async function runPlayersActions(tableName) {
               // Update the last player to act index because the player raised and we want to give the all the other players the option to act.
               // The last player to act is the player before the current player.
               lastPlayerToActIndex = (currentPlayerIndex - 1 + table.playersWithCards.length) % table.playersWithCards.length;
+              lastPlayerToActNickname = table.playersWithCards[lastPlayerToActIndex].nickname;
               break;
             case 'fold':
+              // before folding this currect player, save the next player to act nickname.
               fold(tableName, currentPlayer.nickname); // Fold the player
               // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
               if (table.playersWithCards.length === 1) return;
@@ -142,12 +156,10 @@ async function runPlayersActions(tableName) {
               break;
           }
           // if the player that just acted (currectPlayerIndex) is the last player to act, break the loop.
-          if (currentPlayerIndex === lastPlayerToActIndex) {
+          if (currentPlayer.nickname === lastPlayerToActNickname) {
             break;
           }
-          // Move to the next player in a round robin way.
-          currentPlayerIndex = (currentPlayerIndex + 1) % table.playersWithCards.length;
-
+          currentPlayerIndex = table.playersWithCards.findIndex(player => player.nickname === nextPlayerNickname);
         } catch (err) {
           if (err.message === 'timeout') {
             // Handle the timeout scenario (e.g., skip turn, default action, etc.)
@@ -239,6 +251,7 @@ endRound = async (table) => {
 
   /* Wait 5 seconds to start the next round */
   await new Promise(resolve => setTimeout(resolve, 5000));
+  table.tableIsRunning = false;
 
 }
 // function to check if the round is over because there is only one player with cards.
@@ -255,7 +268,9 @@ async function controlRound(tableName) {
   // get the table
   const table = tablesList.find(table => table.name === tableName);
   // change all the players to players with cards to be able to play. 
+  table.tableIsRunning = true;
   table.startRound();
+
   // Draw and send cards to all players
   sendCardsToAllPlayers(table);
 
@@ -393,9 +408,7 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
 
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
-  while (local_table.players.length >= 2) { // && game isnt running
-    //call control round function
-
+  while (local_table.players.length >= 2 && !local_table.tableIsRunning) { // && game isnt running
     await controlRound(tableName);
   }
 };
@@ -407,7 +420,6 @@ addBot = async (tableName) => {
 
   const username = "Gemini" + curr_bot_name;
   curr_bot_name += 1;
-  console.log("bot name is: ", username);
   /* Add one to the number of players on the table */
   table.numOfPlayers += 1;
   await table.save();
@@ -427,8 +439,7 @@ addBot = async (tableName) => {
 
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
-  while (local_table.players.length >= 2) { // && game isnt running
-    //call control round function
+  while (local_table.players.length >= 2 && !local_table.tableIsRunning) { // && game isnt running
     await controlRound(tableName);
   }
 };

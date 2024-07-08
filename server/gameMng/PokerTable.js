@@ -15,6 +15,7 @@ class ActiveTable {
     this.moneyToCall = 0;
     this.bigBlind = big;
     this.smallBlind = small;
+    this.tableIsRunning = false;
     }
   
     // Method to add a player to the table
@@ -81,8 +82,10 @@ class ActiveTable {
       /* Add player with 0 money to spectators */
       for(const player of this.players) {
         if(player.moneyOnTable <= 0) {
+          if(!player.isAi) {
           player.fullSocket.emit('standUp');
         }
+      }
       }
       
       for(const player of this.players) {
