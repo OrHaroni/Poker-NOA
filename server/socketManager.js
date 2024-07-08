@@ -105,6 +105,7 @@ async function runPlayersActions(tableName) {
         //Notify the current player that it's their turn
         io.to(currentPlayer.socket).emit('yourTurn', table.moneyToCall - currentPlayer.RoundMoney);
         sendTurnToAllPlayers(table.playersWithCards, currentPlayer);
+        renderAll(table);
         try {
           // Await the player's action or timeout
           const playerAction = await new Promise((resolve, reject) => {
