@@ -214,9 +214,9 @@
     border-radius: 50%;
     position: absolute;
     left: 42%;
-    height: 30%;
+    height: 28%;
     width: 13%;
-    top: -10%;
+    top: -5%;
     border: 2px solid black; /* Add a 2px black border */
     /* Add any additional styling as needed */
 }
