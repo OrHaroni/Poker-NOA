@@ -246,6 +246,16 @@ endRound = async (table) => {
   /* Clearing all parameter in table locally */
   table.endRound();
 
+  const tableDB= await Table.findOne({ name: table.name });
+  /* After Clearing the players with 0 money in table.endRound check if rest of the players are bots if so - delete them. */
+  if (table.players.every(player => player.isAi)) {
+    // Remove all bot players
+    table.players = [];
+    table.playersWithCards = [];
+    tableDB.numOfPlayers = 0;
+    await tableDB.save();
+  }  
+
   /* Render to make clear state in every player */
   renderAll(table);
 
@@ -479,13 +489,12 @@ standUp = async (tableName, nickname) => {
   local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== nickname);
   local_table.spectators.push(playerToRemove);
 
-    /* If the last player is bot so delete it also */
-    if (local_table.players.length === 1 && local_table.players[0].isAi) {
-      const botPlayer = local_table.players[0]
-      local_table.players = local_table.players.filter(player => player.nickname !== botPlayer.nickname);
-      local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== botPlayer.nickname);
-
-      table.numOfPlayers -= 1;
+    /* If the last players are bots so delete them also */
+    if (local_table.players.every(player => player.isAi)) {
+      // Remove all bot players
+      local_table.players = [];
+      local_table.playersWithCards = [];
+      table.numOfPlayers = 0;
       await table.save();
     }
 

@@ -157,7 +157,21 @@ function GameTable(props) {
     }
   };
   const addBot = async () => {
-    props.socket.emit('addBot', props.table.name);
+    //Check if we have already 2 bots
+    let bots = 0;
+    for (let i = 0; i < playersAi.length; i++) {
+      if (playersAi[i]) {
+        bots++;
+      }
+    }
+    if (bots >= 2) {
+      sendSwal("You can't add more than 2 bots", "warning");
+      return;
+    }
+    else
+    {
+      props.socket.emit('addBot', props.table.name);
+    }
   };
   return (
     <>
