@@ -36,7 +36,10 @@ function Login() {
     else {
       //Check if the username and password are correct for 1 user.
       let [user, status] = await userExistsWithPassword(username.current.value, password.current.value);
-      if (status !== 200) {
+      if (status === 405) {
+        sendSwal("User is already connected", "error");
+        return;
+      } else if (status !== 200) {
         sendSwal("Username or Password are incorrect", "error");
       } else {
         // if the status is good, we want to use socket io to send to the server that the user is connected. (mainly to know the socket id of the user)
