@@ -17,6 +17,9 @@ function Table(props) {
     /* The actual Animated Message */
     const [Message, setMessage] = useState(<></>);
 
+    /* same as shwoMesage but for the timer in the end of the round */
+    const [showTimer ,setShowTimer] = useState(false);
+
     /* State of all players cards */
     const [playersCardsList, setPlayersCardsList] = useState([[], [], [], []])
 
@@ -67,16 +70,18 @@ function Table(props) {
     const updatedTimers = props.otherPlayers.map(player => false);
     props.setTimers(updatedTimers);
     setMessage(new_message);
+    setShowTimer(true);
     /* wait 5 seconds with all cards open */
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise(resolve => setTimeout(resolve, 3000));
     setShowMessage(true);
     props.setGameRunning(false)
     setOtherPlayersCards(<></>);
     setPlayersCardsList([[], [], [], []]);
 
     /* Wait 5 seconds to let also the timer to run till next round */
-    await new Promise(resolve => setTimeout(resolve, 5000));
+    await new Promise(resolve => setTimeout(resolve, 3000));
 
+    setShowTimer(false);
     setShowMessage(false);
 
   });
@@ -104,9 +109,13 @@ function Table(props) {
 
   return (
     <>
+        {showTimer ? 
+        <>
+          <Timer time={6}/>
+        </> : null}
+
         {showMessage ? 
         <>
-          <Timer time={10}/>
           <AnimatedMessage message={Message}/>
         </> : null}
       <div className="table">
