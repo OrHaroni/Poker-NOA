@@ -1,70 +1,61 @@
-# Getting Started with Create React App
+# Poker Game
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+## Description
 
-## Available Scripts
+This project is a multiplayer online poker game implemented in JavaScript, utilizing Node.js, Express.js, socket.io for real-time communication, and a client-side interface built with React or another frontend framework.
 
-In the project directory, you can run:
+## Features
 
-### `npm start`
+- **Login and Registration:** Users can create accounts and log into the system.
+- **Leaderboard:** Displays rankings of players based on their performance.
+- **Add Money:** Allows players to add virtual currency to their accounts.
+- **Add Table:** Enables players to create new tables for gameplay.
+- **Statistics:** Provides insights into gameplay metrics and player statistics.
+- **Gameplay:** Implements classic Texas Hold'em rules for gameplay.
+- **Spectator Mode:** Allows users to watch ongoing games without participating.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+## Project Structure
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+The project is structured with a client-server architecture:
 
-### `npm test`
+### Server
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
+Located in the `server` folder, it uses Express.js with two main routes:
+- `/users`: Handles user authentication and registration.
+- `/table`: Manages table operations such as creating, joining, and spectating games.
+Real-time communication with clients is managed through socket.io for gameplay updates and chat features.
 
-### `npm run build`
+### Client
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
+Includes various pages:
+- **Login:** Allows users to log into their accounts.
+- **Register:** Enables new users to create accounts.
+- **Leaderboard:** Displays rankings of players.
+- **Add Money:** Facilitates adding virtual currency to the user's account.
+- **Add Table:** Allows users to create new tables for gameplay.
+- **Statistics:** Provides insights into player and game statistics.
+- **Gameplay:** Implements the Texas Hold'em game interface.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## Getting Started
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+To run the server:
+1. Install Node.js and npm.
+2. Navigate to the `server` directory.
+3. Install dependencies: `npm install`.
+4. Start the server: `node App.js`.
 
-### `npm run eject`
+To run the client:
+1. Install Node.js and npm.
+2. Navigate to the client directory.
+3. Install dependencies: `npm install`.
+4. Start the client application: `npm start`.
 
-**Note: this is a one-way operation. Once you `eject`, you can't go back!**
+Ensure both server and client are running concurrently for full functionality.
 
-If you aren't satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+## Technologies Used
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you're on your own.
+- **Backend:** Node.js, Express.js, socket.io
+- **Frontend:** React (or other frontend framework)
+- **Database:** (Mention if applicable, e.g., MongoDB for user data)
+- **Deployment:** (Optional, mention if deployed and where)
 
-You don't have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn't feel obligated to use this feature. However we understand that this tool wouldn't be useful if you couldn't customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `npm run build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
