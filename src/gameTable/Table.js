@@ -67,10 +67,9 @@ function Table(props) {
     const updatedTimers = props.otherPlayers.map(player => false);
     props.setTimers(updatedTimers);
     setMessage(new_message);
-    setShowMessage(true);
     /* wait 5 seconds with all cards open */
     await new Promise(resolve => setTimeout(resolve, 5000));
-
+    setShowMessage(true);
     props.setGameRunning(false)
     setOtherPlayersCards(<></>);
     setPlayersCardsList([[], [], [], []]);
