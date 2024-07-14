@@ -188,7 +188,7 @@ body {
 }
 @media (max-width: 900px) {
   .money-amount {
-    left: 65%; /* Adjusted position for smaller screens */
+    left: 50%; /* Adjusted position for smaller screens */
   }
 }
 
