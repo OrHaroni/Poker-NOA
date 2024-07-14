@@ -81,7 +81,7 @@
 
 .our-player {
     position: fixed;
-    top: 60%;
+    top: 65%;
     left: 40%;
     width: 15%;
     height: 15%;
@@ -141,8 +141,8 @@
 /* Action Container Styles */
 .action-container {
     position: relative;
-    top: -125%;
-    left: 80%;
+    top: -150%;
+    left: 55%;
 }
 
 /* Image Styles */
