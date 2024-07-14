@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import './table.css';
 import cards from '../assets/cards.png';
 import Timer from '../Animations/AnimatedTimer/Timer';
@@ -10,6 +10,7 @@ import Card from '../gameTable/Card.js'
 const Player = (props) => {
 
     const profilePic = props.isAi ? aiPic : genericPic
+    const [thisCards, setThisCards] = useState(<></>);
 
     const GenericDeck = [
         { id: 1, pic: require('../assets/cards/10_of_clubs.png'), suit: 'Clubs', value: '10' },
@@ -82,7 +83,7 @@ const Player = (props) => {
                         <Card pic={card2.pic} suit={card2.suit} value={card2.value} />
                     </div>
                 </>;
-                props.setOtherPlayersCards(generatedCards)
+                setThisCards(generatedCards)
             }
         }, [props.playersCardsList]);
         
@@ -110,7 +111,7 @@ const Player = (props) => {
                     /*Showing cards in the end of round */
                     <div className="player-cards">
                         <div className="RandomCard">
-                            {props.otherPlayersCards}
+                            {thisCards}
                         </div>
                     </div>
             }
