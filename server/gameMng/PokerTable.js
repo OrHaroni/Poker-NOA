@@ -122,7 +122,6 @@ class ActiveTable {
 pickWinner() {
     /* Check that there are players on the table */
     if (this.playersWithCards.length === 0) {
-      console.log("no players");
       return;
     }
     // if there is only one player with cards, he is the winner

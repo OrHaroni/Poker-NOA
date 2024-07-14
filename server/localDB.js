@@ -2,7 +2,7 @@ const Player = require("./gameMng/PokerPlayers.js");
 const ActiveTable = require("./gameMng/PokerTable.js");
 
 
-/* Local DB that stores all the players and all the active tables. */
+/* Local DB that stores all Dynamic data as the players and all the active tables. */
 const playersList = [];
 const tablesList = [];
 

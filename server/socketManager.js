@@ -9,10 +9,9 @@ const { tab } = require("@testing-library/user-event/dist/tab.js");
 const { render } = require("@testing-library/react");
 
 let io;
-//i want a name for the bot that changes each time a new bot is added to the table.
 let curr_bot_name = 0;
-// function that run 1 round of the game of players actions. (like before the flop, after the flop, after the turn, after the river)
 
+// function that run 1 round of the game of players actions. (like before the flop, after the flop, after the turn, after the river)
 async function runPlayersActions(tableName) {
   const table = tablesList.find(table => table.name === tableName);
   if (table == null) {
@@ -45,6 +44,7 @@ async function runPlayersActions(tableName) {
           money = minPlayerMoney;
         }
       }
+      /* Making logical descisions for the bot */
       if (action === 'fold' && table.moneyToCall === 0) {
         action = 'check';
       }
@@ -111,7 +111,6 @@ async function runPlayersActions(tableName) {
           const playerAction = await new Promise((resolve, reject) => {
             const turnTimeout = setTimeout(() => {
               fold(tableName, currentPlayer.nickname); // Fold the player (or take other action as needed)
-              // console.log('players left',table.playersWithCards.length);
               // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
               return resolve(null); // Resolve promise if only one player is left
             }, 20000); // 20 seconds
@@ -178,7 +177,6 @@ sendTurnToAllPlayers = async (players, current_player) => {
   /* Emit to all players, who's turn is it */
   for (const player of players) {
     if (player.isAi) continue;
-    // console.log("Emitting to Player ", player.nickname, " That turn is for: ", current_player.nickname);
     io.to(player.socket).emit('WhosTurn', current_player.nickname);
   }
 }
@@ -212,14 +210,12 @@ renderAll = async (table) => {
   for (const spectator of table.spectators) {
     io.to(spectator.socket).emit('render', table.cardsOnTable, players_and_money, size_of_arr, table.moneyOnTable);
   }
-  // now want to send the spectators the render event.
 }
 
 endRound = async (table) => {
 
   const winner = table.pickWinner();
   if (!winner) {
-    console.log("no winner");
     return;
   }
   /* give the money to the winner */
@@ -424,7 +420,6 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
 };
 
 addBot = async (tableName) => {
-  console.log("add bot to table!");
   //   /* Find the table in the DB */
   const table = await Table.findOne({ name: tableName });
 

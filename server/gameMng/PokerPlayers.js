@@ -43,10 +43,6 @@ class Player {
     this.hand = [];
   }
 
-  // Method to display the player's hand
-  showHand() {
-    console.log(`${this.name}'s hand: ${this.hand.map(card => card.toString()).join(', ')}`);
-  }
 }
 
 module.exports = {

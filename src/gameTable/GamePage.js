@@ -157,7 +157,7 @@ function GameTable(props) {
       props.socket.emit('leaveTable', props.table.name, props.user.username);
       root.render(<Lobby user={props.user} socket={props.socket} />);
     } else {
-      console.log("Error leaving table");
+      console.error("Error leaving table");
     }
   };
   const addBot = async () => {
