@@ -10,6 +10,5 @@ export async function getStat(username) {
     });
     let userStat = await res.json();
     let status = res.status;
-    console.log("we got this: ", userStat);
     return [userStat, status];
 }

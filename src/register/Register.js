@@ -62,8 +62,6 @@ function Register() {
         root.render(<Login />);
       }
     }
-    //Make some things to add the new user to the database and than only
-    //if you added him, go to login again.
   };
   const ClickBack = () => {
     root.render(<Login />);

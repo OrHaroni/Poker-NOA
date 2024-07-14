@@ -68,10 +68,9 @@ const Player = (props) => {
         ];
 
         useEffect(() => {
-            console.log("this is props.playerCards: ", props.playerCards);
             const temp_var = props.playerCards;
+            /* Checking wether the player has cards */
             if (temp_var && temp_var.length > 0) {
-                console.log("In the if!");
                 const card1 = GenericDeck.find(card => card.id === temp_var[0].id);
                 const card2 = GenericDeck.find(card => card.id === temp_var[1].id);
                 const generatedCards =   
