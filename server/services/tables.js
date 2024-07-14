@@ -1,6 +1,8 @@
 const tableSchema = require('../models/tables.js')
 const userSchema = require('../models/users.js')
 
+const MAX_PLAYERS_IN_TBL = 5;
+
 // Function to retrieve all users
 async function getAllTables() {
     try {
@@ -11,6 +13,7 @@ async function getAllTables() {
       throw error;
     }
   }
+
   // get players on table based on the table name
   async function getPlayersOnTable(tableName) {
     try {
@@ -22,7 +25,7 @@ async function getAllTables() {
     }
   }
 
-
+/* Validation on the table name before adding */
 const isTableNameTaken = async (name) => {
     try {
         const table = await tableSchema.findOne({ "name": name });
@@ -33,6 +36,7 @@ const isTableNameTaken = async (name) => {
       }
 }
 
+/* Validation exsist table before joining */
 const validateTable = async (tableName, password, username) => {
     try {
       // finding the table by the name and password, and adding the username to the spectators list 
@@ -44,11 +48,12 @@ const validateTable = async (tableName, password, username) => {
       }
 }
 
+/* Joining table */
 const joinUserIntoTable = async (tableName, username, moneyToEnterWith) => {
   try {
     const table = await tableSchema.findOne({"name": tableName});//No need for password because already validated.
 
-    if(table.numOfPlayers === 5) {
+    if(table.numOfPlayers === MAX_PLAYERS_IN_TBL) {
       return 2; //table is full;
     }
 
@@ -78,6 +83,7 @@ const joinUserIntoTable = async (tableName, username, moneyToEnterWith) => {
 
 }
 
+/* Adding new table */
 const addTable = async (table, userCreated) => {
     const name = table.name;
 
@@ -105,6 +111,7 @@ const addTable = async (table, userCreated) => {
     return 0; //everything good
 }
 
+/* Exiting table */
 const leaveTable = async (tableName, nickname) => {
     try {
       
@@ -120,9 +127,6 @@ const leaveTable = async (tableName, nickname) => {
         throw error;
       }
 }
-
-
-
 
 
 module.exports = {

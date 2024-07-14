@@ -1,6 +1,7 @@
 import './table.css'; // Import the table CSS file
 import Card from './Card';
 
+/* A generic deck that we take the pictures of the cards from */
 const GenericDeck = [
     { id: 1, pic: require('../assets/cards/10_of_clubs.png'), suit: 'Clubs', value: '10' },
     { id: 2, pic: require('../assets/cards/10_of_diamonds.png'), suit: 'Diamonds', value: '10' },
@@ -56,9 +57,8 @@ const GenericDeck = [
     { id: 52, pic: require('../assets/cards/jack_of_spades.png'), suit: 'Spades', value: 'Jack' }
 ];
 
-
+/* This component represents the 5 cards on the table */
 function CommunitiCards({cards}){
-
 
     return(
         <>

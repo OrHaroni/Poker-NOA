@@ -18,6 +18,7 @@ const socketSrcURL = `http://${serverIP}:${serverPort}/socket.io/socket.io.js`;
 // this io is the io from the index.html file on the public folder
 <script src={socketSrcURL}></script>
 
+/* Sending "alert" like message to the screen */
 export function sendSwal(message, icon) {
   Swal.fire({
     text: message,
@@ -28,6 +29,7 @@ export function sendSwal(message, icon) {
 function Lobby(props) {
   const [tablesList, setTablesList] = useState([]);
 
+  /* Getting all the tables from DB using server call */
   const fetchTables = async () => {
     try {
       const tables = await GetAllTables();
@@ -37,10 +39,12 @@ function Lobby(props) {
     }
   };
 
+  /* fetch the tables when opening this page */
   useEffect(() => {
     fetchTables();
   }, []);
 
+  /* refetch the tables by clicking */
   const refresh = () => {
     fetchTables();
   };
@@ -50,6 +54,7 @@ function Lobby(props) {
     root.render(<Login />);
   };
 
+  /* Entering a table using server call */
   const GenericClickTable = async (tableName, event) => {
     const inputFieldPassword = event.target.parentElement.nextElementSibling.querySelector('input');
     let password = inputFieldPassword ? inputFieldPassword.value : '';
@@ -68,6 +73,7 @@ function Lobby(props) {
     }
   };
 
+  /* This variable holds the table of tables */
   const TagTableList = tablesList.map((table, index) => (
     <tr key={index}>
       <td>{table.name}</td>

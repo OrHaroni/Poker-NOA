@@ -13,29 +13,30 @@ function Statistics(props) {
 
       const [statistics, setStatistics] = useState({});
 
-      const fetchStatistics = async () => {
-  try {
-    const [stats, status] = await getStat(props.user.username);
+    /* Fetching the user's statistics via server call*/
+    const fetchStatistics = async () => {
+      try {
+        const [stats, status] = await getStat(props.user.username);
 
-    // Check if stats.dateCreated is a valid Date object or convert it to one
-    let dateCreated = new Date(stats.dateCreated);
-    if (isNaN(dateCreated)) {
-      console.error('Invalid dateCreated value:', stats.dateCreated);
-    } else {
-      /* Format the date */
-      const day = dateCreated.getDate().toString().padStart(2, '0');
-      const month = (dateCreated.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1
-      const year = dateCreated.getFullYear();
+        // Check if stats.dateCreated is a valid Date object or convert it to one
+        let dateCreated = new Date(stats.dateCreated);
+        if (isNaN(dateCreated)) {
+          console.error('Invalid dateCreated value:', stats.dateCreated);
+        } else {
+          /* Format the date */
+          const day = dateCreated.getDate().toString().padStart(2, '0');
+          const month = (dateCreated.getMonth() + 1).toString().padStart(2, '0'); // Months are zero-based, so add 1
+          const year = dateCreated.getFullYear();
 
-      const formattedDate = `${day}/${month}/${year}`;
-      stats.dateCreated = formattedDate;
-    }
-    setStatistics(stats);
-  } catch (error) {
-    console.error('Error fetching statistics:', error);
-  }
+          const formattedDate = `${day}/${month}/${year}`;
+          stats.dateCreated = formattedDate;
+        }
+        setStatistics(stats);
+      } catch (error) {
+        console.error('Error fetching statistics:', error);
+      }
 };
-
+      /* Triggering the fetch Statistics when entering this page */
       useEffect(() => {
         fetchStatistics();
       }, []);

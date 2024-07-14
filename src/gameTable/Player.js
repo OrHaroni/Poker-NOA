@@ -7,9 +7,13 @@ import genericPic from '../assets/generic_profile_pic.png'
 import aiPic from '../assets/chatGptIcon.webp'
 import Card from '../gameTable/Card.js'
 
+/* This component represents the other players on screen wether its a bot or not */
 const Player = (props) => {
 
+    /* Determine if the player is a bot or not */
     const profilePic = props.isAi ? aiPic : genericPic
+
+    /* State of this players cards */
     const [thisCards, setThisCards] = useState(<></>);
 
     const GenericDeck = [
@@ -67,24 +71,25 @@ const Player = (props) => {
         { id: 52, pic: require('../assets/cards/jack_of_spades.png'), suit: 'Spades', value: 'Jack' }
         ];
 
-        useEffect(() => {
-            const temp_var = props.playerCards;
-            /* Checking wether the player has cards */
-            if (temp_var && temp_var.length > 0) {
-                const card1 = GenericDeck.find(card => card.id === temp_var[0].id);
-                const card2 = GenericDeck.find(card => card.id === temp_var[1].id);
-                const generatedCards =   
-                <>
-                    <div className="right">
-                        <Card pic={card1.pic} suit={card1.suit} value={card1.value} />
-                    </div>
-                    <div className="left">
-                        <Card pic={card2.pic} suit={card2.suit} value={card2.value} />
-                    </div>
-                </>;
-                setThisCards(generatedCards)
-            }
-        }, [props.playersCardsList]);
+    /* Updating this player's hand */
+    useEffect(() => {
+        const temp_var = props.playerCards;
+        /* Checking wether the player has cards */
+        if (temp_var && temp_var.length > 0) {
+            const card1 = GenericDeck.find(card => card.id === temp_var[0].id);
+            const card2 = GenericDeck.find(card => card.id === temp_var[1].id);
+            const generatedCards =   
+            <>
+                <div className="right">
+                    <Card pic={card1.pic} suit={card1.suit} value={card1.value} />
+                </div>
+                <div className="left">
+                    <Card pic={card2.pic} suit={card2.suit} value={card2.value} />
+                </div>
+            </>;
+            setThisCards(generatedCards)
+        }
+    }, [props.playersCardsList]);
         
 
     return (

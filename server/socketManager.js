@@ -4,12 +4,14 @@ const connectedUsers = require('./models/connectedUsers.js');
 const allUsers = require('./models/users.js');
 const { tablesList } = require("./localDB");
 const { Player } = require("./gameMng/PokerPlayers.js");
-const { set } = require("mongoose");
-const { tab } = require("@testing-library/user-event/dist/tab.js");
-const { render } = require("@testing-library/react");
 
+/* A variable that holds the instance of the socket Input Output */
 let io;
+/* A counter to count number of bots for suffix nickname */
 let curr_bot_name = 0;
+
+const BOT_DEFAULT_MONEY = 1000;
+const NUM_PLAYERS_TO_START_GAME = 2;
 
 // function that run 1 round of the game of players actions. (like before the flop, after the flop, after the turn, after the river)
 async function runPlayersActions(tableName) {
@@ -177,6 +179,7 @@ async function runPlayersActions(tableName) {
   }
 }
 
+/* Sending to all players, who is playing now (For timer purposes) */
 sendTurnToAllPlayers = async (players,spectators, current_player) => {
   /* Emit to all players, who's turn is it */
   for (const player of players) {
@@ -189,8 +192,8 @@ sendTurnToAllPlayers = async (players,spectators, current_player) => {
 }
 }
 
+// draw cards to all the players on the local table
 sendCardsToAllPlayers = async (table) => {
-  // draw cards to all the players on the table
   // draw 2 cards to each player in the local DB.
   table.drawCardsToAllPlayers();
   for (const player of table.playersWithCards) {
@@ -201,6 +204,7 @@ sendCardsToAllPlayers = async (table) => {
 
 };
 
+/* Sending render to all player and spectators, sending data like nicknames, money, state of hand and more */
 renderAll = async (table) => {
   let size_of_arr = table.players.length * 4;
   let players_and_money = [];
@@ -220,6 +224,7 @@ renderAll = async (table) => {
   }
 }
 
+/* API that ends the round, clear hands, send winner and reset the table's state */
 endRound = async (table) => {
 
   const winner = table.pickWinner();
@@ -268,6 +273,7 @@ endRound = async (table) => {
   table.tableIsRunning = false;
 
 }
+
 // function to check if the round is over because there is only one player with cards.
 async function checkIfPlayersFolded(table) {
   // Check if only one player is left with cards, meaning he is the winner
@@ -278,6 +284,7 @@ async function checkIfPlayersFolded(table) {
   return false;
 }
 
+/* Control's a whole game, starting round, sending cards, manages and runs flop, turn and river */
 async function controlRound(tableName) {
   // get the table
   const table = tablesList.find(table => table.name === tableName);
@@ -329,12 +336,13 @@ async function controlRound(tableName) {
 
 }
 
-
+/* Initialize the socket io instance */
 function initialize(server) {
   io = socketIO(server);
   // Setup socket.io event handlers, if needed
 }
 
+/* a getter for the io instance for the server to use */
 function getIO() {
   if (!io) {
     throw new Error("Socket.io has not been initialized.");
@@ -349,11 +357,13 @@ function getIO() {
  *                       *
  *                       * 
  *                       */
+/* Adding new connected user */
 userConnected = async (username, socket) => {
   const temp = new connectedUsers({ username: username, socketId: socket.id });
   await temp.save();
 };
 
+/* while exsiting, removing from connected users */
 exit = async (username) => {
   // remove user from connected users 
   await connectedUsers.deleteOne({
@@ -361,6 +371,7 @@ exit = async (username) => {
   });
 };
 
+/* Deleting  all connected users when closing the server */
 close = async () => {
   // Disconnect users and clean up resources here 
   //delete all the connected users 
@@ -376,6 +387,7 @@ close = async () => {
  *                       * 
  *                       */
 
+/* Joining after being a spectator, you will enter the next round */
 joinScreenTable = async (socket, tableName, username, nickname) => {
   /* Get the connected user from the DB for its socket */
   const tempConnectedUser = await connectedUsers.findOne({ username: username });
@@ -392,6 +404,7 @@ joinScreenTable = async (socket, tableName, username, nickname) => {
   io.to(tempConnectedUser.socketId).emit('getLocalTable', players);
 };
 
+/* Join a state where you are only spectator and cant play */
 joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
   /* Find the table in the DB */
   const table = await Table.findOne({ name: tableName });
@@ -427,6 +440,7 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
   }
 };
 
+/* Adding new bot to the game */
 addBot = async (tableName) => {
   //   /* Find the table in the DB */
   const table = await Table.findOne({ name: tableName });
@@ -441,7 +455,7 @@ addBot = async (tableName) => {
   const local_table = tablesList.find(table => table.name === tableName);
 
   const playerToJoin = new Player(username, null, null);
-  playerToJoin.moneyOnTable = 1000;
+  playerToJoin.moneyOnTable = BOT_DEFAULT_MONEY;
   playerToJoin.isAi = true;
 
   /* add him to the players on table list */
@@ -452,11 +466,12 @@ addBot = async (tableName) => {
 
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
-  while (local_table.players.length >= 2 && !local_table.tableIsRunning) { // && game isnt running
+  while (local_table.players.length >= NUM_PLAYERS_TO_START_GAME && !local_table.tableIsRunning) { // && game isnt running
     await controlRound(tableName);
   }
 };
 
+/* When leaving a table, needs to update DB's and render all other players */
 leaveTable = async (tableName, username) => {
   const table = await Table.findOne({ name: tableName });
   const local_table = tablesList.find(table => table.name === tableName);
@@ -473,6 +488,7 @@ leaveTable = async (tableName, username) => {
   renderAll(local_table);
 };
 
+/* Becoming a spectator from a player */
 standUp = async (tableName, nickname) => {
   // after stand up the username is a spectator so we need to change the database, add him to the spectators and remove him from the players on table.
   const table = await Table.findOne({ name: tableName });
@@ -513,6 +529,8 @@ standUp = async (tableName, nickname) => {
  *                       *
  *                       * 
  *                       */
+
+/* Doing raise action */
 raise = async (tableName, nickname, amout) => {
   // get the table
   const table = tablesList.find(table => table.name === tableName);
@@ -534,6 +552,7 @@ raise = async (tableName, nickname, amout) => {
   return;
 };
 
+/* Doing fold action */
 fold = async (tableName, nickname) => {
   const table = tablesList.find(table => table.name === tableName);
   if (table == null) {
@@ -548,13 +567,12 @@ fold = async (tableName, nickname) => {
   player.clearHand();
 };
 
+/* Doing check action */
 check = async (tableName, username) => {
-  // const table = tablesList.find(table => table.name === tableName);
-  // if(table == null) {
-  //   return false;
-  // }
+  /* Do nothing on check */
 };
 
+/* Doing call action */
 call = async (tableName, nickname) => {
   // get the table
   const table = tablesList.find(table => table.name === tableName);
@@ -573,6 +591,7 @@ call = async (tableName, nickname) => {
   }
 };
 
+/* Send the winner to all players at the end of a round */
 function sendWinner(table, winner) {
 /* Send to all users the winner */
 for(const player of table.players)
@@ -587,6 +606,7 @@ for(const spectator of table.spectators)
   }
 };
 
+/* Send all the hands in the end of a round to show them */
 function sendCardsInEndOfGame(table) {
   /* null for each players so that if he folded, wont send cards */
   let allPlayersCards= [];
@@ -612,6 +632,7 @@ function sendCardsInEndOfGame(table) {
     }
 }
 
+/* Update all players statistics at the end of every game */
 async function updateStatisticsEndGame(table, winner) {
     const player = table.playersWithCards.find(player => player.nickname == winner.nickname);
     if(!player.isAi) {
@@ -632,6 +653,7 @@ async function updateStatisticsEndGame(table, winner) {
     }
 }
 
+/* Update all players statistics at the beggining of every game */
 async function updateStatisticsBeginGame(table) {
   for(const player of table.playersWithCards) {
     if(!player.isAi) {

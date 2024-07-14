@@ -12,6 +12,7 @@ function Leaderboard(props) {
 
   const [users, setUsers] = useState([]);
 
+  /* Getting all the players and sorting them by all time money won using server call */
   const fetchUsers = async () => {
     try {
       const usersData = await GetAllUser();
@@ -23,6 +24,7 @@ function Leaderboard(props) {
     }
   };
 
+  /* Fetch users when openning this component */
   useEffect(() => {
     fetchUsers();
   }, []);

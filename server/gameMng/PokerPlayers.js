@@ -3,7 +3,7 @@ const User = require("../models/users.js");
 const {ai_play} = require("../ai.js");
 
 class Player {
-  constructor(nickname,socket ,socketId) {
+  constructor(nickname, socket, socketId) {
     this.nickname = nickname;
     this.moneyOnTable = 0;
     this.hand = []; // The player's hand of cards
@@ -17,7 +17,7 @@ class Player {
   addChips(amount) {
     this.moneyOnTable = Number(this.moneyOnTable) + Number(amount);
   }
-  //this player is AI
+  //set this player to be an AI bot
   setAi(){
     this.isAi = true;
   }

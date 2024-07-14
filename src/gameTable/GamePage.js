@@ -9,7 +9,6 @@ import { joinUserIntoTable } from '../serverCalls/lobby.js';
 import { sendSwal } from '../lobby/lobby.js';
 import { leaveTable } from '../serverCalls/Table.js';
 import OurPlayer from './OurPlayer.js';
-import { io } from 'socket.io-client';
 
 const serverIP = process.env.REACT_APP_SERVER_IP;
 const serverPort = process.env.REACT_APP_SERVER_PORT;
@@ -21,6 +20,7 @@ const srcURL = `http://${serverIP}:${serverPort}/socket.io/socket.io.js`;
 // Set the app element for react-modal
 Modal.setAppElement('#root');
 
+/* This component represents the Whole game table with the table inside and our player and other players (in table) */
 function GameTable(props) {
   const [showModal, setShowModal] = useState(false);
   const [money, setMoney] = useState(0);
@@ -39,6 +39,7 @@ function GameTable(props) {
 
 
 
+  /* This function parse the data from server to render */
   const fetchData = async (cards, players_with_money, size) => {
     if (cards) {
       setCommunityCards(cards);
@@ -63,6 +64,7 @@ function GameTable(props) {
     setPlayersAi(isAi);
   };
 
+  /* This function retrives the data to render from the server */
   useEffect(() => {
     const handleRender = (cards, players_with_money, size, money_on_table) => {
       fetchData(cards, players_with_money, size);
@@ -73,16 +75,18 @@ function GameTable(props) {
     };
   }, [props.socket]);
 
+  /* This function gets from the server to stand up */
   useEffect(() => {
-    const handleRender = () => {
+    const HandleStandUp = () => {
       setSatDown(false);
     };
-    props.socket.on('standUp', handleRender);
+    props.socket.on('standUp', HandleStandUp);
     return () => {
-      props.socket.off('standUp', handleRender);
+      props.socket.off('standUp', HandleStandUp);
     };
   }, [props.socket]);
 
+  /* Getting the player who's playing to reveal the timer */
   useEffect(() => {
     const handleWhosTurn = (current_player_nickname) => {
       /* If we got turn then game is running */
@@ -130,6 +134,7 @@ function GameTable(props) {
     }
   };
 
+  /* Entering a game via server call */
   const ClickEnterGame = async () => {
     const moneyToEnterWith = moneyRef.current.value;
     const tableName = props.table.name;
@@ -167,6 +172,8 @@ function GameTable(props) {
       console.error("Error leaving table");
     }
   };
+  
+  /* Adding bot to a game */
   const addBot = async () => {
     //Check if we have already 2 bots
     let bots = 0;

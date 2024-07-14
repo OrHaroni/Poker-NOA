@@ -30,6 +30,7 @@ function Login() {
       ClickLogin();
     }
   };
+  /* Login via server call */
   const ClickLogin = async () => {
     if (username.current.value === '') {
       sendSwal("Username is empty", "error");

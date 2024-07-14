@@ -1,6 +1,7 @@
 const userServices = require('../services/users.js');
 const connectedUsers = require('../models/connectedUsers.js');
 
+/* Return all users from leaderbaord */
 const getAllUsers = async (req, res) => {
     const users = await userServices.getAllUsers();
     if(users) {
@@ -11,6 +12,7 @@ const getAllUsers = async (req, res) => {
     }
 }
 
+/* Validate user for login */
 const validateUser = async (req, res) => {
     const username = req.body.username;
     const password = req.body.password
@@ -31,6 +33,7 @@ const validateUser = async (req, res) => {
     }
 }
 
+/* add new user for register */
 const addUser = async (req, res) => {
     const new_user = req.body;
     new_user.dateCreated = new Date();
@@ -51,6 +54,7 @@ const addUser = async (req, res) => {
     }
 }
 
+/* Add money to an exsisting user */
 const addMoney = async (req, res) => {
     let username = req.body.username;
     let moneyAmount = req.body.moneyAmount;
@@ -70,6 +74,7 @@ const addMoney = async (req, res) => {
     }
 }
 
+/* statistics for statistics page */
 const getStat = async (req, res) => {
     let username = req.params.username;
 

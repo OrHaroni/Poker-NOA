@@ -2,6 +2,7 @@ const gameUtiles = require("./gameUtiles.js");
 
 /* Creating a copy of a generic full deck */
 const genericDeck = gameUtiles.GenericFullDeck;
+const MAX_PLAYERS_IN_TBL = 5
 
 class ActiveTable {
     constructor(name, big, small) {
@@ -20,7 +21,7 @@ class ActiveTable {
   
     // Method to add a player to the table
     addPlayer(player) {
-      if (this.players.length < 5) {
+      if (this.players.length < MAX_PLAYERS_IN_TBL) {
         this.players.push(player);
         return true; // Player added successfully
       } else {
@@ -38,6 +39,7 @@ class ActiveTable {
         return false; // Player not found at the table
       }
     }
+
     // Method to remove a player from the table
     removePlayerWithCards(playerName) {
       const index = this.removePlayerWithCards.findIndex(player => player.name === playerName);
@@ -49,7 +51,6 @@ class ActiveTable {
       }
     }
         
-  
     // Method to draw cards to all players at the table
     drawCardsToAllPlayers() {
       // Assuming deck is an array of card objects
@@ -115,11 +116,13 @@ class ActiveTable {
     drawRiver() {
         this.cardsOnTable.push(DrawCard(this.deck));
     }
+
     startRound() {
       this.playersWithCards = [...this.players];
     }
+
     // Method to pick the winner of the round
-pickWinner() {
+    pickWinner() {
     /* Check that there are players on the table */
     if (this.playersWithCards.length === 0) {
       return;
@@ -215,6 +218,7 @@ pickWinner() {
         return parseInt(value, 10);
     }
 
+    /* This method initialize the table state to new round */
     endRound() {
         /* Reset the money on the table */
         this.moneyOnTable = 0;
@@ -232,8 +236,6 @@ pickWinner() {
     }
 
   } /* END OF CLASS ActiveTable */
-
-
 
 
 /* Static function that draws a card */ 

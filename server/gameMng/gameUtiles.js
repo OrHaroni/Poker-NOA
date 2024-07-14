@@ -1,8 +1,8 @@
 /**
  * This file is for constants and function that the game handler needs
  */
-const tableSchema = require('../models/tables.js')
 
+/* Generic deck for the server */
 const GenericFullDeck = [
         { id: 1, suit: 'Clubs', value: '10' },
         { id: 2, suit: 'Diamonds', value: '10' },
