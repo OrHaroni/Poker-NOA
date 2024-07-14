@@ -204,7 +204,7 @@ function GameTable(props) {
             </button>
           )}
         <button className="money-amount">
-          money: {mongoMoney}
+        Current money: {mongoMoney}$
         </button>
       </div>
       <Container className="container">

@@ -46,7 +46,7 @@ const OurPlayer = (props) => {
         /* If its our turn then the game in running */
         props.setGameRunning(true)
         setMoneyToCall(moneyToCallArg);
-        if (ourPlayerMoney === 0) {
+        if (ourPlayerMoney === 0 || minPlayerMoney === 0) {
             setButtonsState(4); /* Only check and fold */
         }
         else if (moneyToCallArg === 0) {
