@@ -49,23 +49,23 @@
 /* Player-specific Card Styles */
 .player1 {
     position: absolute;
-    left: 13%;
-    top: 12%;
+    left: 15%;
+    top: -5%;
     color: azure;
     font-weight: bold;
 }
 
 .player2 {
     position: absolute;
-    left: 77%;
-    top: 12%;
+    left: 75%;
+    top: -5%;
     color: azure;
     font-weight: bold;
 }
 
 .player3 {
     position: absolute;
-    left: 77%;
+    left: 75%;
     top: 53%;
     color: azure;
     font-weight: bold;
@@ -137,12 +137,28 @@
 .exit-button:hover {
     background-color: #cc4738;
 }
-
 /* Action Container Styles */
 .action-container {
     position: relative;
     top: -150%;
     left: 55%;
+}
+
+/* Media query for smaller screens */
+@media screen and (max-width: 950px) {
+    .action-container {
+        top: -100%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
+}
+
+@media screen and (max-width: 765px) {
+    .action-container {
+        top: -80%;
+        left: 50%;
+        transform: translateX(-50%);
+    }
 }
 
 /* Image Styles */
