@@ -9,7 +9,6 @@ require('dotenv').config({ path: './serverConfig.env' });
 
 // Initialize socket.io
 socketManager.initialize(server);
-
 const io = socketManager.getIO();
 
 
@@ -68,11 +67,11 @@ io.on('connection', async (socket) => {
 const cors = require('cors');
 
 // Enable CORS for all routes
+// Using cors middleware to enable cross-origin requests
 app.use(cors());
 
 app.get('/', (req, res) => {
     res.sendFile(path.join(__dirname, '../public/index.html'));
-
   });
 
 const userRoutes = require('./routes/users.js');
@@ -81,9 +80,6 @@ const tableRoutes = require('./routes/tables.js');
 // Middleware for parsing JSON bodies
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ limit: '50mb', extended: true }));
-
-// Using cors middleware to enable cross-origin requests
-app.use(cors());
 
 // Connecting to MongoDB
 const mongoose = require('mongoose');

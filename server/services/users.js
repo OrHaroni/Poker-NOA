@@ -1,6 +1,5 @@
 const userSchema = require('../models/users.js');
 
-
 // Function to retrieve all users
 async function getAllUsers() {
     try {
@@ -11,6 +10,7 @@ async function getAllUsers() {
       throw error;
     }
   }
+
 // Function to check if an email is already taken
 async function isEmailTaken(email) {
     try {

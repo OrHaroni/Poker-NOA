@@ -18,19 +18,11 @@ const userSchema = new mongoose.Schema({
     required: true,
     unique: true
   },
-  isApprovedByEmail: {
-    type: Boolean,
-    default: false
-  },
   moneyAmount: {
     type: Number,
     default: 0
   },
   dateCreated: Date,
-  biggestWin: {
-    type: Number,
-    default: 0
-  },
   numberOfWins: {
     type: Number,
     default: 0

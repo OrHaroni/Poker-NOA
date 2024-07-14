@@ -7,10 +7,15 @@ import logo from '../assets/logo.png';
 
 
 function Add_Money_Page(props) {
+
+  const nameRef = useRef(null);
+  const passRef = useRef(null);
+
   const ClickBack = () => {
     root.render(<Lobby user={props.user} socket={props.socket}  />);
   };
 
+  /* Adding table via server call and returning to lobby */
   const clickAddTable = async () => {
     const name = nameRef.current.value;
     const password = passRef.current.value;
@@ -33,10 +38,6 @@ function Add_Money_Page(props) {
       }
 
   };
-
-  const nameRef = useRef(null);
-  const passRef = useRef(null);
-
 
   return (
     <>

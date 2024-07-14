@@ -7,12 +7,13 @@ import logo from '../assets/logo.png'
 
 function Add_Money_Page(props) {
 
+  const moneyAmountRef = useRef(null);
+
   const ClickBack = () => {
     root.render(<Lobby user={props.user} socket={props.socket} />);
   };
 
-  const moneyAmountRef = useRef(null);
-
+  /* Adding the money via server call and returning the Lobby */
   const handleAddMoney = async () => {
   const selectedAmount = moneyAmountRef.current.value;
 

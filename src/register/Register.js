@@ -21,6 +21,7 @@ function Register() {
     }
   };
 
+  /* Registering using server call */
   const ClickRegister = async () => {
 
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;

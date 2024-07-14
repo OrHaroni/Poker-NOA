@@ -7,6 +7,8 @@ import logo from '../assets/logopng.png'
 import { sendSwal } from '../lobby/lobby';
 import generic_pic from '../assets/generic_profile_pic.png'
 
+/* This component represents our player in the middle (or as spectator)
+    In general in represent the player who runs this code on the device*/
 const OurPlayer = (props) => {
     // State to store the generated card
     const [generatedCards, setGeneratedCard] = useState(null);
@@ -34,6 +36,7 @@ const OurPlayer = (props) => {
     // State to keep track of the minimum player money
     const [minPlayerMoney, setMinPlayerMoney] = useState(Math.min(...props.playerMoney));
 
+    /* Saving the minimun player's money to limit the maximum raise */
     useEffect(() => {
         // Update minPlayerMoney whenever props.playerMoney changes
         setMinPlayerMoney(Math.min(...props.playerMoney));
@@ -65,9 +68,9 @@ const OurPlayer = (props) => {
     }
 );
     /* Update our money */
-useEffect(() => {
-    setOurPlayerMoney(Number(props.money));
-}, [props.money]);
+    useEffect(() => {
+        setOurPlayerMoney(Number(props.money));
+    }, [props.money]);
 
     /* Changing the buttons layout */
     useEffect(() => {
@@ -173,6 +176,7 @@ useEffect(() => {
         setShowMessage(false);
         props.socket.emit('playerAction',"raise", raiseAmount);
     };
+
     //clickCall function to send 'call' event to the server
     const clickCall = () => {
         setButtonsState(0); 
@@ -181,11 +185,13 @@ useEffect(() => {
         setShowTimer(false);
         props.socket.emit('playerAction',"call",null);
     };
+
     const clickCheck = () => {
         setButtonsState(0); 
         setShowTimer(false);
         props.socket.emit('playerAction',"check",null);
     };
+
     const clickFold = () => {
         setButtonsState(0); 
         setShowTimer(false);
@@ -203,7 +209,6 @@ useEffect(() => {
         setRaiseAmount(0);
     };
   
-
     /* Get cards from the Server and make it into html */
     props.socket.off('getCards').on('getCards', (cards) => {
         initializeStates();
@@ -233,6 +238,7 @@ useEffect(() => {
         
     });
 
+    /* Generic deck for the cards images */
     const GenericDeck = [
         { id: 1, pic: require('../assets/cards/10_of_clubs.png'), suit: 'Clubs', value: '10' },
         { id: 2, pic: require('../assets/cards/10_of_diamonds.png'), suit: 'Diamonds', value: '10' },

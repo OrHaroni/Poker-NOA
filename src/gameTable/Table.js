@@ -14,6 +14,7 @@ const socketSrcURL = `http://${serverIP}:${serverPort}/socket.io/socket.io.js`;
 // this io is the io from the index.html file on the public folder
 <script src={socketSrcURL}></script>
 
+/* This component represent the table, including showing the other players on the table */
 function Table(props) {
     // State to control AnimatedMessage visibility
     const [showMessage, setShowMessage] = useState(false);

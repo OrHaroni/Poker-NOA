@@ -18,6 +18,7 @@ const getAllTables = async (req, res) => {
         res.status(500).json({});
     }
 }
+
 // get players on table based on the table name
 const getPlayersOnTable = async (req, res) => {
     const tableName = req.params.tableName;
@@ -29,8 +30,7 @@ const getPlayersOnTable = async (req, res) => {
         res.status(500).json({});
     }
 }
-
-
+/* Validating an exsisting table before joinning */
 const validateTable = async (req, res) => {
     const tableName = req.body.tableName;
     const password = req.body.password
@@ -47,6 +47,7 @@ const validateTable = async (req, res) => {
     }
 }
 
+/* Join to the table */
 const joinUserIntoTable = async (req, res) => {
     const tableName = req.body.tableName;
     const username = req.body.username;
@@ -72,6 +73,7 @@ const joinUserIntoTable = async (req, res) => {
     }
 }
 
+/* Adding new table */
 const addTable = async (req, res) => {
     const new_table = req.body.table;
     const userCreated = req.body.nickname;
