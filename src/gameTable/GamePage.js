@@ -97,6 +97,13 @@ function GameTable(props) {
       props.socket.off('WhosTurn', handleWhosTurn);
     };
   }, [props.socket, timers]);
+   
+  /* Listen to gotRemovedPlayer, if player got timeout he get removed from the table to the spectators*/
+  props.socket.on('gotRemovedFromTable', () => {
+    setSatDown(false);
+    setMongoMoney(Number(mongoMoney) + Number(moneyAmount));
+    props.user.moneyAmount = Number(mongoMoney) + Number(moneyAmount);
+  });  
 
   const sitDownHandler = () => {
     setShowModal(true); // Open the modal when sitting down

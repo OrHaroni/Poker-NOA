@@ -19,7 +19,6 @@ const socketSrcURL = `http://${serverIP}:${serverPort}/socket.io/socket.io.js`;
 <script src={socketSrcURL}></script>
 
 export function sendSwal(message, icon) {
-  /* eslint-disable no-undef */
   Swal.fire({
     text: message,
     icon: icon,
@@ -57,15 +56,13 @@ function Lobby(props) {
     const [table, retStatus] = await enterTable(tableName, password, props.user.username);
     if (retStatus === 200) {
       props.socket.emit('joinScreenTable',tableName, props.user.username,props.user.nickname);
-      // we have to get the table from the server and send it to the gameTable component.
       props.socket.off('getLocalTable').on('getLocalTable',  playersArray => {
         let Localtable = {
           name: tableName,
           Players: playersArray,
         };
         root.render(<GameTable table={Localtable} user={props.user} socket={props.socket} />);
-      }
-      );
+      });
     } else if (retStatus === 404) {
       sendSwal("Incorrect password, try again.", "error");
     }
@@ -95,12 +92,16 @@ function Lobby(props) {
   };
 
   const addTable = () => {
-    root.render(<Add_Table_Page user={props.user} socket={props.socket} />);
-  }
+    if (tablesList.length >= 4) {
+      sendSwal("Can not add more than 4 tables.", "error");
+    } else {
+      root.render(<Add_Table_Page user={props.user} socket={props.socket} />);
+    }
+  };
 
   const goToStat = () => {
     root.render(<Statistics user={props.user} socket={props.socket} />);
-  }
+  };
 
   return (
     <>

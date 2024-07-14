@@ -104,7 +104,7 @@ async function runPlayersActions(tableName) {
         currentPlayer.fullSocket.removeAllListeners('playerAction');
         //Notify the current player that it's their turn
         io.to(currentPlayer.socket).emit('yourTurn', table.moneyToCall - currentPlayer.RoundMoney);
-        sendTurnToAllPlayers(table.playersWithCards, currentPlayer);
+        sendTurnToAllPlayers(table.playersWithCards,table.spectators, currentPlayer);
         renderAll(table);
         try {
           // Await the player's action or timeout
@@ -123,6 +123,10 @@ async function runPlayersActions(tableName) {
           // if the playerAction is null, it means that the player didnt do any action, so we want to continue to the next player.
           // but if we have only one player with cards, we dont want to continue to the next player because he is the winner.
           if (playerAction == null) {
+            /*Call the standUp fucntion to remove him from the playersWithCards and add to to spectators*/
+            standUp(tableName, currentPlayer.nickname);
+            /* Use socket.io to send to the player he got removed from the table */
+            io.to(currentPlayer.socket).emit('gotRemovedFromTable');
             if (table.playersWithCards.length === 1) return;
             continue;
           }
@@ -173,12 +177,16 @@ async function runPlayersActions(tableName) {
   }
 }
 
-sendTurnToAllPlayers = async (players, current_player) => {
+sendTurnToAllPlayers = async (players,spectators, current_player) => {
   /* Emit to all players, who's turn is it */
   for (const player of players) {
     if (player.isAi) continue;
     io.to(player.socket).emit('WhosTurn', current_player.nickname);
   }
+  /* Emit to all spectators, who's turn is it */
+  for(const spectator of spectators) {
+    io.to(spectator.socket).emit('WhosTurn', current_player.nickname);
+}
 }
 
 sendCardsToAllPlayers = async (table) => {
