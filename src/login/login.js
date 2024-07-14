@@ -10,10 +10,14 @@ import { userExistsWithPassword } from '../serverCalls/login.js'
 import { io } from 'socket.io-client';
 import Leaderboard from '../Leaderboard/Leaderboard.js';
 
-// Initialize the socket connection
+const serverIP = process.env.REACT_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+const socketSrcURL = `http://${serverIP}:${serverPort}/socket.io/socket.io.js`;
+
 // this io is the io from the index.html file on the public folder
-<script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
-const socket = io('http://127.0.0.1:8080', { transports: ['websocket'] });
+<script src={socketSrcURL}></script>
+const serverURL = `http://${serverIP}:${serverPort}`
+const socket = io(serverURL, { transports: ['websocket'] });
 
 function Login() {
 

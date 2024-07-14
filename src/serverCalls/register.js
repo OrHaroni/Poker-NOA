@@ -1,6 +1,8 @@
+const serverIP = process.env.REACT_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 
 const registerServer = async (user) => {
-    const res = await fetch('http://localhost:8080/users/register', {
+    const res = await fetch(`http://${serverIP}:${serverPort}/users/register`, {
         'method' : 'post',
         "headers" : {
           'Content-Type': 'application/json',

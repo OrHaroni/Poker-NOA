@@ -1,14 +1,15 @@
+const serverIP = process.env.REACT_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 
+export async function addMoney(username, amount) {
+    const data = { "username": username, "moneyAmount": amount };
 
-export async function addMoney(username, ammount) {
-    const data = {"username" : username, "moneyAmount" : ammount};
-
-    const res = await fetch('http://localhost:8080/users/addMoney', {
-      'method' : 'post',
-      "headers" : {
-        'Content-Type': 'application/json',
-      },
-      'body': JSON.stringify(data)
+    const res = await fetch(`http://${serverIP}:${serverPort}/users/addMoney`, {
+        method: 'post',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data)
     });
 
     let updatedUser = await res.json();

@@ -11,8 +11,12 @@ import { leaveTable } from '../serverCalls/Table.js';
 import OurPlayer from './OurPlayer.js';
 import { io } from 'socket.io-client';
 
+const serverIP = process.env.REACT_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+const srcURL = `http://${serverIP}:${serverPort}/socket.io/socket.io.js`;
+
 // this io is the io from the index.html file on the public folder
-<script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
+<script src={srcURL}></script>
 
 // Set the app element for react-modal
 Modal.setAppElement('#root');

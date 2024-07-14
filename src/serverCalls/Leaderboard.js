@@ -1,7 +1,9 @@
+const serverIP = process.env.REACT_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 
 export async function getAllUsers() {
     const data = {};
-    const res = await fetch('http://localhost:8080/users/getAll', {
+    const res = await fetch(`http://${serverIP}:${serverPort}/users/getAll`, {
       'method' : 'post',
       "headers" : {
         'Content-Type': 'application/json',

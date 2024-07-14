@@ -10,7 +10,13 @@ import { GetAllTables } from '../serverCalls/lobby.js';
 import { enterTable } from '../serverCalls/lobby.js';
 import Add_Table_Page from '../Add_Table_Page/Add_Table_Page.js'
 import Statistics from '../Statistics/Statistics.js';
-<script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
+
+const serverIP = process.env.REACT_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+const socketSrcURL = `http://${serverIP}:${serverPort}/socket.io/socket.io.js`;
+
+// this io is the io from the index.html file on the public folder
+<script src={socketSrcURL}></script>
 
 export function sendSwal(message, icon) {
   /* eslint-disable no-undef */
