@@ -168,6 +168,7 @@ body {
   transition: background-color 0.3s ease; /* Smooth transition for hover effect */
   font-weight: bolder;
 }
+/* Money Amount Styles */
 .money-amount {
   position: relative;
   left: 75%;
@@ -183,7 +184,19 @@ body {
   cursor: pointer;
   transition: background-color 0.3s ease, transform 0.3s ease; /* Smooth transition for hover effect */
   font-weight: bolder;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */ 
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1); /* Slight shadow for a 3D effect */
+}
+@media (max-width: 900px) {
+  .money-amount {
+    left: 65%; /* Adjusted position for smaller screens */
+  }
+}
+
+
+
+.money-amount:hover {
+  background-color: #3555b8; /* Darker blue color on hover */
+  transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
 .add-money {

@@ -6,8 +6,13 @@
   }
   
   .range-input {
-    width: 200px;
+    width: 150px;
     color: aliceblue;
+  }
+  @media (max-width: 768px) {
+    .range-input {
+      width: 100px;
+    }
   }
   
   .range-value {
