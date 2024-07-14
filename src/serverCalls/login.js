@@ -1,7 +1,9 @@
+const serverIP = process.env.REACT_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
 
 export async function userExistsWithPassword(username, password) {
     const data = {"username" : username, "password" : password};
-    const res = await fetch('http://localhost:8080/users/validateUser', {
+    const res = await fetch(`http://${serverIP}:${serverPort}/users/validateUser`, {
       'method' : 'post',
       "headers" : {
         'Content-Type': 'application/json',
@@ -14,7 +16,7 @@ export async function userExistsWithPassword(username, password) {
 }
 
 export async function GetAllUser(){
-    const res = await fetch('http://localhost:8080/users/getall', {
+    const res = await fetch(`http://${serverIP}:${serverPort}/users/getall`, {
         'method' : 'get',
         "headers" : {
           'Content-Type': 'application/json',

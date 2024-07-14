@@ -1,5 +1,8 @@
+const serverIP = process.env.REACT_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+
 export async function GetAllTables(){
-    const res = await fetch('http://localhost:8080/tables', {
+    const res = await fetch(`http://${serverIP}:${serverPort}/tables`, {
         'method' : 'get',
         "headers" : {
           'Content-Type': 'application/json',
@@ -11,7 +14,7 @@ export async function GetAllTables(){
 
 export async function enterTable(tableName, password, username) {
     const data = {"tableName" : tableName, "password" : password, "username" : username};
-    const res = await fetch('http://localhost:8080/tables/validateTable', {
+    const res = await fetch(`http://${serverIP}:${serverPort}/tables/validateTable`, {
       'method' : 'post',
       "headers" : {
         'Content-Type': 'application/json',
@@ -26,7 +29,7 @@ export async function enterTable(tableName, password, username) {
 export async function joinUserIntoTable(tableName, username, moneyToEnterWith) {
   const data = {"tableName" : tableName, "username" : username, "moneyToEnterWith": moneyToEnterWith};
 
-  const res = await fetch('http://localhost:8080/tables/joinUserIntoTable', {
+  const res = await fetch(`http://${serverIP}:${serverPort}/tables/joinUserIntoTable`, {
     'method' : 'post',
     "headers" : {
       'Content-Type': 'application/json',

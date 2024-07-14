@@ -1,6 +1,9 @@
+const serverIP = process.env.REACT_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+
 export async function addTable(name, password, nickname) {
     const data = {"table": {"name" : name, "password" : password}, "nickname": nickname};
-    const res = await fetch('http://localhost:8080/tables/addTable', {
+    const res = await fetch(`http://${serverIP}:${serverPort}/tables/addTable`, {
       'method' : 'post',
       "headers" : {
         'Content-Type': 'application/json',

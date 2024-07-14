@@ -1,7 +1,8 @@
 const { GoogleGenerativeAI } = require("@google/generative-ai");
+require('dotenv').config({ path: './serverConfig.env' });
 
 // Access your API key as an environment variable (see "Set up your API key" above)
-const genAI = new GoogleGenerativeAI("AIzaSyAkPDYtW5Dya0H9cWqdbFYZwwg14ZWqEqY");
+const genAI = new GoogleGenerativeAI(process.env.AI_BOT_KEY);
 
 // The Gemini 1.5 models are versatile and work with both text-only and multimodal prompts
 const model = genAI.getGenerativeModel({ model: "gemini-1.5-flash"});

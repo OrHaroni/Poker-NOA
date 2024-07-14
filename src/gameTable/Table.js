@@ -7,8 +7,12 @@ import AnimatedMessage from '../Animations/AnimatedMessage/AnimatedMessage.js';
 import Timer from '../Animations/AnimatedTimer/Timer.js';
 import logo from '../assets/logopng.png'
 
+const serverIP = process.env.REACT_APP_SERVER_IP;
+const serverPort = process.env.REACT_APP_SERVER_PORT;
+const socketSrcURL = `http://${serverIP}:${serverPort}/socket.io/socket.io.js`;
+
 // this io is the io from the index.html file on the public folder
-<script src="http://127.0.0.1:8080/socket.io/socket.io.js"></script>
+<script src={socketSrcURL}></script>
 
 function Table(props) {
     // State to control AnimatedMessage visibility
