@@ -144,7 +144,7 @@ function GameTable(props) {
     const nickname = props.user.nickname;
     /* Validation that the entering money is multiple of 50 */
     if((moneyToEnterWith % 50) != 0) {
-      sendSwal("Must enter multiple of 50", "error");
+      sendSwal("Must enter multiple of the Small Blind (50 in default)", "error");
       return;
     }
     const retStatus = await joinUserIntoTable(tableName, username, moneyToEnterWith);
@@ -160,7 +160,7 @@ function GameTable(props) {
     } else if (retStatus === 302) {
       sendSwal("This table is full!", "error");
     } else if (retStatus === 303) {
-      sendSwal("You must enter with 50 times the big blind at least! 100 is the minimum entrance", "error");
+      sendSwal("You must enter with 2 times the big blind at least! 200 is the minimum entrance", "error");
     } else {
       sendSwal("Unknown problem, 404", "error");
     }
