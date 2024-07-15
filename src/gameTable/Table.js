@@ -31,9 +31,6 @@ function Table(props) {
     /* State for specific player cards */
     const [otherPlayersCards, setOtherPlayersCards] = useState(<></>);
 
-    const moneyOnTable = useRef(0);
-
-
   /* Getting winner and print it on the screen */
   props.socket.off('getWinner').on('getWinner', async (winner) => {
     const new_message = "The winner is: " + winner;
@@ -87,7 +84,7 @@ function Table(props) {
       <div className="table">
         <img className='dealer-img' src={dealer_img} />
         <span className='table-money'>
-          <img src={logo} alt="Logo" className="table-chips" />money: {moneyOnTable.current}$
+          <img src={logo} alt="Logo" className="table-chips" />money: {props.moneyOnTable}$
         </span>
         <div className="players">
           {props.otherPlayers.map((player, index) => (
