@@ -2,12 +2,33 @@
 .table {
     position: fixed;
     top: 17%;
-    left: 19%;
-    height: 74%;
-    width: 63%;
+    left: 18%;
+    height: 80%;
+    width: 65%;
     background-image: url(../assets/emptyTable.png);
     background-size: cover; /* Added to make the image cover the entire div */
 }
+
+/* Media query for smaller screens */
+@media screen and (max-width: 950px) {
+    .table {
+        top: 20%;
+        left: 0%;
+        height: 70%;
+        width: 100%;
+    }
+}
+
+@media screen and (max-width: 765px) {
+    .table {
+        top: 17%;
+        left: 0%;
+        height: 70%;
+        width: 100%;
+    }
+}
+
+
 /* Player Styles */
 .player {
     position: relative;
@@ -133,6 +154,11 @@
     justify-content: center; 
     align-items: center; 
 }
+@media screen and (max-width: 950px) {
+    .action-button {
+        font-size: 70% ;
+    }
+}
 
 .action-button:hover {
     background-color: #A95042;
@@ -146,15 +172,15 @@
 /* Action Container Styles */
 .action-container {
     position: relative;
-    top: -150%;
-    left: 55%;
+    top: -142%;
+    left: 45%;
 }
 
 /* Media query for smaller screens */
 @media screen and (max-width: 950px) {
     .action-container {
-        top: -100%;
-        left: 50%;
+        top: -70%;
+        left: 55%;
         transform: translateX(-50%);
     }
 }
@@ -364,4 +390,9 @@
 }
 .out-text{
     font-size: 150%;
+}
+@media screen and (max-width: 950px) {
+    .out-text {
+        font-size: 100%; /* Adjust the font size as needed */
+    }
 }
