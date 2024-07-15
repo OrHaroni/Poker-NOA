@@ -133,6 +133,27 @@ body {
   height: 50%;
   height:fit-content ;
 }
+.leaderboard-table {
+  width: 100%;
+  font-size: 110%;
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+.leaderboard-table table {
+  width: 100%; /* Spread table to full width of parent */
+  border-collapse: collapse;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.leaderboard-table th:last-child, .leaderboard-table td:last-child {
+  text-align: center;
+}
+
 .lobby-table {
   width: 100%;
   font-size: 110%;
