@@ -194,7 +194,7 @@ body {
 /* Money Amount Styles */
 .money-amount {
   position: relative;
-  left: 80%;
+  left: 78%;
   margin-left: 1%;
   margin-top: 1%;
   margin-bottom:1%;
@@ -211,7 +211,7 @@ body {
 }
 @media (max-width: 900px) {
   .money-amount {
-    left: 63%; /* Adjusted position for smaller screens */
+    left: 60%; /* Adjusted position for smaller screens */
   }
 }
 
