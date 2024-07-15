@@ -154,6 +154,11 @@
     justify-content: center; 
     align-items: center; 
 }
+@media screen and (max-width: 950px) {
+    .action-button {
+        font-size: 70% ;
+    }
+}
 
 .action-button:hover {
     background-color: #A95042;
@@ -174,8 +179,8 @@
 /* Media query for smaller screens */
 @media screen and (max-width: 950px) {
     .action-container {
-        top: -100%;
-        left: 50%;
+        top: -70%;
+        left: 55%;
         transform: translateX(-50%);
     }
 }
@@ -385,4 +390,9 @@
 }
 .out-text{
     font-size: 150%;
+}
+@media screen and (max-width: 950px) {
+    .out-text {
+        font-size: 100%; /* Adjust the font size as needed */
+    }
 }
