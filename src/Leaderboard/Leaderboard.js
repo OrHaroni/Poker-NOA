@@ -37,7 +37,7 @@ function Leaderboard(props) {
       <div className="background">
         <div className="form-container form-container-lobby">
           <h2 className="reg-head">Leaderboard</h2>
-          <table className="lobby-table">
+          <table className="leaderboard-table">
             <thead>
               <tr>
                 <th>#</th>
