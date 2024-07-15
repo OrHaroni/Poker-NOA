@@ -133,7 +133,30 @@ body {
   height: 50%;
   height:fit-content ;
 }
+.leaderboard-table {
+  overflow-y: auto; /* Enable vertical scrolling */
+  width: 100%;
+  font-size: 110%;
+  margin: 0 auto; /* Center the container horizontally */
+}
+
+.leaderboard-table table {
+  width: 100%; /* Spread table to full width of parent */
+  border-collapse: collapse;
+}
+
+.leaderboard-table th, .leaderboard-table td {
+  padding: 10px;
+  text-align: left;
+  border-bottom: 1px solid #ddd;
+}
+
+.leaderboard-table th:last-child, .leaderboard-table td:last-child {
+  text-align: center;
+}
+
 .lobby-table {
+  overflow-y: auto; /* Enable vertical scrolling */
   width: 100%;
   font-size: 110%;
   margin: 0 auto; /* Center the container horizontally */
@@ -171,7 +194,7 @@ body {
 /* Money Amount Styles */
 .money-amount {
   position: relative;
-  left: 75%;
+  left: 80%;
   margin-left: 1%;
   margin-top: 1%;
   margin-bottom:1%;
@@ -188,14 +211,12 @@ body {
 }
 @media (max-width: 900px) {
   .money-amount {
-    left: 50%; /* Adjusted position for smaller screens */
+    left: 63%; /* Adjusted position for smaller screens */
   }
 }
 
-
-
 .money-amount:hover {
-  background-color: #3555b8; /* Darker blue color on hover */
+  background-color: #A95042; /* Darker blue color on hover */
   transform: scale(1.05); /* Slight zoom effect on hover */
 }
 
