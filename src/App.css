@@ -134,6 +134,7 @@ body {
   height:fit-content ;
 }
 .leaderboard-table {
+  overflow-y: auto; /* Enable vertical scrolling */
   width: 100%;
   font-size: 110%;
   margin: 0 auto; /* Center the container horizontally */
@@ -155,6 +156,7 @@ body {
 }
 
 .lobby-table {
+  overflow-y: auto; /* Enable vertical scrolling */
   width: 100%;
   font-size: 110%;
   margin: 0 auto; /* Center the container horizontally */

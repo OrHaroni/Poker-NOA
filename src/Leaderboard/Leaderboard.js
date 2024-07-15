@@ -37,7 +37,8 @@ function Leaderboard(props) {
       <div className="background">
         <div className="form-container form-container-lobby">
           <h2 className="reg-head">Leaderboard</h2>
-          <table className="leaderboard-table">
+          <div className="leaderboard-table">
+          <table>
             <thead>
               <tr>
                 <th>#</th>
@@ -59,6 +60,7 @@ function Leaderboard(props) {
               ))}
             </tbody>
           </table>
+          </div>
         </div>
         <div className="image-container">
             <img src={logo} alt="Dealer" className="logo-image" />
