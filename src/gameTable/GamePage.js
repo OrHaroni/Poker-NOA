@@ -36,11 +36,12 @@ function GameTable(props) {
   const [mongoMoney, setMongoMoney] = useState(props.user.moneyAmount); // my money from mongo, meaning all my money in my user (not on table)
   const [ourPlayerCards, setOurPlayerCards] = useState(null);
   const [gameRunning, setGameRunning] = useState(false);
+  const [moneyOnTable, setMoneyOnTable] = useState(0);
 
 
 
   /* This function parse the data from server to render */
-  const fetchData = async (cards, players_with_money, size) => {
+  const fetchData = async (cards, players_with_money, size, newMoneyOnTable) => {
     if (cards) {
       setCommunityCards(cards);
     }
@@ -62,12 +63,13 @@ function GameTable(props) {
     setPlayerMoney(player_money);
     setPlayersCards(hasCards);
     setPlayersAi(isAi);
+    setMoneyOnTable(newMoneyOnTable);
   };
 
   /* This function retrives the data to render from the server */
   useEffect(() => {
     const handleRender = (cards, players_with_money, size, money_on_table) => {
-      fetchData(cards, players_with_money, size);
+      fetchData(cards, players_with_money, size, money_on_table);
     };
     props.socket.on('render', handleRender);
     return () => {
@@ -140,6 +142,11 @@ function GameTable(props) {
     const tableName = props.table.name;
     const username = props.user.username;
     const nickname = props.user.nickname;
+    /* Validation that the entering money is multiple of 50 */
+    if((moneyToEnterWith % 50) != 0) {
+      sendSwal("Must enter multiple of 50", "error");
+      return;
+    }
     const retStatus = await joinUserIntoTable(tableName, username, moneyToEnterWith);
     if (retStatus === 200) {
       props.socket.emit('joinTable', tableName, username, nickname, moneyToEnterWith);
@@ -247,6 +254,8 @@ function GameTable(props) {
               setPlayersAi={setPlayersAi}
               setGameRunning={setGameRunning}
               ourPlayerCards={ourPlayerCards}
+              moneyOnTable={moneyOnTable}
+              setMoneyOnTable={setMoneyOnTable}
             />
             {satDown && <OurPlayer
             name={props.user.nickname}

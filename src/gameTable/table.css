@@ -280,7 +280,7 @@
     position: absolute;
     top: 0;
     left: 0;
-    background-color: #ff6347;
+    background-color: #B85042;
     color: #000000;
     border: none;
     padding: 10px 20px;
@@ -294,7 +294,7 @@
 .enter-button {
     display: block;
     margin: 1% auto; /* Center the button horizontally with a 1% margin on top and bottom */
-    background-color: #d6dc1d;
+    background-color: #B85042;
     color: #000000;
     border: none;
     padding: 10px 20px;
@@ -306,7 +306,8 @@
   }
   
   .enter-button:hover {
-    background-color: #515609;
+    background-color: #A95042;
+    transform: scale(1.05); /* Slight zoom effect on hover */
   }
   .modal-content{
     height: 40%;
