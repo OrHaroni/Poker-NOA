@@ -1,4 +1,5 @@
 const gameUtiles = require("./gameUtiles.js");
+const Table = require('../models/tables.js');
 
 /* Creating a copy of a generic full deck */
 const genericDeck = gameUtiles.GenericFullDeck;
@@ -79,7 +80,7 @@ class ActiveTable {
     }
 
     /* Standing up the players with 0 money */
-    kickPlayersWithoutMoney() {
+    async kickPlayersWithoutMoney() {
       /* Add player with 0 money to spectators */
       for(const player of this.players) {
         if(player.moneyOnTable <= 0) {
@@ -97,6 +98,10 @@ class ActiveTable {
       /* Exclude all players with 0 money off the players */
       this.players = this.players.filter(player => player.moneyOnTable > 0);
       this.playersWithCards = this.playersWithCards.filter(player => player.moneyOnTable > 0);
+      /* Updating the table num of players in the DB after removing players with 0 money. */
+      const tableDB= await Table.findOne({ name: this.name });
+      tableDB.numOfPlayers = this.players.length;
+      await tableDB.save();
   
     }
 

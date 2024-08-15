@@ -33,6 +33,7 @@ function Table(props) {
 
   /* Getting winner and print it on the screen */
   props.socket.off('getWinner').on('getWinner', async (winner) => {
+    if(winner) {
     const new_message = "The winner is: " + winner;
     /* Make all timers go off */
     const updatedTimers = props.otherPlayers.map(player => false);
@@ -51,6 +52,12 @@ function Table(props) {
 
     setShowTimer(false);
     setShowMessage(false);
+    }
+    else {
+      props.setGameRunning(false)
+      setOtherPlayersCards(<></>);
+      setPlayersCardsList([[], [], [], []]);
+    }
 
   });
 

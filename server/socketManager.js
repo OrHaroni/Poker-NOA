@@ -126,10 +126,10 @@ async function runPlayersActions(tableName) {
           // but if we have only one player with cards, we dont want to continue to the next player because he is the winner.
           if (playerAction == null) {
             /*Call the standUp fucntion to remove him from the playersWithCards and add to to spectators*/
-            standUp(tableName, currentPlayer.nickname);
+            await standUp(tableName, currentPlayer.nickname);
             /* Use socket.io to send to the player he got removed from the table */
             io.to(currentPlayer.socket).emit('gotRemovedFromTable');
-            if (table.playersWithCards.length === 1) return;
+            if (table.playersWithCards.length < NUM_PLAYERS_TO_START_GAME) return;
             continue;
           }
           let action = playerAction.action;
@@ -254,7 +254,9 @@ endRound = async (table) => {
 
   /* Clearing all parameter in table locally */
   table.endRound();
-
+  /* Render to make clear state in every player */
+  renderAll(table);
+  
   const tableDB= await Table.findOne({ name: table.name });
   /* After Clearing the players with 0 money in table.endRound check if rest of the players are bots if so - delete them. */
   if (table.players.every(player => player.isAi)) {
@@ -279,6 +281,7 @@ async function checkIfPlayersFolded(table) {
   // Check if only one player is left with cards, meaning he is the winner
   if (table.playersWithCards.length === 1 || table.playersWithCards.length === 0) {
     await endRound(table);
+    table.tableIsRunning = false;
     return true;
   }
   return false;
@@ -504,18 +507,21 @@ standUp = async (tableName, nickname) => {
   user.moneyAmount = Number(user.moneyAmount) + Number(playerToRemove.moneyOnTable);
   await user.save();
 
+  /* If the last players are bots so delete them also */
+  if (local_table.players.every(player => player.isAi || player.nickname === nickname)) {
+    
+    io.to(playerToRemove.socket).emit('getWinner', null);
+    io.to(playerToRemove.socket).emit('getCards', null);
+    // Remove all bot players
+    local_table.players = [];
+    local_table.playersWithCards = [];
+    table.numOfPlayers = 0;
+    await table.save();
+  }
+
   local_table.players = local_table.players.filter(player => player.nickname !== nickname);
   local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== nickname);
   local_table.spectators.push(playerToRemove);
-
-    /* If the last players are bots so delete them also */
-    if (local_table.players.every(player => player.isAi)) {
-      // Remove all bot players
-      local_table.players = [];
-      local_table.playersWithCards = [];
-      table.numOfPlayers = 0;
-      await table.save();
-    }
 
     // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
     renderAll(local_table);
