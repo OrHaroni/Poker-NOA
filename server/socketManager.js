@@ -254,7 +254,9 @@ endRound = async (table) => {
 
   /* Clearing all parameter in table locally */
   table.endRound();
-
+  /* Render to make clear state in every player */
+  renderAll(table);
+  
   const tableDB= await Table.findOne({ name: table.name });
   /* After Clearing the players with 0 money in table.endRound check if rest of the players are bots if so - delete them. */
   if (table.players.every(player => player.isAi)) {
