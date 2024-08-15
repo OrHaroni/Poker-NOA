@@ -336,8 +336,17 @@ body {
 }
 
 .login-buttons {
-  width: 31%;
+  width: 30%;
 }
+@media (max-width: 900px) {
+  .login-buttons {
+    width: 100%;
+    margin-left: 40%;
+    
+  }
+}
+
+
 
 .login-btn {
   margin-left: 0%;

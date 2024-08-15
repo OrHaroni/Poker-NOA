@@ -28,6 +28,7 @@ async function runPlayersActions(tableName) {
     table.playersWithCards[i].RoundMoney = 0;
   }
   while (true) {
+    if(table.playersWithCards.length < NUM_PLAYERS_TO_START_GAME) return;
     // print the playerswithcards array with the nicknames of the players and the order of the players.
     const currentPlayer = table.playersWithCards[currentPlayerIndex];
     /* Saving the next player nickname to act , the array of playersWithCards may change because of fold! (and so the Indices ) */
@@ -111,7 +112,7 @@ async function runPlayersActions(tableName) {
         try {
           // Await the player's action or timeout
           const playerAction = await new Promise((resolve, reject) => {
-            const turnTimeout = setTimeout(() => {
+            const turnTimeout = setTimeout(async () => {
               fold(tableName, currentPlayer.nickname); // Fold the player (or take other action as needed)
               // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
               return resolve(null); // Resolve promise if only one player is left
@@ -127,6 +128,7 @@ async function runPlayersActions(tableName) {
           if (playerAction == null) {
             /*Call the standUp fucntion to remove him from the playersWithCards and add to to spectators*/
             standUp(tableName, currentPlayer.nickname);
+            if (table.playersWithCards.length === 1 || table.playersWithCards.length === 0) return;
             /* Use socket.io to send to the player he got removed from the table */
             io.to(currentPlayer.socket).emit('gotRemovedFromTable');
             if (table.playersWithCards.length === 1) return;
@@ -254,7 +256,9 @@ endRound = async (table) => {
 
   /* Clearing all parameter in table locally */
   table.endRound();
-
+  /* Render to make clear state in every player */
+  renderAll(table);
+  
   const tableDB= await Table.findOne({ name: table.name });
   /* After Clearing the players with 0 money in table.endRound check if rest of the players are bots if so - delete them. */
   if (table.players.every(player => player.isAi)) {
@@ -435,7 +439,8 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
 
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
-  while (local_table.players.length >= 2 && !local_table.tableIsRunning) { // && game isnt running
+  while (local_table.players.length >= NUM_PLAYERS_TO_START_GAME && !local_table.tableIsRunning) { // && game isnt running
+    console.log(local_table.players.length);
     await controlRound(tableName);
   }
 };
@@ -467,6 +472,8 @@ addBot = async (tableName) => {
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
   while (local_table.players.length >= NUM_PLAYERS_TO_START_GAME && !local_table.tableIsRunning) { // && game isnt running
+    console.log(local_table.players.length);
+
     await controlRound(tableName);
   }
 };
