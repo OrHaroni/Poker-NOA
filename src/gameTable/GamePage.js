@@ -13,6 +13,7 @@ import OurPlayer from './OurPlayer.js';
 const serverIP = process.env.REACT_APP_SERVER_IP;
 const serverPort = process.env.REACT_APP_SERVER_PORT;
 const srcURL = `http://${serverIP}:${serverPort}/socket.io/socket.io.js`;
+const MIN_BLIND = 50;
 
 // this io is the io from the index.html file on the public folder
 <script src={srcURL}></script>
@@ -143,7 +144,7 @@ function GameTable(props) {
     const username = props.user.username;
     const nickname = props.user.nickname;
     /* Validation that the entering money is multiple of 50 */
-    if((moneyToEnterWith % 50) != 0) {
+    if((moneyToEnterWith % MIN_BLIND) != 0) {
       sendSwal("Must enter multiple of the Small Blind (50 in default)", "error");
       return;
     }

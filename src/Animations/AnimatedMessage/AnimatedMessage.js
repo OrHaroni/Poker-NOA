@@ -2,6 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { TypeAnimation } from 'react-type-animation';
 import './AnimatedMessage.css'; // Ensure you have the CSS for styling
 
+const MESSAGE_TIME = 3000; // Time to show the message in milliseconds
+
 const AnimatedMessage = (props) => {
   const [visible, setVisible] = useState(true);
   const [cursorVisible, setCursorVisible] = useState(true);
@@ -9,7 +11,7 @@ const AnimatedMessage = (props) => {
   useEffect(() => {
     const timer = setTimeout(() => {
       setVisible(false);
-    }, 3000 + props.message.length * 100); // Show the text for 3 seconds + typing duration
+    }, MESSAGE_TIME + props.message.length * 100); // Show the text for 3 seconds + typing duration
 
     return () => clearTimeout(timer); // Cleanup the timer on component unmount
   }, [props.message]);

@@ -53,13 +53,13 @@ const OurPlayer = (props) => {
             setButtonsState(4); /* Only check and fold */
         }
         else if (moneyToCallArg === 0) {
-            setButtonsState(1); 
+            setButtonsState(1);  /* Can check, raise and fold */
         }
         else if (moneyToCallArg === ourPlayerMoney) {
-            setButtonsState(3); 
+            setButtonsState(3); /* All-in */
         }
         else {
-            setButtonsState(2);
+            setButtonsState(2); /* Can raise, call and fold */
         }
         // Show Timer
         setShowTimer(true);

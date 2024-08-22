@@ -28,7 +28,6 @@ async function runPlayersActions(tableName) {
     table.playersWithCards[i].RoundMoney = 0;
   }
   while (true) {
-    if(table.playersWithCards.length < NUM_PLAYERS_TO_START_GAME) return;
     // print the playerswithcards array with the nicknames of the players and the order of the players.
     const currentPlayer = table.playersWithCards[currentPlayerIndex];
     /* Saving the next player nickname to act , the array of playersWithCards may change because of fold! (and so the Indices ) */
@@ -112,7 +111,7 @@ async function runPlayersActions(tableName) {
         try {
           // Await the player's action or timeout
           const playerAction = await new Promise((resolve, reject) => {
-            const turnTimeout = setTimeout(async () => {
+            const turnTimeout = setTimeout(() => {
               fold(tableName, currentPlayer.nickname); // Fold the player (or take other action as needed)
               // check if the round is over because there is only one player with cards,and he is the winner, he dont need to do any action.
               return resolve(null); // Resolve promise if only one player is left
@@ -127,11 +126,10 @@ async function runPlayersActions(tableName) {
           // but if we have only one player with cards, we dont want to continue to the next player because he is the winner.
           if (playerAction == null) {
             /*Call the standUp fucntion to remove him from the playersWithCards and add to to spectators*/
-            standUp(tableName, currentPlayer.nickname);
-            if (table.playersWithCards.length === 1 || table.playersWithCards.length === 0) return;
+            await standUp(tableName, currentPlayer.nickname);
             /* Use socket.io to send to the player he got removed from the table */
             io.to(currentPlayer.socket).emit('gotRemovedFromTable');
-            if (table.playersWithCards.length === 1) return;
+            if (table.playersWithCards.length < NUM_PLAYERS_TO_START_GAME) return;
             continue;
           }
           let action = playerAction.action;
@@ -231,6 +229,10 @@ endRound = async (table) => {
 
   const winner = table.pickWinner();
   if (!winner) {
+    /* Clearing all parameter in table locally */
+    table.endRound();
+    /* Render to make clear state in every player */
+    renderAll(table);
     return;
   }
   /* give the money to the winner */
@@ -283,6 +285,7 @@ async function checkIfPlayersFolded(table) {
   // Check if only one player is left with cards, meaning he is the winner
   if (table.playersWithCards.length === 1 || table.playersWithCards.length === 0) {
     await endRound(table);
+    table.tableIsRunning = false;
     return true;
   }
   return false;
@@ -440,7 +443,6 @@ joinTable = async (tableName, username, nickname, moneyToEnterWith) => {
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
   while (local_table.players.length >= NUM_PLAYERS_TO_START_GAME && !local_table.tableIsRunning) { // && game isnt running
-    console.log(local_table.players.length);
     await controlRound(tableName);
   }
 };
@@ -472,8 +474,6 @@ addBot = async (tableName) => {
   // check if there is two players now on the table and the game isnt running yet, if so, we want to start the game.
   // need to check if the game isnt running yet..
   while (local_table.players.length >= NUM_PLAYERS_TO_START_GAME && !local_table.tableIsRunning) { // && game isnt running
-    console.log(local_table.players.length);
-
     await controlRound(tableName);
   }
 };
@@ -511,18 +511,20 @@ standUp = async (tableName, nickname) => {
   user.moneyAmount = Number(user.moneyAmount) + Number(playerToRemove.moneyOnTable);
   await user.save();
 
+  /* If the last players are bots so delete them also */
+  if (local_table.players.every(player => player.isAi || player.nickname === nickname)) {
+    io.to(playerToRemove.socket).emit('getWinner', null);
+    io.to(playerToRemove.socket).emit('getCards', null);
+    // Remove all bot players
+    local_table.players = [];
+    local_table.playersWithCards = [];
+    table.numOfPlayers = 0;
+    await table.save();
+  }
+
   local_table.players = local_table.players.filter(player => player.nickname !== nickname);
   local_table.playersWithCards = local_table.playersWithCards.filter(player => player.nickname !== nickname);
   local_table.spectators.push(playerToRemove);
-
-    /* If the last players are bots so delete them also */
-    if (local_table.players.every(player => player.isAi)) {
-      // Remove all bot players
-      local_table.players = [];
-      local_table.playersWithCards = [];
-      table.numOfPlayers = 0;
-      await table.save();
-    }
 
     // Iterate over each player on the table , if its not the user that leave the table, send him the render event.
     renderAll(local_table);

@@ -7,6 +7,7 @@ import AnimatedMessage from '../Animations/AnimatedMessage/AnimatedMessage.js';
 import Timer from '../Animations/AnimatedTimer/Timer.js';
 import logo from '../assets/logopng.png'
 
+const BETWEEN_ROUNDS_TIME = 6; // Time between rounds 
 const serverIP = process.env.REACT_APP_SERVER_IP;
 const serverPort = process.env.REACT_APP_SERVER_PORT;
 const socketSrcURL = `http://${serverIP}:${serverPort}/socket.io/socket.io.js`;
@@ -33,24 +34,33 @@ function Table(props) {
 
   /* Getting winner and print it on the screen */
   props.socket.off('getWinner').on('getWinner', async (winner) => {
+    /* If there is a winner, show the winner message */
+    if(winner) {
     const new_message = "The winner is: " + winner;
     /* Make all timers go off */
     const updatedTimers = props.otherPlayers.map(player => false);
     props.setTimers(updatedTimers);
     setMessage(new_message);
     setShowTimer(true);
-    /* wait 5 seconds with all cards open */
+    /* wait 3 seconds with all cards open */
     await new Promise(resolve => setTimeout(resolve, 3000));
     setShowMessage(true);
     props.setGameRunning(false)
     setOtherPlayersCards(<></>);
     setPlayersCardsList([[], [], [], []]);
 
-    /* Wait 5 seconds to let also the timer to run till next round */
+    /* Wait 3 seconds to let also the timer to run till next round */
     await new Promise(resolve => setTimeout(resolve, 3000));
 
     setShowTimer(false);
     setShowMessage(false);
+    }
+    /* Game has ended without a winner */
+    else {
+      props.setGameRunning(false)
+      setOtherPlayersCards(<></>);
+      setPlayersCardsList([[], [], [], []]);
+    }
 
   });
 
@@ -74,7 +84,7 @@ function Table(props) {
     <>
         {showTimer ? 
         <>
-          <Timer time={6}/>
+          <Timer time={BETWEEN_ROUNDS_TIME}/>
         </> : null}
 
         {showMessage ? 

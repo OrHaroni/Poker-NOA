@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import './table.css';
-import cards from '../assets/cards.png';
+import hiddenCards from '../assets/cards.png';
 import Timer from '../Animations/AnimatedTimer/Timer';
 import logo from '../assets/logopng.png'
 import genericPic from '../assets/generic_profile_pic.png'
@@ -109,7 +109,7 @@ const Player = (props) => {
                 null :
                 props.playerCards.length === 0 ?
                     <div className="player-cards">
-                        <img className="hidden-cards" src={cards} alt="Player Cards" />
+                        <img className="hidden-cards" src={hiddenCards} alt="Player Cards" />
                     </div>
                     :
                     /*Showing cards in the end of round */
